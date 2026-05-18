@@ -3,544 +3,613 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Nosso Tempo</title>
 
 <style>
 
-:root{
-  --glass: rgba(255,255,255,0.12);
-  --border: rgba(255,255,255,0.18);
-  --text: #ffffff;
-}
-
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Segoe UI",sans-serif;
 }
 
 body{
-  min-height:100vh;
-  overflow-x:hidden;
-  font-family:"Segoe UI",sans-serif;
-  background:url("fundo-site.jpg") center/cover no-repeat fixed;
-  color:white;
-  position:relative;
+min-height:100vh;
+overflow-x:hidden;
+background:
+linear-gradient(180deg,#78cfff,#a7e2ff);
+display:flex;
+justify-content:center;
+align-items:center;
+padding:30px;
+position:relative;
 }
 
-/* =========================
-   AURA ANIME
-========================= */
+/* FUNDO AZUL */
 
-.aura{
-  position:fixed;
-  border-radius:50%;
-  pointer-events:none;
-  z-index:-1;
-  mix-blend-mode:screen;
-  animation:animeAura 6s ease-in-out infinite;
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at top left,
+rgba(255,255,255,.45),
+transparent 30%),
+
+radial-gradient(circle at bottom right,
+rgba(255,255,255,.3),
+transparent 35%);
+z-index:-3;
 }
 
-.aura1{
-  width:420px;
-  height:420px;
-  top:-120px;
-  left:-120px;
-
-  background:
-    radial-gradient(circle,
-      rgba(0,180,255,0.98) 0%,
-      rgba(70,120,255,0.85) 22%,
-      rgba(120,0,255,0.72) 48%,
-      rgba(180,0,255,0.38) 68%,
-      transparent 100%);
-
-  filter:
-    blur(55px)
-    saturate(180%)
-    brightness(1.15);
-
-  box-shadow:
-    0 0 80px rgba(0,170,255,0.55),
-    0 0 140px rgba(120,0,255,0.45),
-    0 0 220px rgba(180,0,255,0.28);
-}
-
-.aura2{
-  width:460px;
-  height:460px;
-  bottom:-140px;
-  right:-140px;
-
-  background:
-    radial-gradient(circle,
-      rgba(180,0,255,0.98) 0%,
-      rgba(120,0,255,0.82) 25%,
-      rgba(0,140,255,0.65) 50%,
-      rgba(0,220,255,0.34) 72%,
-      transparent 100%);
-
-  filter:
-    blur(65px)
-    saturate(180%)
-    brightness(1.12);
-
-  box-shadow:
-    0 0 90px rgba(180,0,255,0.58),
-    0 0 160px rgba(0,110,255,0.4),
-    0 0 240px rgba(0,220,255,0.22);
-
-  animation-delay:2.5s;
-}
-
-.aura::after{
-  content:"";
-  position:absolute;
-  inset:22%;
-  border-radius:50%;
-
-  background:
-    radial-gradient(circle,
-      rgba(255,255,255,0.95) 0%,
-      rgba(170,220,255,0.45) 35%,
-      transparent 100%);
-
-  filter:blur(22px);
-  opacity:0.9;
-}
-
-@keyframes animeAura{
-  0%,100%{
-    transform:scale(1) translateY(0px) rotate(0deg);
-    opacity:0.95;
-  }
-
-  50%{
-    transform:scale(1.14) translateY(8px) rotate(-2deg);
-    opacity:1;
-  }
-}
-
-/* =========================
-   LOGIN
-========================= */
+/* LOGIN */
 
 #login{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:url("fundo-login.jpg") center/cover no-repeat;
+width:100%;
+display:flex;
+justify-content:center;
+align-items:center;
 }
 
 .login-box{
-  width:100%;
-  max-width:390px;
-  padding:32px;
-  border-radius:28px;
-  background:rgba(255,255,255,0.12);
-  backdrop-filter:blur(18px);
-  border:1px solid rgba(255,255,255,0.18);
-  text-align:center;
-  box-shadow:0 20px 45px rgba(0,0,0,0.2);
+width:340px;
+
+padding:40px 28px;
+
+border-radius:35px;
+
+background:rgba(255,255,255,.18);
+
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+
+border:1px solid rgba(255,255,255,.25);
+
+box-shadow:
+0 20px 40px rgba(0,0,0,.12);
+
+text-align:center;
 }
 
 .heart{
-  font-size:50px;
-  margin-bottom:10px;
+font-size:42px;
+margin-bottom:20px;
+animation:float 3s ease-in-out infinite;
 }
 
-.login-box h1{
-  font-size:2rem;
-  margin-bottom:12px;
+@keyframes float{
+0%,100%{
+transform:translateY(0px);
 }
-
-.login-box p{
-  opacity:0.85;
-  margin-bottom:22px;
+50%{
+transform:translateY(-8px);
+}
 }
 
 input{
-  width:100%;
-  padding:15px;
-  border:none;
-  outline:none;
-  border-radius:999px;
-  margin-bottom:16px;
-  font-size:16px;
+width:100%;
+height:52px;
+
+border:none;
+outline:none;
+
+border-radius:999px;
+
+padding:0 18px;
+
+font-size:16px;
+
+background:rgba(255,255,255,.88);
+
+margin-bottom:18px;
 }
 
 button{
-  width:100%;
-  padding:15px;
-  border:none;
-  border-radius:999px;
-  background:linear-gradient(135deg,#4da3ff,#7b5cff);
-  color:white;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
+width:100%;
+height:52px;
+
+border:none;
+cursor:pointer;
+
+border-radius:999px;
+
+font-size:16px;
+font-weight:700;
+
+color:white;
+
+background:
+linear-gradient(90deg,#2ea4ff,#7d4dff);
+
+box-shadow:
+0 10px 25px rgba(78,140,255,.35);
+
+transition:.25s;
 }
 
-.error{
-  margin-top:12px;
-  color:#ffd2d2;
+button:hover{
+transform:translateY(-2px);
 }
 
-/* =========================
-   SITE
-========================= */
+#error{
+margin-top:14px;
+font-size:15px;
+color:#fff;
+}
+
+/* SITE */
 
 #site{
-  display:none;
-  width:min(1050px,92vw);
-  margin:auto;
-  padding:45px 0 120px;
+display:none;
+width:min(1050px,100%);
 }
 
-.title{
-  text-align:center;
-  margin-bottom:35px;
+.top{
+text-align:center;
+margin-bottom:28px;
 }
 
-.title h1{
-  font-size:3rem;
-  margin-bottom:10px;
+.top h1{
+font-size:48px;
+font-weight:800;
+color:white;
+text-shadow:0 8px 20px rgba(0,0,0,.12);
 }
 
-.title p{
-  opacity:0.85;
+.top p{
+color:rgba(255,255,255,.9);
+margin-top:8px;
+font-size:17px;
 }
+
+/* QUADROS */
 
 .grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:22px;
-}
-
-.card{
-  background:var(--glass);
-  border:1px solid var(--border);
-  backdrop-filter:blur(18px);
-  border-radius:30px;
-  padding:26px;
-  box-shadow:0 18px 40px rgba(0,0,0,0.18);
-}
-
-.card h2{
-  text-align:center;
-  margin-bottom:25px;
-  font-size:1.5rem;
-}
-
-.counter{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-}
-
-.box{
-  background:rgba(255,255,255,0.08);
-  border-radius:20px;
-  padding:18px;
-  text-align:center;
-}
-
-.value{
-  font-size:2rem;
-  font-weight:bold;
-  display:block;
-}
-
-.label{
-  opacity:0.8;
-}
-
-.messages{
-  margin-top:24px;
-}
-
-.message-card{
-  margin-top:18px;
-  padding:20px;
-  border-radius:22px;
-  background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.08);
-}
-
-.message-card h3{
-  margin-bottom:12px;
-}
-
-.message-card p{
-  line-height:1.6;
-  opacity:0.92;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:22px;
 }
 
 @media(max-width:850px){
+.grid{
+grid-template-columns:1fr;
+}
+}
 
-  .grid{
-    grid-template-columns:1fr;
-  }
+/* BOXES */
 
-  .title h1{
-    font-size:2.3rem;
-  }
+.time-box{
+position:relative;
+overflow:visible;
 
-  .aura1{
-    width:300px;
-    height:300px;
-    top:-70px;
-    left:-70px;
-    filter:blur(42px);
-  }
+padding:28px;
 
-  .aura2{
-    width:320px;
-    height:320px;
-    bottom:-90px;
-    right:-90px;
-    filter:blur(45px);
-  }
+border-radius:34px;
 
+background:rgba(255,255,255,.16);
+
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+
+border:1px solid rgba(255,255,255,.22);
+
+box-shadow:
+0 18px 40px rgba(0,0,0,.12);
+
+z-index:2;
+}
+
+/* AURA ANIME */
+
+.time-box::before{
+content:"";
+position:absolute;
+
+inset:-20px;
+
+border-radius:50px;
+
+background:
+
+radial-gradient(circle at 20% 20%,
+rgba(0,170,255,.9),
+transparent 28%),
+
+radial-gradient(circle at 80% 30%,
+rgba(136,0,255,.85),
+transparent 34%),
+
+radial-gradient(circle at 50% 80%,
+rgba(0,120,255,.8),
+transparent 36%);
+
+filter:blur(34px);
+
+opacity:.9;
+
+z-index:-1;
+
+animation:auraMove 6s ease-in-out infinite alternate;
+}
+
+.time-box::after{
+content:"";
+position:absolute;
+
+inset:-6px;
+
+border-radius:38px;
+
+border:1px solid rgba(120,0,255,.25);
+
+box-shadow:
+0 0 22px rgba(0,170,255,.45),
+0 0 48px rgba(120,0,255,.25);
+
+z-index:-1;
+
+animation:auraPulse 3s ease-in-out infinite;
+}
+
+@keyframes auraMove{
+
+0%{
+transform:scale(1) rotate(0deg);
+filter:blur(34px);
+}
+
+50%{
+transform:scale(1.08) rotate(2deg);
+filter:blur(42px);
+}
+
+100%{
+transform:scale(1.03) rotate(-2deg);
+filter:blur(38px);
+}
+
+}
+
+@keyframes auraPulse{
+
+0%{
+opacity:.45;
+}
+
+50%{
+opacity:1;
+}
+
+100%{
+opacity:.6;
+}
+
+}
+
+.box-title{
+text-align:center;
+font-size:28px;
+font-weight:800;
+color:white;
+margin-bottom:22px;
+}
+
+/* CONTADOR */
+
+.counter-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+
+.counter{
+padding:18px 12px;
+
+border-radius:22px;
+
+background:rgba(255,255,255,.14);
+
+border:1px solid rgba(255,255,255,.2);
+
+text-align:center;
+}
+
+.number{
+display:block;
+font-size:34px;
+font-weight:800;
+color:white;
+}
+
+.label{
+display:block;
+margin-top:5px;
+font-size:15px;
+color:rgba(255,255,255,.88);
+}
+
+/* MENSAGEM */
+
+.message-box{
+margin-top:24px;
+
+padding:24px;
+
+border-radius:34px;
+
+background:rgba(255,255,255,.16);
+
+backdrop-filter:blur(18px);
+
+border:1px solid rgba(255,255,255,.22);
+
+box-shadow:
+0 18px 40px rgba(0,0,0,.12);
+
+text-align:center;
+}
+
+.message-date{
+font-size:15px;
+color:rgba(255,255,255,.82);
+margin-bottom:14px;
+}
+
+.message-text{
+font-size:22px;
+font-weight:700;
+line-height:1.6;
+color:white;
 }
 
 </style>
 </head>
 <body>
 
-<div class="aura aura1"></div>
-<div class="aura aura2"></div>
+<!-- LOGIN -->
 
-<section id="login">
+<div id="login">
 
-  <div class="login-box">
+<div class="login-box">
 
-    <div class="heart">💜</div>
+<div class="heart">💜</div>
 
-    <h1>Nosso Tempo</h1>
+<input type="password" id="senha" placeholder="Senha">
 
-    <p>Digite a senha para entrar</p>
+<button onclick="entrar()">Entrar</button>
 
-    <input type="password" id="senha" placeholder="Senha">
+<div id="error"></div>
 
-    <button onclick="entrar()">Entrar</button>
+</div>
 
-    <div class="error" id="erro"></div>
+</div>
 
-  </div>
+<!-- SITE -->
 
-</section>
+<div id="site">
 
-<section id="site">
+<div class="top">
+<h1>Nosso Tempo</h1>
+<p>Dois contadores diferentes</p>
+</div>
 
-  <div class="title">
-    <h1>Nosso Tempo</h1>
-    <p>Dois começos, uma única história.</p>
-  </div>
+<div class="grid">
 
-  <div class="grid">
+<!-- OFICIAL -->
 
-    <!-- OFICIAL -->
+<div class="time-box">
 
-    <div class="card">
+<div class="box-title">
+Oficial
+</div>
 
-      <h2>Oficial</h2>
+<div class="counter-grid">
 
-      <div class="counter">
+<div class="counter">
+<span class="number" id="oDias">0</span>
+<span class="label">Dias</span>
+</div>
 
-        <div class="box">
-          <span class="value" id="oDias">0</span>
-          <span class="label">Dias</span>
-        </div>
+<div class="counter">
+<span class="number" id="oHoras">0</span>
+<span class="label">Horas</span>
+</div>
 
-        <div class="box">
-          <span class="value" id="oHoras">0</span>
-          <span class="label">Horas</span>
-        </div>
+<div class="counter">
+<span class="number" id="oMin">0</span>
+<span class="label">Minutos</span>
+</div>
 
-        <div class="box">
-          <span class="value" id="oMin">0</span>
-          <span class="label">Minutos</span>
-        </div>
+<div class="counter">
+<span class="number" id="oSeg">0</span>
+<span class="label">Segundos</span>
+</div>
 
-        <div class="box">
-          <span class="value" id="oSeg">0</span>
-          <span class="label">Segundos</span>
-        </div>
+</div>
 
-      </div>
+</div>
 
-    </div>
+<!-- NÃO OFICIAL -->
 
-    <!-- NÃO OFICIAL -->
+<div class="time-box">
 
-    <div class="card">
+<div class="box-title">
+Não Oficial
+</div>
 
-      <h2>Não oficial</h2>
+<div class="counter-grid">
 
-      <div class="counter">
+<div class="counter">
+<span class="number" id="nDias">0</span>
+<span class="label">Dias</span>
+</div>
 
-        <div class="box">
-          <span class="value" id="nDias">0</span>
-          <span class="label">Dias</span>
-        </div>
+<div class="counter">
+<span class="number" id="nHoras">0</span>
+<span class="label">Horas</span>
+</div>
 
-        <div class="box">
-          <span class="value" id="nHoras">0</span>
-          <span class="label">Horas</span>
-        </div>
+<div class="counter">
+<span class="number" id="nMin">0</span>
+<span class="label">Minutos</span>
+</div>
 
-        <div class="box">
-          <span class="value" id="nMin">0</span>
-          <span class="label">Minutos</span>
-        </div>
+<div class="counter">
+<span class="number" id="nSeg">0</span>
+<span class="label">Segundos</span>
+</div>
 
-        <div class="box">
-          <span class="value" id="nSeg">0</span>
-          <span class="label">Segundos</span>
-        </div>
+</div>
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-  </div>
+<!-- MENSAGEM -->
 
-  <!-- MENSAGEM -->
+<div class="message-box">
 
-  <div class="messages">
+<div class="message-date" id="messageDate"></div>
 
-    <div class="card message-card">
+<div class="message-text" id="messageText"></div>
 
-      <h3 id="msgData"></h3>
+</div>
 
-      <p id="msgTexto"></p>
-
-    </div>
-
-  </div>
-
-</section>
+</div>
 
 <script>
 
-const SENHA = "210425";
+const senhaCorreta = "210425";
+
+function entrar(){
+
+const senha = document.getElementById("senha").value;
+
+if(senha === senhaCorreta){
+
+document.getElementById("login").style.display = "none";
+
+document.getElementById("site").style.display = "block";
+
+}else{
+
+document.getElementById("error").innerText = "Senha incorreta";
+
+}
+
+}
+
+/* DATAS */
 
 const oficial = new Date("2025-04-21T00:00:00");
 const naoOficial = new Date("2024-10-09T00:00:00");
 
-function entrar(){
-
-  const senha = document.getElementById("senha").value;
-
-  if(senha === SENHA){
-
-    document.getElementById("login").style.display = "none";
-    document.getElementById("site").style.display = "block";
-
-  }else{
-    document.getElementById("erro").innerText = "Senha incorreta";
-  }
-
-}
+/* CONTADOR */
 
 function atualizar(){
 
-  atualizarContador(oficial,"o");
-  atualizarContador(naoOficial,"n");
+const agora = new Date();
+
+contador(oficial,"o");
+contador(naoOficial,"n");
+
+function contador(data,prefixo){
+
+const diff = agora - data;
+
+const dias = Math.floor(diff / 1000 / 60 / 60 / 24);
+
+const horas = agora.getHours();
+const minutos = agora.getMinutes();
+const segundos = agora.getSeconds();
+
+document.getElementById(prefixo+"Dias").innerText = dias;
+document.getElementById(prefixo+"Horas").innerText = horas;
+document.getElementById(prefixo+"Min").innerText = minutos;
+document.getElementById(prefixo+"Seg").innerText = segundos;
 
 }
-
-function atualizarContador(data,id){
-
-  const agora = new Date();
-
-  const diff = agora - data;
-
-  const dias = Math.floor(diff / (1000*60*60*24));
-  const horas = Math.floor((diff / (1000*60*60)) % 24);
-  const minutos = Math.floor((diff / (1000*60)) % 60);
-  const segundos = Math.floor((diff / 1000) % 60);
-
-  document.getElementById(id+"Dias").innerText = dias;
-  document.getElementById(id+"Horas").innerText = horas;
-  document.getElementById(id+"Min").innerText = minutos;
-  document.getElementById(id+"Seg").innerText = segundos;
 
 }
 
 setInterval(atualizar,1000);
-
 atualizar();
 
-/* =========================
-   MENSAGENS
-========================= */
+/* MENSAGENS */
 
 const mensagens = [
 
 {
-data:"21 de Maio de 2026",
-texto:"Algumas pessoas passam pela nossa vida. Você ficou no meu coração."
+date:"2026-05-21",
+text:"Você transformou meus dias em algo muito melhor."
 },
 
 {
-data:"21 de Junho de 2026",
-texto:"Mesmo depois de tanto tempo, ainda gosto de cada detalhe seu."
+date:"2026-06-21",
+text:"Mesmo depois de tanto tempo, ainda escolho você todos os dias."
 },
 
 {
-data:"21 de Julho de 2026",
-texto:"Você transformou momentos simples nas melhores memórias da minha vida."
+date:"2026-07-21",
+text:"Cada momento vivido ao seu lado virou uma lembrança especial."
 },
 
 {
-data:"21 de Agosto de 2026",
-texto:"Se eu pudesse escolher mil vezes, ainda escolheria você."
+date:"2026-08-21",
+text:"Seu sorriso continua sendo uma das minhas coisas favoritas."
 },
 
 {
-data:"21 de Setembro de 2026",
-texto:"O tempo passa, mas o sentimento continua especial."
+date:"2026-09-21",
+text:"Algumas pessoas passam pela nossa vida. Você virou parte da minha."
 },
 
 {
-data:"21 de Outubro de 2026",
-texto:"Você continua sendo uma das melhores partes dos meus dias."
+date:"2026-10-21",
+text:"O tempo passa rápido quando os momentos são especiais."
 },
 
 {
-data:"21 de Novembro de 2026",
-texto:"Algumas conexões simplesmente acontecem uma vez na vida."
+date:"2026-11-21",
+text:"Ainda existem muitos momentos bonitos esperando por nós."
 },
 
 {
-data:"21 de Dezembro de 2026",
-texto:"Obrigado por existir e fazer parte da minha história."
+date:"2026-12-21",
+text:"Obrigado por fazer parte da minha história."
 }
 
 ];
 
 function atualizarMensagem(){
 
-  const agora = new Date();
+const agora = new Date();
 
-  let indice = 0;
+let atual = mensagens[0];
 
-  if(agora.getMonth() >= 4){
-    indice = agora.getMonth() - 4;
-  }
+for(let i=0;i<mensagens.length;i++){
 
-  if(indice >= mensagens.length){
-    indice = mensagens.length - 1;
-  }
+const data = new Date(mensagens[i].date+"T00:00:00");
 
-  document.getElementById("msgData").innerText = mensagens[indice].data;
+if(agora >= data){
 
-  document.getElementById("msgTexto").innerText = mensagens[indice].texto;
+atual = mensagens[i];
+
+}
+
+}
+
+document.getElementById("messageText").innerText = atual.text;
+
+const data = new Date(atual.date+"T00:00:00");
+
+document.getElementById("messageDate").innerText =
+data.toLocaleDateString("pt-BR",{
+day:"numeric",
+month:"long",
+year:"numeric"
+});
 
 }
 
