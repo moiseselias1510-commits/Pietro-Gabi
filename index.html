@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Tempo</title>
+<title>Nosso Tempo</title>
 
 <style>
 
@@ -204,8 +204,47 @@ body::after{
 }
 
 .counter-card{
+  position:relative;
+  overflow:hidden;
   border-radius:30px;
   padding:26px 22px;
+}
+
+/* AURA AZUL */
+
+.counter-card::before{
+  content:"";
+  position:absolute;
+  inset:-40%;
+
+  background:
+  radial-gradient(circle,
+  rgba(80,170,255,.55) 0%,
+  rgba(80,170,255,.18) 30%,
+  transparent 70%);
+
+  animation:auraMove 7s linear infinite;
+
+  z-index:0;
+  filter:blur(30px);
+}
+
+.counter-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:30px;
+
+  box-shadow:
+  0 0 18px rgba(120,200,255,.45),
+  0 0 40px rgba(70,150,255,.22);
+
+  pointer-events:none;
+}
+
+.counter-card > *{
+  position:relative;
+  z-index:1;
 }
 
 .counter-title{
@@ -291,6 +330,21 @@ body::after{
   }
 }
 
+@keyframes auraMove{
+
+  0%{
+    transform:rotate(0deg) scale(1);
+  }
+
+  50%{
+    transform:rotate(180deg) scale(1.15);
+  }
+
+  100%{
+    transform:rotate(360deg) scale(1);
+  }
+}
+
 /* RESPONSIVO */
 
 @media(max-width:850px){
@@ -327,6 +381,7 @@ body::after{
 
 </style>
 </head>
+
 <body>
 
 <!-- LOGIN -->
@@ -484,10 +539,8 @@ body::after{
 
 const PASSWORD = "210425";
 
-const officialDate = new Date(2025, 3, 21);
-const unofficialDate = new Date(2024, 9, 9);
-
-/* MENSAGENS */
+const officialDate = new Date(2025,3,21);
+const unofficialDate = new Date(2024,9,9);
 
 const monthlyMessages = [
 
@@ -533,8 +586,6 @@ const monthlyMessages = [
 
 ];
 
-/* ELEMENTOS */
-
 const loginScreen = document.getElementById("loginScreen");
 const site = document.getElementById("site");
 
@@ -576,7 +627,7 @@ passwordInput.addEventListener("keydown",(e)=>{
   }
 });
 
-/* CONTADOR */
+/* CONTADORES */
 
 function preciseDiff(start,end){
 
@@ -671,8 +722,6 @@ function setupMessage(){
 
   document.getElementById("monthMessage").textContent =
   current.text;
-
-  /* CORREÇÃO DO BUG DE FUSO */
 
   const [year, month, day] =
   current.date.split("-").map(Number);
