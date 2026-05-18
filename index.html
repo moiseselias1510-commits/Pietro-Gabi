@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Nosso Tempo</title>
 
 <style>
 
 :root{
-  --glass:rgba(255,255,255,.14);
-  --border:rgba(255,255,255,.22);
-  --shadow:0 18px 45px rgba(0,0,0,.18);
-  --text:rgba(255,255,255,.85);
+  --glass: rgba(255,255,255,0.12);
+  --border: rgba(255,255,255,0.18);
+  --text: #ffffff;
 }
 
 *{
@@ -25,450 +24,351 @@ body{
   min-height:100vh;
   overflow-x:hidden;
   font-family:"Segoe UI",sans-serif;
+  background:url("fundo-site.jpg") center/cover no-repeat fixed;
   color:white;
-  background:#8fd4f8;
+  position:relative;
 }
 
-body::before{
-  content:"";
+/* =========================
+   AURA ANIME
+========================= */
+
+.aura{
   position:fixed;
-  inset:0;
-  background:url("fundo-login.png") center/cover no-repeat;
-  z-index:-3;
-  transition:.8s;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:-1;
+  mix-blend-mode:screen;
+  animation:animeAura 6s ease-in-out infinite;
 }
 
-body.inside::before{
-  background:url("fundo-site.png") center/cover no-repeat;
-}
+.aura1{
+  width:420px;
+  height:420px;
+  top:-120px;
+  left:-120px;
 
-body::after{
-  content:"";
-  position:fixed;
-  inset:0;
   background:
-  radial-gradient(circle at top, rgba(255,255,255,.16), transparent 40%),
-  linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.18));
-  z-index:-2;
+    radial-gradient(circle,
+      rgba(0,180,255,0.98) 0%,
+      rgba(70,120,255,0.85) 22%,
+      rgba(120,0,255,0.72) 48%,
+      rgba(180,0,255,0.38) 68%,
+      transparent 100%);
+
+  filter:
+    blur(55px)
+    saturate(180%)
+    brightness(1.15);
+
+  box-shadow:
+    0 0 80px rgba(0,170,255,0.55),
+    0 0 140px rgba(120,0,255,0.45),
+    0 0 220px rgba(180,0,255,0.28);
 }
 
-.glass{
-  background:var(--glass);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-  border:1px solid var(--border);
-  box-shadow:var(--shadow);
+.aura2{
+  width:460px;
+  height:460px;
+  bottom:-140px;
+  right:-140px;
+
+  background:
+    radial-gradient(circle,
+      rgba(180,0,255,0.98) 0%,
+      rgba(120,0,255,0.82) 25%,
+      rgba(0,140,255,0.65) 50%,
+      rgba(0,220,255,0.34) 72%,
+      transparent 100%);
+
+  filter:
+    blur(65px)
+    saturate(180%)
+    brightness(1.12);
+
+  box-shadow:
+    0 0 90px rgba(180,0,255,0.58),
+    0 0 160px rgba(0,110,255,0.4),
+    0 0 240px rgba(0,220,255,0.22);
+
+  animation-delay:2.5s;
 }
 
-.hidden{
-  display:none !important;
+.aura::after{
+  content:"";
+  position:absolute;
+  inset:22%;
+  border-radius:50%;
+
+  background:
+    radial-gradient(circle,
+      rgba(255,255,255,0.95) 0%,
+      rgba(170,220,255,0.45) 35%,
+      transparent 100%);
+
+  filter:blur(22px);
+  opacity:0.9;
 }
 
-/* LOGIN */
+@keyframes animeAura{
+  0%,100%{
+    transform:scale(1) translateY(0px) rotate(0deg);
+    opacity:0.95;
+  }
 
-.screen{
+  50%{
+    transform:scale(1.14) translateY(8px) rotate(-2deg);
+    opacity:1;
+  }
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+#login{
   min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:20px;
+  background:url("fundo-login.jpg") center/cover no-repeat;
 }
 
-.login-card{
-  width:min(410px,92vw);
-  border-radius:30px;
-  padding:34px 24px;
+.login-box{
+  width:100%;
+  max-width:390px;
+  padding:32px;
+  border-radius:28px;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,0.18);
   text-align:center;
-  animation:fadeUp 1s ease;
+  box-shadow:0 20px 45px rgba(0,0,0,0.2);
 }
 
 .heart{
-  width:92px;
-  height:92px;
-  margin:0 auto 18px;
-  position:relative;
-  transform:rotate(-45deg);
-  background:linear-gradient(145deg,#ff6b9a,#ff3f7c);
-  border-radius:16px;
-  animation:pulse 2s infinite;
-  box-shadow:
-  0 14px 30px rgba(255,65,120,.28),
-  inset 0 0 14px rgba(255,255,255,.22);
-}
-
-.heart::before,
-.heart::after{
-  content:"";
-  position:absolute;
-  width:92px;
-  height:92px;
-  border-radius:50%;
-  background:linear-gradient(145deg,#ff6b9a,#ff3f7c);
-}
-
-.heart::before{
-  top:-46px;
-  left:0;
-}
-
-.heart::after{
-  left:46px;
-  top:0;
-}
-
-.login-card h1{
-  font-size:2rem;
+  font-size:50px;
   margin-bottom:10px;
 }
 
-.login-card p{
-  color:var(--text);
-  line-height:1.6;
+.login-box h1{
+  font-size:2rem;
+  margin-bottom:12px;
+}
+
+.login-box p{
+  opacity:0.85;
   margin-bottom:22px;
 }
 
-.login-card input{
+input{
   width:100%;
+  padding:15px;
   border:none;
   outline:none;
-  padding:15px 18px;
   border-radius:999px;
+  margin-bottom:16px;
   font-size:16px;
-  margin-bottom:14px;
-  background:rgba(255,255,255,.94);
 }
 
-.login-card button{
+button{
   width:100%;
+  padding:15px;
   border:none;
-  cursor:pointer;
-  padding:14px;
   border-radius:999px;
-  font-size:16px;
-  font-weight:700;
+  background:linear-gradient(135deg,#4da3ff,#7b5cff);
   color:white;
-  background:linear-gradient(135deg,#ff5f95,#ff3d7c);
-  box-shadow:0 12px 28px rgba(255,65,120,.28);
-  transition:.25s;
-}
-
-.login-card button:hover{
-  transform:translateY(-2px);
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
 .error{
-  margin-top:14px;
-  color:#fff2b8;
-  min-height:20px;
+  margin-top:12px;
+  color:#ffd2d2;
 }
 
-/* SITE */
+/* =========================
+   SITE
+========================= */
 
 #site{
-  width:min(1000px,92vw);
-  margin:34px auto 60px;
-  opacity:0;
-  transform:translateY(18px);
-  pointer-events:none;
-  transition:1s;
+  display:none;
+  width:min(1050px,92vw);
+  margin:auto;
+  padding:45px 0 120px;
 }
 
-#site.show{
-  opacity:1;
-  transform:translateY(0);
-  pointer-events:auto;
-}
-
-.header{
+.title{
   text-align:center;
-  margin-bottom:26px;
+  margin-bottom:35px;
 }
 
-.header h1{
-  font-size:clamp(2.3rem,5vw,3.5rem);
-  margin-bottom:12px;
-  text-shadow:0 8px 24px rgba(0,0,0,.18);
+.title h1{
+  font-size:3rem;
+  margin-bottom:10px;
 }
 
-.header p{
-  color:var(--text);
-}
-
-/* CONTADORES */
-
-.counters{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:22px;
-  margin-bottom:24px;
-}
-
-.counter-card{
-  position:relative;
-  overflow:hidden;
-  border-radius:30px;
-  padding:26px 22px;
-}
-
-/* AURA AZUL */
-
-.counter-card::before{
-  content:"";
-  position:absolute;
-  inset:-40%;
-
-  background:
-  radial-gradient(circle,
-  rgba(80,170,255,.55) 0%,
-  rgba(80,170,255,.18) 30%,
-  transparent 70%);
-
-  animation:auraMove 7s linear infinite;
-
-  z-index:0;
-  filter:blur(30px);
-}
-
-.counter-card::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:30px;
-
-  box-shadow:
-  0 0 18px rgba(120,200,255,.45),
-  0 0 40px rgba(70,150,255,.22);
-
-  pointer-events:none;
-}
-
-.counter-card > *{
-  position:relative;
-  z-index:1;
-}
-
-.counter-title{
-  text-align:center;
-  margin-bottom:20px;
-  font-size:1.2rem;
-  font-weight:700;
-  letter-spacing:.05em;
+.title p{
+  opacity:0.85;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+
+.card{
+  background:var(--glass);
+  border:1px solid var(--border);
+  backdrop-filter:blur(18px);
+  border-radius:30px;
+  padding:26px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.18);
+}
+
+.card h2{
+  text-align:center;
+  margin-bottom:25px;
+  font-size:1.5rem;
+}
+
+.counter{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
 }
 
 .box{
+  background:rgba(255,255,255,0.08);
   border-radius:20px;
-  padding:18px 10px;
+  padding:18px;
   text-align:center;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.18);
 }
 
-.number{
+.value{
+  font-size:2rem;
+  font-weight:bold;
   display:block;
-  font-size:1.6rem;
-  font-weight:800;
-  margin-bottom:6px;
 }
 
 .label{
-  color:rgba(255,255,255,.85);
-  font-size:.9rem;
+  opacity:0.8;
 }
 
-/* MENSAGEM */
+.messages{
+  margin-top:24px;
+}
 
 .message-card{
-  border-radius:30px;
-  padding:28px;
-  text-align:center;
-}
-
-.message-card h2{
-  margin-bottom:18px;
-  font-size:1.1rem;
-  letter-spacing:.05em;
-  color:rgba(255,255,255,.9);
-}
-
-.message{
-  font-size:clamp(1.05rem,2vw,1.4rem);
-  line-height:1.9;
-  font-weight:700;
-}
-
-.date{
   margin-top:18px;
-  color:rgba(255,255,255,.75);
-  font-size:.95rem;
+  padding:20px;
+  border-radius:22px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.08);
 }
 
-/* ANIMAÇÕES */
-
-@keyframes fadeUp{
-  from{
-    opacity:0;
-    transform:translateY(18px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+.message-card h3{
+  margin-bottom:12px;
 }
 
-@keyframes pulse{
-  0%,100%{
-    transform:rotate(-45deg) scale(1);
-  }
-  50%{
-    transform:rotate(-45deg) scale(1.06);
-  }
+.message-card p{
+  line-height:1.6;
+  opacity:0.92;
 }
-
-@keyframes auraMove{
-
-  0%{
-    transform:rotate(0deg) scale(1);
-  }
-
-  50%{
-    transform:rotate(180deg) scale(1.15);
-  }
-
-  100%{
-    transform:rotate(360deg) scale(1);
-  }
-}
-
-/* RESPONSIVO */
 
 @media(max-width:850px){
 
-  .counters{
+  .grid{
     grid-template-columns:1fr;
   }
 
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-}
-
-@media(max-width:520px){
-
-  .login-card,
-  .counter-card,
-  .message-card{
-    padding:20px;
+  .title h1{
+    font-size:2.3rem;
   }
 
-  .grid{
-    gap:10px;
+  .aura1{
+    width:300px;
+    height:300px;
+    top:-70px;
+    left:-70px;
+    filter:blur(42px);
   }
 
-  .number{
-    font-size:1.3rem;
+  .aura2{
+    width:320px;
+    height:320px;
+    bottom:-90px;
+    right:-90px;
+    filter:blur(45px);
   }
 
-  .box{
-    padding:16px 8px;
-  }
 }
 
 </style>
 </head>
-
 <body>
 
-<!-- LOGIN -->
+<div class="aura aura1"></div>
+<div class="aura aura2"></div>
 
-<section class="screen" id="loginScreen">
+<section id="login">
 
-  <div class="login-card glass">
+  <div class="login-box">
 
-    <div class="heart"></div>
+    <div class="heart">💜</div>
 
     <h1>Nosso Tempo</h1>
 
-    <p>
-      Um cantinho simples para guardar o tempo.
-    </p>
+    <p>Digite a senha para entrar</p>
 
-    <input
-    type="password"
-    id="password"
-    placeholder="Senha">
+    <input type="password" id="senha" placeholder="Senha">
 
-    <button id="enterBtn">
-      Entrar
-    </button>
+    <button onclick="entrar()">Entrar</button>
 
-    <div class="error" id="error"></div>
+    <div class="error" id="erro"></div>
 
   </div>
 
 </section>
 
-<!-- SITE -->
+<section id="site">
 
-<main id="site">
-
-  <div class="header">
-
+  <div class="title">
     <h1>Nosso Tempo</h1>
-
-    <p>
-      Cada segundo continua sendo especial.
-    </p>
-
+    <p>Dois começos, uma única história.</p>
   </div>
 
-  <!-- CONTADORES -->
-
-  <section class="counters">
+  <div class="grid">
 
     <!-- OFICIAL -->
 
-    <div class="counter-card glass">
+    <div class="card">
 
-      <div class="counter-title">
-        Oficial
-      </div>
+      <h2>Oficial</h2>
 
-      <div class="grid">
+      <div class="counter">
 
         <div class="box">
-          <span class="number" id="oy">0</span>
-          <span class="label">anos</span>
+          <span class="value" id="oDias">0</span>
+          <span class="label">Dias</span>
         </div>
 
         <div class="box">
-          <span class="number" id="om">0</span>
-          <span class="label">meses</span>
+          <span class="value" id="oHoras">0</span>
+          <span class="label">Horas</span>
         </div>
 
         <div class="box">
-          <span class="number" id="od">0</span>
-          <span class="label">dias</span>
+          <span class="value" id="oMin">0</span>
+          <span class="label">Minutos</span>
         </div>
 
         <div class="box">
-          <span class="number" id="oh">0</span>
-          <span class="label">horas</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="omi">0</span>
-          <span class="label">minutos</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="os">0</span>
-          <span class="label">segundos</span>
+          <span class="value" id="oSeg">0</span>
+          <span class="label">Segundos</span>
         </div>
 
       </div>
@@ -477,264 +377,174 @@ body::after{
 
     <!-- NÃO OFICIAL -->
 
-    <div class="counter-card glass">
+    <div class="card">
 
-      <div class="counter-title">
-        Não Oficial
-      </div>
+      <h2>Não oficial</h2>
 
-      <div class="grid">
+      <div class="counter">
 
         <div class="box">
-          <span class="number" id="ny">0</span>
-          <span class="label">anos</span>
+          <span class="value" id="nDias">0</span>
+          <span class="label">Dias</span>
         </div>
 
         <div class="box">
-          <span class="number" id="nm">0</span>
-          <span class="label">meses</span>
+          <span class="value" id="nHoras">0</span>
+          <span class="label">Horas</span>
         </div>
 
         <div class="box">
-          <span class="number" id="nd">0</span>
-          <span class="label">dias</span>
+          <span class="value" id="nMin">0</span>
+          <span class="label">Minutos</span>
         </div>
 
         <div class="box">
-          <span class="number" id="nh">0</span>
-          <span class="label">horas</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="nmi">0</span>
-          <span class="label">minutos</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="ns">0</span>
-          <span class="label">segundos</span>
+          <span class="value" id="nSeg">0</span>
+          <span class="label">Segundos</span>
         </div>
 
       </div>
 
     </div>
 
-  </section>
+  </div>
 
   <!-- MENSAGEM -->
 
-  <section class="message-card glass">
+  <div class="messages">
 
-    <h2>Mensagem do mês</h2>
+    <div class="card message-card">
 
-    <div class="message" id="monthMessage"></div>
+      <h3 id="msgData"></h3>
 
-    <div class="date" id="monthDate"></div>
+      <p id="msgTexto"></p>
 
-  </section>
+    </div>
 
-</main>
+  </div>
+
+</section>
 
 <script>
 
-const PASSWORD = "210425";
+const SENHA = "210425";
 
-const officialDate = new Date(2025,3,21);
-const unofficialDate = new Date(2024,9,9);
+const oficial = new Date("2025-04-21T00:00:00");
+const naoOficial = new Date("2024-10-09T00:00:00");
 
-const monthlyMessages = [
+function entrar(){
+
+  const senha = document.getElementById("senha").value;
+
+  if(senha === SENHA){
+
+    document.getElementById("login").style.display = "none";
+    document.getElementById("site").style.display = "block";
+
+  }else{
+    document.getElementById("erro").innerText = "Senha incorreta";
+  }
+
+}
+
+function atualizar(){
+
+  atualizarContador(oficial,"o");
+  atualizarContador(naoOficial,"n");
+
+}
+
+function atualizarContador(data,id){
+
+  const agora = new Date();
+
+  const diff = agora - data;
+
+  const dias = Math.floor(diff / (1000*60*60*24));
+  const horas = Math.floor((diff / (1000*60*60)) % 24);
+  const minutos = Math.floor((diff / (1000*60)) % 60);
+  const segundos = Math.floor((diff / 1000) % 60);
+
+  document.getElementById(id+"Dias").innerText = dias;
+  document.getElementById(id+"Horas").innerText = horas;
+  document.getElementById(id+"Min").innerText = minutos;
+  document.getElementById(id+"Seg").innerText = segundos;
+
+}
+
+setInterval(atualizar,1000);
+
+atualizar();
+
+/* =========================
+   MENSAGENS
+========================= */
+
+const mensagens = [
 
 {
-  date:"2026-05-21",
-  text:"O tempo passa, mas continuar ao seu lado ainda é uma das melhores partes dos meus dias."
+data:"21 de Maio de 2026",
+texto:"Algumas pessoas passam pela nossa vida. Você ficou no meu coração."
 },
 
 {
-  date:"2026-06-21",
-  text:"Mesmo depois de tantos dias, ainda gosto de cada momento que passamos juntos."
+data:"21 de Junho de 2026",
+texto:"Mesmo depois de tanto tempo, ainda gosto de cada detalhe seu."
 },
 
 {
-  date:"2026-07-21",
-  text:"Você transformou momentos simples em lembranças que eu nunca quero esquecer."
+data:"21 de Julho de 2026",
+texto:"Você transformou momentos simples nas melhores memórias da minha vida."
 },
 
 {
-  date:"2026-08-21",
-  text:"Ainda acho incrível como alguém pode significar tanto na vida de outra pessoa."
+data:"21 de Agosto de 2026",
+texto:"Se eu pudesse escolher mil vezes, ainda escolheria você."
 },
 
 {
-  date:"2026-09-21",
-  text:"Espero que o tempo continue sendo gentil com a nossa história."
+data:"21 de Setembro de 2026",
+texto:"O tempo passa, mas o sentimento continua especial."
 },
 
 {
-  date:"2026-10-21",
-  text:"Não importa quanto tempo passe, algumas pessoas continuam especiais do mesmo jeito."
+data:"21 de Outubro de 2026",
+texto:"Você continua sendo uma das melhores partes dos meus dias."
 },
 
 {
-  date:"2026-11-21",
-  text:"Tem dias que tudo parece melhor só por lembrar de você."
+data:"21 de Novembro de 2026",
+texto:"Algumas conexões simplesmente acontecem uma vez na vida."
 },
 
 {
-  date:"2026-12-21",
-  text:"Mais um fim de ano chegando e eu ainda gosto de olhar para tudo que construímos."
+data:"21 de Dezembro de 2026",
+texto:"Obrigado por existir e fazer parte da minha história."
 }
 
 ];
 
-const loginScreen = document.getElementById("loginScreen");
-const site = document.getElementById("site");
+function atualizarMensagem(){
 
-const passwordInput = document.getElementById("password");
-const enterBtn = document.getElementById("enterBtn");
-const error = document.getElementById("error");
+  const agora = new Date();
 
-/* LOGIN */
+  let indice = 0;
 
-function enterSite(){
-
-  if(passwordInput.value.trim() !== PASSWORD){
-
-    error.textContent = "Senha incorreta";
-    return;
+  if(agora.getMonth() >= 4){
+    indice = agora.getMonth() - 4;
   }
 
-  document.body.classList.add("inside");
+  if(indice >= mensagens.length){
+    indice = mensagens.length - 1;
+  }
 
-  loginScreen.classList.add("hidden");
+  document.getElementById("msgData").innerText = mensagens[indice].data;
 
-  setTimeout(()=>{
-    site.classList.add("show");
-  },100);
+  document.getElementById("msgTexto").innerText = mensagens[indice].texto;
 
-  updateCounters();
-
-  setInterval(updateCounters,1000);
-
-  setupMessage();
 }
 
-enterBtn.addEventListener("click",enterSite);
-
-passwordInput.addEventListener("keydown",(e)=>{
-
-  if(e.key === "Enter"){
-    enterSite();
-  }
-});
-
-/* CONTADORES */
-
-function preciseDiff(start,end){
-
-  let years = end.getFullYear() - start.getFullYear();
-  let months = end.getMonth() - start.getMonth();
-  let days = end.getDate() - start.getDate();
-
-  let hours = end.getHours() - start.getHours();
-  let minutes = end.getMinutes() - start.getMinutes();
-  let seconds = end.getSeconds() - start.getSeconds();
-
-  if(seconds < 0){
-    seconds += 60;
-    minutes--;
-  }
-
-  if(minutes < 0){
-    minutes += 60;
-    hours--;
-  }
-
-  if(hours < 0){
-    hours += 24;
-    days--;
-  }
-
-  if(days < 0){
-
-    const lastMonth = new Date(
-      end.getFullYear(),
-      end.getMonth(),
-      0
-    ).getDate();
-
-    days += lastMonth;
-    months--;
-  }
-
-  if(months < 0){
-    months += 12;
-    years--;
-  }
-
-  return {
-    years,
-    months,
-    days,
-    hours,
-    minutes,
-    seconds
-  };
-}
-
-function setValues(prefix,diff){
-
-  document.getElementById(prefix+"y").textContent = diff.years;
-  document.getElementById(prefix+"m").textContent = diff.months;
-  document.getElementById(prefix+"d").textContent = diff.days;
-
-  document.getElementById(prefix+"h").textContent = diff.hours;
-  document.getElementById(prefix+"mi").textContent = diff.minutes;
-  document.getElementById(prefix+"s").textContent = diff.seconds;
-}
-
-function updateCounters(){
-
-  const now = new Date();
-
-  const official = preciseDiff(officialDate,now);
-  const unofficial = preciseDiff(unofficialDate,now);
-
-  setValues("o",official);
-  setValues("n",unofficial);
-}
-
-/* MENSAGEM */
-
-function setupMessage(){
-
-  const now = new Date();
-
-  const visible = monthlyMessages.filter(item=>{
-
-    const d = new Date(item.date + "T00:00:00");
-
-    return d <= now;
-  });
-
-  const current = visible.length
-  ? visible[visible.length - 1]
-  : monthlyMessages[0];
-
-  document.getElementById("monthMessage").textContent =
-  current.text;
-
-  const [year, month, day] =
-  current.date.split("-").map(Number);
-
-  const date = new Date(year, month - 1, day);
-
-  document.getElementById("monthDate").textContent =
-  date.toLocaleDateString("pt-BR",{
-    day:"numeric",
-    month:"long",
-    year:"numeric"
-  });
-}
+atualizarMensagem();
 
 </script>
 
