@@ -23,23 +23,23 @@ body{
   overflow-x:hidden;
   font-family:"Segoe UI",sans-serif;
   color:white;
-  background:#1a1a2e; /* cor de fundo para bordas quando a imagem não preenche */
+  background:#8fd4f8; /* cor de fundo azul clara */
 }
 
-/* Fundo de login - agora usa contain para mostrar toda a imagem */
+/* Fundo de login com contain e cor sólida */
 body::before{
   content:"";
   position:fixed;
   inset:0;
-  background:url("fundo-login.png") center/contain no-repeat;
-  background-color:#1a1a2e; /* mesma cor do body para preencher bordas */
+  background: url("fundo-login.png") center/contain no-repeat;
+  background-color: #8fd4f8;
   z-index:-3;
   transition:.8s;
 }
 
 body.inside::before{
-  background:url("fundo-site.png") center/contain no-repeat;
-  background-color:#1a1a2e;
+  background: url("fundo-site.png") center/contain no-repeat;
+  background-color: #8fd4f8;
 }
 
 body::after{
@@ -47,8 +47,8 @@ body::after{
   position:fixed;
   inset:0;
   background:
-  radial-gradient(circle at top, rgba(255,255,255,.12), transparent 40%),
-  linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.16));
+    radial-gradient(circle at top, rgba(255,255,255,.12), transparent 40%),
+    linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.16));
   z-index:-2;
 }
 
@@ -72,6 +72,7 @@ body::after{
 #splash img{
   max-width:300px;
   width:70vw;
+  max-height:70vh;
   height:auto;
   animation: rotate3d 3s ease-in-out forwards;
   transform-origin: center;
@@ -105,7 +106,6 @@ body::after{
   opacity:1;
 }
 
-/* Campos mais transparentes */
 .login-card input{
   width:100%;
   border:none;
@@ -114,14 +114,10 @@ body::after{
   border-radius:999px;
   font-size:16px;
   margin-bottom:14px;
-  background:rgba(255,255,255,.5); /* mais transparente */
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  color:#333;
+  background:rgba(255,255,255,.75);
+  backdrop-filter:blur(4px);
 }
-.login-card input::placeholder{
-  color:rgba(0,0,0,.4);
-}
+
 .login-card button{
   width:100%;
   border:none;
@@ -300,22 +296,12 @@ body::after{
 
 /* Animações */
 @keyframes fadeUp{
-  from{
-    opacity:0;
-    transform:translateY(18px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+  from{ opacity:0; transform:translateY(18px); }
+  to{ opacity:1; transform:translateY(0); }
 }
 @keyframes pulse{
-  0%,100%{
-    transform:rotate(-45deg) scale(1);
-  }
-  50%{
-    transform:rotate(-45deg) scale(1.06);
-  }
+  0%,100%{ transform:rotate(-45deg) scale(1); }
+  50%{ transform:rotate(-45deg) scale(1.06); }
 }
 
 /* Responsivo */
@@ -419,7 +405,7 @@ const monthlyMessages = [
   { date:"2026-09-21", text:"Espero que o tempo continue sendo gentil com a nossa história." },
   { date:"2026-10-21", text:"Não importa quanto tempo passe, algumas pessoas continuam especiais do mesmo jeito." },
   { date:"2026-11-21", text:"Tem dias que tudo parece melhor só por lembrar de você." },
-  { date:"2026-12-21", text:"Mais um fim de ano chegando e eu ainda gosto de olhar para tudo que construímos." }
+  { date:"2026-12-21", text:"Mais um ano chegando e eu ainda gosto de olhar para tudo que construímos." }
 ];
 
 // Elementos
@@ -431,10 +417,10 @@ const passwordInput = document.getElementById('password');
 const enterBtn = document.getElementById('enterBtn');
 const error = document.getElementById('error');
 
-// Mostra splash por 5 segundos (3 de rotação + 2 parado)
+// Mostra splash por 3 segundos (rotação) + 2 segundos parado = total 5s
 setTimeout(() => {
   splash.classList.add('hidden');
-  // Após sumir o splash, espera 3 segundos para o login aparecer
+  // Após sumir splash, mostra login com atraso de 3s para visualizar fundo
   setTimeout(() => {
     loginCard.classList.add('visible');
   }, 3000);
