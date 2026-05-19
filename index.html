@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Nosso Tempo</title>
 
 <style>
+
 /* =========================
    RESET
 ========================= */
+
 *{
     margin:0;
     padding:0;
@@ -31,19 +33,22 @@ body{
 }
 
 /* =========================
-   FUNDOS
+   FUNDO
 ========================= */
+
 body::before{
     content:"";
     position:fixed;
     inset:0;
-    background:url("fundo-login.png") center/cover no-repeat;
+    background:url("fundo-login.png") center/contain no-repeat;
+    background-color:#8fd4f8;
     z-index:-3;
     transition:.8s;
 }
 
 body.inside::before{
-    background:url("fundo-site.png") center/cover no-repeat;
+    background:url("fundo-site.png") center/contain no-repeat;
+    background-color:#8fd4f8;
 }
 
 body::after{
@@ -59,6 +64,7 @@ body::after{
 /* =========================
    SPLASH
 ========================= */
+
 #splash{
     position:fixed;
     inset:0;
@@ -82,13 +88,16 @@ body::after{
 }
 
 @keyframes introSpin{
+
     0%{
         transform:perspective(800px) rotateY(0deg) scale(.7);
         opacity:0;
     }
+
     20%{
         opacity:1;
     }
+
     100%{
         transform:perspective(800px) rotateY(720deg) scale(1);
         opacity:1;
@@ -98,6 +107,7 @@ body::after{
 /* =========================
    LOGIN
 ========================= */
+
 .screen{
     min-height:100vh;
     display:flex;
@@ -149,11 +159,6 @@ body::after{
     font-weight:700;
     color:white;
     background:linear-gradient(135deg,#ff5f95,#ff3d7c);
-    transition:.25s;
-}
-
-.login-card button:hover{
-    transform:translateY(-2px);
 }
 
 .error{
@@ -164,6 +169,7 @@ body::after{
 /* =========================
    SITE
 ========================= */
+
 .hidden{
     display:none !important;
 }
@@ -200,6 +206,7 @@ body::after{
 /* =========================
    COUNTERS
 ========================= */
+
 .counters{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -258,21 +265,26 @@ body::after{
 }
 
 /* =========================
-   MESSAGE
+   CARDS
 ========================= */
-.message-card{
+
+.message-card,
+.love-card{
     border-radius:30px;
     padding:28px;
     text-align:center;
+    margin-top:24px;
 }
 
-.message-card h2{
-    margin-bottom:16px;
+.message-card h2,
+.love-card h2{
+    margin-bottom:18px;
 }
 
-.message{
-    font-size:clamp(1rem,2vw,1.4rem);
-    line-height:1.8;
+.message,
+.love-text{
+    font-size:clamp(1rem,2vw,1.3rem);
+    line-height:1.9;
     font-weight:700;
 }
 
@@ -284,6 +296,7 @@ body::after{
 /* =========================
    COELHO
 ========================= */
+
 #rabbit-container{
     position:absolute;
     inset:0;
@@ -292,31 +305,83 @@ body::after{
 
 .rabbit{
     position:absolute;
-    width:80px;
-    height:90px;
+    width:95px;
+    height:95px;
     z-index:10;
     transition:transform .08s linear;
-    will-change:transform;
 }
 
 .rabbit svg{
-    width:100%;
-    height:100%;
-}
+    overflow:visible;
 
-@keyframes rabbitFloat{
-    0%{ transform:translateY(0px); }
-    50%{ transform:translateY(-3px); }
-    100%{ transform:translateY(0px); }
+    filter:
+    drop-shadow(0 0 10px rgba(255,255,255,.4))
+    drop-shadow(0 0 20px rgba(255,255,255,.2));
 }
 
 .rabbit .inner{
     animation:rabbitFloat 2s ease-in-out infinite;
 }
 
+@keyframes rabbitFloat{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-3px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+.ear-left{
+    animation:ear1 3s ease-in-out infinite;
+    transform-origin:center bottom;
+}
+
+.ear-right{
+    animation:ear2 3s ease-in-out infinite;
+    transform-origin:center bottom;
+}
+
+@keyframes ear1{
+
+    0%{
+        transform:rotate(0deg);
+    }
+
+    50%{
+        transform:rotate(-6deg);
+    }
+
+    100%{
+        transform:rotate(0deg);
+    }
+}
+
+@keyframes ear2{
+
+    0%{
+        transform:rotate(0deg);
+    }
+
+    50%{
+        transform:rotate(6deg);
+    }
+
+    100%{
+        transform:rotate(0deg);
+    }
+}
+
 /* =========================
    PARTICULAS
 ========================= */
+
 #particle-canvas{
     position:fixed;
     inset:0;
@@ -327,22 +392,30 @@ body::after{
 /* =========================
    RESPONSIVO
 ========================= */
+
 @media(max-width:850px){
+
     .counters{
         grid-template-columns:1fr;
     }
 }
 
 @media(max-width:520px){
+
     .grid{
         grid-template-columns:repeat(2,1fr);
     }
 
     .rabbit{
-        width:65px;
+        width:75px;
         height:75px;
     }
+
+    body::before{
+        background-size:contain;
+    }
 }
+
 </style>
 </head>
 
@@ -355,8 +428,12 @@ body::after{
 
 <!-- LOGIN -->
 <div id="loginScreen" class="screen">
+
     <div id="loginCard" class="login-card glass">
-        <h1 style="font-size:2.2rem;margin-bottom:8px;">Nosso Tempo</h1>
+
+        <h1 style="font-size:2.2rem;margin-bottom:8px;">
+            Nosso Tempo
+        </h1>
 
         <p style="margin-bottom:28px;color:var(--text);">
             Um cantinho simples para guardar o tempo.
@@ -367,7 +444,9 @@ body::after{
         <button id="enterBtn">Entrar</button>
 
         <div id="error" class="error"></div>
+
     </div>
+
 </div>
 
 <!-- SITE -->
@@ -381,43 +460,115 @@ body::after{
     <div class="counters">
 
         <div class="counter-card glass">
-            <div class="counter-title">🌸 Oficial</div>
+
+            <div class="counter-title">
+                🌸 Oficial
+            </div>
 
             <div class="grid">
-                <div class="box"><span class="number" id="oficial-anos">0</span><span class="label">anos</span></div>
-                <div class="box"><span class="number" id="oficial-meses">0</span><span class="label">meses</span></div>
-                <div class="box"><span class="number" id="oficial-dias">0</span><span class="label">dias</span></div>
-                <div class="box"><span class="number" id="oficial-horas">0</span><span class="label">horas</span></div>
-                <div class="box"><span class="number" id="oficial-minutos">0</span><span class="label">minutos</span></div>
-                <div class="box"><span class="number" id="oficial-segundos">0</span><span class="label">segundos</span></div>
+
+                <div class="box">
+                    <span class="number" id="oficial-anos">0</span>
+                    <span class="label">anos</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="oficial-meses">0</span>
+                    <span class="label">meses</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="oficial-dias">0</span>
+                    <span class="label">dias</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="oficial-horas">0</span>
+                    <span class="label">horas</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="oficial-minutos">0</span>
+                    <span class="label">minutos</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="oficial-segundos">0</span>
+                    <span class="label">segundos</span>
+                </div>
+
             </div>
+
         </div>
 
         <div class="counter-card glass">
-            <div class="counter-title">🌟 Não Oficial</div>
+
+            <div class="counter-title">
+                🌟 Não Oficial
+            </div>
 
             <div class="grid">
-                <div class="box"><span class="number" id="naooficial-anos">0</span><span class="label">anos</span></div>
-                <div class="box"><span class="number" id="naooficial-meses">0</span><span class="label">meses</span></div>
-                <div class="box"><span class="number" id="naooficial-dias">0</span><span class="label">dias</span></div>
-                <div class="box"><span class="number" id="naooficial-horas">0</span><span class="label">horas</span></div>
-                <div class="box"><span class="number" id="naooficial-minutos">0</span><span class="label">minutos</span></div>
-                <div class="box"><span class="number" id="naooficial-segundos">0</span><span class="label">segundos</span></div>
+
+                <div class="box">
+                    <span class="number" id="naooficial-anos">0</span>
+                    <span class="label">anos</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="naooficial-meses">0</span>
+                    <span class="label">meses</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="naooficial-dias">0</span>
+                    <span class="label">dias</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="naooficial-horas">0</span>
+                    <span class="label">horas</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="naooficial-minutos">0</span>
+                    <span class="label">minutos</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="naooficial-segundos">0</span>
+                    <span class="label">segundos</span>
+                </div>
+
             </div>
+
         </div>
 
     </div>
 
+    <!-- MENSAGEM DO MES -->
+
     <div class="message-card glass">
+
         <h2>💌 Mensagem do mês</h2>
 
         <div id="monthly-message" class="message">
-            O tempo passa, mas continuar ao seu lado ainda é uma das melhores partes dos meus dias.
+            Carregando...
         </div>
 
-        <div class="date">
-            — Maio de 2026
+        <div id="monthly-date" class="date"></div>
+
+    </div>
+
+    <!-- NOVO QUADRADO -->
+
+    <div class="love-card glass">
+
+        <h2>🤍 Sobre você</h2>
+
+        <div class="love-text">
+            Eu gosto do seu jeito. Tipo, vc é engraçada (eu realmente te acho muito engraçada), carinhosa, eu gosto do jeito q vc se preocupa comigo e da forma q vc demonstra as coisas. Tipo quando vc começa a sorrir enquanto eu tô falando, eu acho isso muito fofo kkkkkk
         </div>
+
     </div>
 
     <div id="rabbit-container"></div>
@@ -427,17 +578,64 @@ body::after{
 <canvas id="particle-canvas"></canvas>
 
 <script>
+
 /* =========================
    CONFIG
 ========================= */
+
 const PASSWORD = "210425";
 
 const officialDate = new Date(2025,3,21);
 const unofficialDate = new Date(2024,9,9);
 
+const monthlyMessages = [
+
+{
+date:"2026-05-21",
+text:"O tempo passa, mas continuar ao seu lado ainda é uma das melhores partes dos meus dias."
+},
+
+{
+date:"2026-06-21",
+text:"Você supera a perfeição de Shadow Of The Colossus "
+},
+
+{
+date:"2026-07-21",
+text:"Eu te amo muito mais do que amo Resident Evil "
+},
+
+{
+date:"2026-08-21",
+text:"Em meio à tantas galáxias e universos, meu amor por vc supera toda essa vastidão"
+},
+
+{
+date:"2026-09-21",
+text:"Eu iria até o fim por você, assim como Alan Wake, Dante, Wander, Leon e Deacon foram"
+},
+
+{
+date:"2026-10-21",
+text:"Mesmo que a gente se veja por horas, eu vou sentir sua falta assim que for embora"
+},
+
+{
+date:"2026-11-21",
+text:"I would rather share one lifetime with you than face all the ages of this world"
+},
+
+{
+date:"2026-12-21",
+text:"Pra acabar o ano, quero que você saiba: eu te amo e vou te amar em todos os próximos anos"
+}
+
+];
+
 /* =========================
    ELEMENTOS
 ========================= */
+
 const splash = document.getElementById("splash");
 const loginCard = document.getElementById("loginCard");
 const loginScreen = document.getElementById("loginScreen");
@@ -450,11 +648,12 @@ const error = document.getElementById("error");
 /* =========================
    SPLASH
 ========================= */
-setTimeout(() => {
+
+setTimeout(()=>{
 
     splash.classList.add("hidden");
 
-    setTimeout(() => {
+    setTimeout(()=>{
         loginCard.classList.add("visible");
     },500);
 
@@ -463,9 +662,11 @@ setTimeout(() => {
 /* =========================
    LOGIN
 ========================= */
+
 function enterSite(){
 
     if(passwordInput.value.trim() !== PASSWORD){
+
         error.textContent = "Senha incorreta";
         return;
     }
@@ -474,13 +675,16 @@ function enterSite(){
 
     loginScreen.classList.add("hidden");
 
-    setTimeout(() => {
+    setTimeout(()=>{
         site.classList.add("show");
         initRabbit();
     },100);
 
     updateCounters();
+
     setInterval(updateCounters,1000);
+
+    setupMessage();
 
     initParticles();
 }
@@ -488,14 +692,17 @@ function enterSite(){
 enterBtn.addEventListener("click", enterSite);
 
 passwordInput.addEventListener("keydown",(e)=>{
+
     if(e.key === "Enter"){
         enterSite();
     }
+
 });
 
 /* =========================
    COUNTERS
 ========================= */
+
 function preciseDiff(start,end){
 
     let years = end.getFullYear() - start.getFullYear();
@@ -521,8 +728,11 @@ function preciseDiff(start,end){
     }
 
     if(days < 0){
+
         const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+
         days += prevMonth.getDate();
+
         months--;
     }
 
@@ -564,7 +774,43 @@ function updateCounters(){
 }
 
 /* =========================
-   COELHO ARRUMADO
+   MENSAGEM
+========================= */
+
+function setupMessage(){
+
+    const now = new Date();
+
+    let found = null;
+
+    for(const msg of monthlyMessages){
+
+        const d = new Date(msg.date + "T00:00:00");
+
+        if(d <= now){
+            found = msg;
+        }
+    }
+
+    if(found){
+
+        document.getElementById("monthly-message").textContent = found.text;
+
+        const d = new Date(found.date + "T00:00:00");
+
+        document.getElementById("monthly-date").textContent =
+        "— " +
+        d.toLocaleDateString("pt-BR",{
+            day:"numeric",
+            month:"long",
+            year:"numeric"
+        });
+
+    }
+}
+
+/* =========================
+   COELHO
 ========================= */
 
 const rabbitContainer = document.getElementById("rabbit-container");
@@ -573,40 +819,82 @@ let rabbit = null;
 
 const rabbitState = {
     x:200,
-    y:350,
+    y:380,
     targetX:200,
     direction:1
 };
 
 function rabbitSVG(){
+
 return `
 <div class="inner">
-<svg viewBox="0 0 80 90">
 
-<ellipse cx="40" cy="78" rx="22" ry="8" fill="rgba(0,0,0,.12)"/>
+<svg viewBox="0 0 120 120">
 
-<ellipse cx="40" cy="55" rx="22" ry="25" fill="white"/>
-<circle cx="40" cy="32" r="18" fill="white"/>
+<ellipse cx="60" cy="105" rx="28" ry="10"
+fill="rgba(0,0,0,0.12)"/>
 
-<ellipse cx="30" cy="10" rx="7" ry="18" fill="white"/>
-<ellipse cx="50" cy="10" rx="7" ry="18" fill="white"/>
+<g class="ear-left">
+<ellipse cx="38" cy="28" rx="12" ry="34"
+fill="#ffffff"/>
+<ellipse cx="38" cy="32" rx="5" ry="22"
+fill="#ffd1dc"/>
+</g>
 
-<ellipse cx="30" cy="14" rx="3" ry="10" fill="pink"/>
-<ellipse cx="50" cy="14" rx="3" ry="10" fill="pink"/>
+<g class="ear-right">
+<ellipse cx="82" cy="28" rx="12" ry="34"
+fill="#ffffff"/>
+<ellipse cx="82" cy="32" rx="5" ry="22"
+fill="#ffd1dc"/>
+</g>
 
-<circle cx="33" cy="32" r="3.5" fill="#222"/>
-<circle cx="47" cy="32" r="3.5" fill="#222"/>
+<ellipse cx="60" cy="74" rx="30" ry="28"
+fill="#ffffff"/>
 
-<circle cx="34" cy="31" r="1" fill="white"/>
-<circle cx="48" cy="31" r="1" fill="white"/>
+<circle cx="60" cy="50" r="26"
+fill="#ffffff"/>
 
-<ellipse cx="40" cy="39" rx="2" ry="1.5" fill="pink"/>
+<ellipse cx="42" cy="58" rx="6" ry="4"
+fill="rgba(255,180,190,.5)"/>
 
-<path d="M36 43 Q40 47 44 43" stroke="#555" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<ellipse cx="78" cy="58" rx="6" ry="4"
+fill="rgba(255,180,190,.5)"/>
+
+<ellipse cx="50" cy="50" rx="4" ry="6"
+fill="#1f1f1f"/>
+
+<ellipse cx="70" cy="50" rx="4" ry="6"
+fill="#1f1f1f"/>
+
+<circle cx="51" cy="48" r="1.3"
+fill="white"/>
+
+<circle cx="71" cy="48" r="1.3"
+fill="white"/>
+
+<ellipse cx="60" cy="60" rx="3" ry="2"
+fill="#ffb6c1"/>
+
+<path d="M55 64 Q60 69 65 64"
+stroke="#666"
+stroke-width="1.8"
+fill="none"
+stroke-linecap="round"/>
+
+<ellipse cx="45" cy="92" rx="9" ry="6"
+fill="#ffffff"/>
+
+<ellipse cx="75" cy="92" rx="9" ry="6"
+fill="#ffffff"/>
+
+<circle cx="88" cy="76" r="8"
+fill="#ffffff"/>
 
 </svg>
+
 </div>
 `;
+
 }
 
 function initRabbit(){
@@ -619,25 +907,14 @@ function initRabbit(){
 
     rabbitContainer.appendChild(rabbit);
 
-    rabbit.style.transform = `translate(${rabbitState.x}px, ${rabbitState.y}px)`;
+    rabbit.style.transform =
+    `translate(${rabbitState.x}px, ${rabbitState.y}px)`;
 
     moveRabbit();
 
     animateRabbit();
-
-    /* clique */
-    rabbit.addEventListener("click",()=>{
-
-        rabbit.style.scale = "1.15";
-
-        setTimeout(()=>{
-            rabbit.style.scale = "1";
-        },200);
-
-    });
 }
 
-/* movimento automático suave */
 function moveRabbit(){
 
     setInterval(()=>{
@@ -652,15 +929,12 @@ function moveRabbit(){
     },3000);
 }
 
-/* animação */
 function animateRabbit(){
 
     function loop(){
 
-        const speed = 0.03;
-
         rabbitState.x +=
-        (rabbitState.targetX - rabbitState.x) * speed;
+        (rabbitState.targetX - rabbitState.x) * 0.03;
 
         rabbit.style.transform =
         `
@@ -692,18 +966,19 @@ function initParticles(){
     for(let i=0;i<35;i++){
 
         particles.push({
+
             x:Math.random()*canvas.width,
             y:Math.random()*canvas.height,
             r:Math.random()*3+1,
             speed:Math.random()*0.5+0.2
         });
-
     }
 
     drawParticles();
 }
 
 function resizeCanvas(){
+
     canvas.width = innerWidth;
     canvas.height = innerHeight;
 }
@@ -717,19 +992,24 @@ function drawParticles(){
         p.y -= p.speed;
 
         if(p.y < -10){
+
             p.y = canvas.height + 10;
+
             p.x = Math.random()*canvas.width;
         }
 
         ctx.beginPath();
+
         ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
 
         ctx.fillStyle = "rgba(255,255,255,.4)";
+
         ctx.fill();
     });
 
     requestAnimationFrame(drawParticles);
 }
+
 </script>
 
 </body>
