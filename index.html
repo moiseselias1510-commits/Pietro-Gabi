@@ -1,1553 +1,736 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-    <title>Nosso Tempo</title>
-    <style>
-        /* ===== ROOT & RESET ===== */
-        :root {
-            --glass: rgba(255, 255, 255, .08);
-            --border: rgba(255, 255, 255, .18);
-            --shadow: 0 18px 45px rgba(0, 0, 0, .18);
-            --text: rgba(255, 255, 255, .9);
-            --glow-white: rgba(255, 255, 255, .6);
-            --glow-yellow: rgba(255, 255, 0, .6);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            min-height: 100vh;
-            overflow-x: hidden;
-            font-family: "Segoe UI", sans-serif;
-            color: white;
-            background: #8fd4f8;
-            cursor: default;
-        }
-
-        /* Fundo login */
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: url("fundo-login.png") center/contain no-repeat;
-            background-color: #8fd4f8;
-            z-index: -3;
-            transition: .8s;
-        }
-
-        body.inside::before {
-            background: url("fundo-site.png") center/contain no-repeat;
-            background-color: #8fd4f8;
-        }
-
-        body::after {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(circle at top, rgba(255, 255, 255, .12), transparent 40%),
-                linear-gradient(180deg, rgba(0, 0, 0, .10), rgba(0, 0, 0, .16));
-            z-index: -2;
-        }
-
-        /* ===== SPLASH ===== */
-        #splash {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, .3);
-            z-index: 100;
-            backdrop-filter: blur(4px);
-            transition: opacity 1s ease, visibility 1s ease;
-        }
-
-        #splash.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        #splash img {
-            max-width: 300px;
-            width: 70vw;
-            max-height: 70vh;
-            height: auto;
-            animation: rotate3d 3s ease-in-out forwards;
-            transform-origin: center;
-            perspective: 600px;
-        }
-
-        @keyframes rotate3d {
-            0% {
-                transform: perspective(600px) rotateY(0deg) scale(0.9);
-                opacity: 0.4;
-            }
-            20% {
-                opacity: 1;
-            }
-            80% {
-                transform: perspective(600px) rotateY(360deg) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: perspective(600px) rotateY(360deg) scale(1);
-                opacity: 1;
-            }
-        }
-
-        /* ===== LOGIN ===== */
-        .screen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .login-card {
-            width: min(410px, 92vw);
-            border-radius: 30px;
-            padding: 34px 24px;
-            text-align: center;
-            animation: fadeUp 1s ease;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        .login-card.visible {
-            opacity: 1;
-        }
-
-        .login-card input {
-            width: 100%;
-            border: none;
-            outline: none;
-            padding: 15px 18px;
-            border-radius: 999px;
-            font-size: 16px;
-            margin-bottom: 14px;
-            background: rgba(255, 255, 255, .75);
-            backdrop-filter: blur(4px);
-        }
-
-        .login-card button {
-            width: 100%;
-            border: none;
-            cursor: pointer;
-            padding: 14px;
-            border-radius: 999px;
-            font-size: 16px;
-            font-weight: 700;
-            color: white;
-            background: linear-gradient(135deg, #ff5f95, #ff3d7c);
-            box-shadow: 0 12px 28px rgba(255, 65, 120, .28);
-            transition: .25s;
-            opacity: 0.9;
-        }
-
-        .login-card button:hover {
-            transform: translateY(-2px);
-        }
-
-        .error {
-            margin-top: 14px;
-            color: #fff2b8;
-            min-height: 20px;
-        }
-
-        .glass {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* ===== SITE ===== */
-        #site {
-            width: min(1000px, 92vw);
-            margin: 34px auto 60px;
-            opacity: 0;
-            transform: translateY(18px);
-            pointer-events: none;
-            transition: 1s;
-            position: relative;
-            z-index: 1;
-            padding-bottom: 120px;
-            /* espaço pro coelho */;
-        }
-
-        #site.show {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 26px;
-        }
-
-        .header h1 {
-            font-size: clamp(2.3rem, 5vw, 3.5rem);
-            margin-bottom: 12px;
-            text-shadow: 0 8px 24px rgba(0, 0, 0, .18);
-            position: relative;
-            display: inline-block;
-        }
-
-        .header h1 .letter {
-            display: inline-block;
-            transition: transform 0.4s ease, opacity 0.4s ease;
-            position: relative;
-        }
-
-        .header h1 .letter.stolen {
-            transform: translateY(-40px) scale(0.5);
-            opacity: 0.3;
-            color: #ffd966;
-        }
-
-        .header h1 .letter.returning {
-            animation: letterReturn 0.6s ease forwards;
-        }
-
-        @keyframes letterReturn {
-            0% {
-                transform: translateY(-40px) scale(0.5);
-                opacity: 0.3;
-            }
-            60% {
-                transform: translateY(6px) scale(1.1);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
-        }
-
-        .header p {
-            color: var(--text);
-        }
-
-        /* ===== COUNTERS ===== */
-        .counters {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 22px;
-            margin-bottom: 24px;
-        }
-
-        .counter-card {
-            border-radius: 30px;
-            padding: 26px 22px;
-            position: relative;
-            overflow: visible !important;
-        }
-
-        .counter-card:nth-child(1) {
-            box-shadow:
-                0 0 20px rgba(255, 255, 255, 0.6),
-                0 0 40px rgba(255, 255, 255, 0.4),
-                0 0 60px rgba(255, 255, 255, 0.2),
-                inset 0 0 10px rgba(255, 255, 255, 0.1);
-            animation: glowWhite 2s ease-in-out infinite alternate;
-        }
-
-        .counter-card:nth-child(2) {
-            box-shadow:
-                0 0 20px rgba(255, 255, 0, 0.6),
-                0 0 40px rgba(255, 255, 0, 0.4),
-                0 0 60px rgba(255, 255, 0, 0.2),
-                inset 0 0 10px rgba(255, 255, 0, 0.1);
-            animation: glowYellow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glowWhite {
-            from {
-                box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.3), 0 0 60px rgba(255, 255, 255, 0.1);
-            }
-            to {
-                box-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 0.5), 0 0 80px rgba(255, 255, 255, 0.3);
-            }
-        }
-
-        @keyframes glowYellow {
-            from {
-                box-shadow: 0 0 20px rgba(255, 255, 0, 0.5), 0 0 40px rgba(255, 255, 0, 0.3), 0 0 60px rgba(255, 255, 0, 0.1);
-            }
-            to {
-                box-shadow: 0 0 30px rgba(255, 255, 0, 0.8), 0 0 60px rgba(255, 255, 0, 0.5), 0 0 80px rgba(255, 255, 0, 0.3);
-            }
-        }
-
-        .counter-title {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: .05em;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-
-        .box {
-            border-radius: 20px;
-            padding: 18px 10px;
-            text-align: center;
-            background: rgba(255, 255, 255, .12);
-            border: 1px solid rgba(255, 255, 255, .18);
-            position: relative;
-        }
-
-        .number {
-            display: block;
-            font-size: 1.6rem;
-            font-weight: 800;
-            margin-bottom: 6px;
-        }
-
-        .label {
-            color: rgba(255, 255, 255, .85);
-            font-size: .9rem;
-        }
-
-        /* ===== MESSAGE ===== */
-        .message-card {
-            border-radius: 30px;
-            padding: 28px;
-            text-align: center;
-        }
-
-        .message-card h2 {
-            margin-bottom: 18px;
-            font-size: 1.1rem;
-            letter-spacing: .05em;
-            color: rgba(255, 255, 255, .9);
-        }
-
-        .message {
-            font-size: clamp(1.05rem, 2vw, 1.4rem);
-            line-height: 1.9;
-            font-weight: 700;
-        }
-
-        .date {
-            margin-top: 18px;
-            color: rgba(255, 255, 255, .75);
-            font-size: .95rem;
-        }
-
-        /* ===== RABBIT MASCOT ===== */
-        #rabbit-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 10;
-            overflow: visible;
-        }
-
-        #rabbit-container.interactive {
-            pointer-events: auto;
-        }
-
-        .rabbit {
-            position: absolute;
-            width: 80px;
-            height: 90px;
-            transform-origin: center bottom;
-            pointer-events: auto;
-            cursor: pointer;
-            filter: drop-shadow(0 8px 20px rgba(255, 255, 255, 0.3));
-            transition: filter 0.3s ease;
-            z-index: 20;
-            will-change: transform;
-        }
-
-        .rabbit:hover {
-            filter: drop-shadow(0 8px 30px rgba(255, 255, 255, 0.6));
-        }
-
-        .rabbit svg {
-            width: 100%;
-            height: 100%;
-            display: block;
-            overflow: visible;
-        }
-
-        .rabbit .glow-ring {
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 12px;
-            background: radial-gradient(ellipse, rgba(255, 255, 200, 0.4) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: glowPulse 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glowPulse {
-            0% {
-                transform: translateX(-50%) scaleX(1);
-                opacity: 0.3;
-            }
-            100% {
-                transform: translateX(-50%) scaleX(1.3);
-                opacity: 0.7;
-            }
-        }
-
-        /* Partículas Canvas */
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        /* ===== GROUND ===== */
-        #ground-sensor {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: transparent;
-            pointer-events: none;
-        }
-
-        /* ===== ANIMAÇÕES ===== */
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(18px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ===== RESPONSIVO ===== */
-        @media(max-width:850px) {
-            .counters {
-                grid-template-columns: 1fr;
-            }
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media(max-width:520px) {
-            .login-card,
-            .counter-card,
-            .message-card {
-                padding: 20px;
-            }
-            .grid {
-                gap: 10px;
-            }
-            .number {
-                font-size: 1.3rem;
-            }
-            .box {
-                padding: 16px 8px;
-            }
-            .rabbit {
-                width: 60px;
-                height: 68px;
-            }
-        }
-
-        /* Estado dormindo */
-        .rabbit.sleeping svg .eye-open {
-            display: none;
-        }
-        .rabbit.sleeping svg .eye-closed {
-            display: block;
-        }
-        .rabbit:not(.sleeping) svg .eye-closed {
-            display: none;
-        }
-        .rabbit:not(.sleeping) svg .eye-open {
-            display: block;
-        }
-
-        /* zzz */
-        .rabbit .zzz {
-            position: absolute;
-            top: -30px;
-            right: -20px;
-            font-size: 22px;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: bold;
-            opacity: 0;
-            pointer-events: none;
-            animation: zzzFloat 2.5s ease-in-out infinite;
-        }
-
-        .rabbit.sleeping .zzz {
-            opacity: 1;
-        }
-
-        @keyframes zzzFloat {
-            0% {
-                transform: translateY(0) scale(0.6);
-                opacity: 0;
-            }
-            20% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-40px) scale(1.2);
-                opacity: 0;
-            }
-        }
-
-        /* Emoção reativa */
-        .rabbit .emote {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 32px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.5s ease;
-        }
-
-        .rabbit .emote.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(-10px);
-        }
-
-        /* Poeira ao cair */
-        .dust {
-            position: absolute;
-            pointer-events: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            animation: dustFade 0.6s ease forwards;
-        }
-
-        @keyframes dustFade {
-            0% {
-                transform: scale(1);
-                opacity: 0.6;
-            }
-            100% {
-                transform: scale(2.5);
-                opacity: 0;
-            }
-        }
-
-        /* Faíscas mágicas */
-        .sparkle {
-            position: fixed;
-            pointer-events: none;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(255, 255, 200, 0.8);
-            box-shadow: 0 0 10px rgba(255, 255, 200, 0.6);
-            animation: sparkleFade 0.8s ease forwards;
-            z-index: 15;
-        }
-
-        @keyframes sparkleFade {
-            0% {
-                transform: scale(1) translateY(0);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(0.2) translateY(-30px);
-                opacity: 0;
-            }
-        }
-
-        /* Partícula de corrida */
-        .run-particle {
-            position: fixed;
-            pointer-events: none;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            animation: runParticle 0.5s ease forwards;
-            z-index: 15;
-        }
-
-        @keyframes runParticle {
-            0% {
-                transform: scale(1) translateY(0);
-                opacity: 0.7;
-            }
-            100% {
-                transform: scale(0) translateY(20px);
-                opacity: 0;
-            }
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nosso Tempo</title>
+
+<style>
+/* =========================
+   RESET
+========================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --glass: rgba(255,255,255,.08);
+    --border: rgba(255,255,255,.18);
+    --shadow: 0 18px 45px rgba(0,0,0,.18);
+    --text: rgba(255,255,255,.9);
+}
+
+body{
+    min-height:100vh;
+    overflow-x:hidden;
+    font-family:"Segoe UI",sans-serif;
+    background:#8fd4f8;
+    color:white;
+}
+
+/* =========================
+   FUNDOS
+========================= */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:url("fundo-login.png") center/cover no-repeat;
+    z-index:-3;
+    transition:.8s;
+}
+
+body.inside::before{
+    background:url("fundo-site.png") center/cover no-repeat;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at top, rgba(255,255,255,.1), transparent 40%),
+    linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.15));
+    z-index:-2;
+}
+
+/* =========================
+   SPLASH
+========================= */
+#splash{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,.35);
+    backdrop-filter:blur(5px);
+    z-index:999;
+    transition:1s;
+}
+
+#splash.hidden{
+    opacity:0;
+    visibility:hidden;
+}
+
+#splash img{
+    width:min(320px,70vw);
+    animation:introSpin 4s ease forwards;
+}
+
+@keyframes introSpin{
+    0%{
+        transform:perspective(800px) rotateY(0deg) scale(.7);
+        opacity:0;
+    }
+    20%{
+        opacity:1;
+    }
+    100%{
+        transform:perspective(800px) rotateY(720deg) scale(1);
+        opacity:1;
+    }
+}
+
+/* =========================
+   LOGIN
+========================= */
+.screen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.login-card{
+    width:min(400px,92vw);
+    padding:32px 24px;
+    border-radius:30px;
+    text-align:center;
+    opacity:0;
+    transform:translateY(20px);
+    transition:1s;
+}
+
+.login-card.visible{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.glass{
+    background:var(--glass);
+    backdrop-filter:blur(20px);
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+}
+
+.login-card input{
+    width:100%;
+    padding:15px 18px;
+    border:none;
+    outline:none;
+    border-radius:999px;
+    margin-bottom:14px;
+    font-size:16px;
+    background:rgba(255,255,255,.8);
+}
+
+.login-card button{
+    width:100%;
+    border:none;
+    cursor:pointer;
+    padding:14px;
+    border-radius:999px;
+    font-size:16px;
+    font-weight:700;
+    color:white;
+    background:linear-gradient(135deg,#ff5f95,#ff3d7c);
+    transition:.25s;
+}
+
+.login-card button:hover{
+    transform:translateY(-2px);
+}
+
+.error{
+    margin-top:14px;
+    color:#fff3b7;
+}
+
+/* =========================
+   SITE
+========================= */
+.hidden{
+    display:none !important;
+}
+
+#site{
+    width:min(1000px,92vw);
+    margin:35px auto 60px;
+    opacity:0;
+    transform:translateY(20px);
+    transition:1s;
+    position:relative;
+    padding-bottom:120px;
+}
+
+#site.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.header h1{
+    font-size:clamp(2.3rem,5vw,3.8rem);
+    margin-bottom:10px;
+}
+
+.header p{
+    color:rgba(255,255,255,.85);
+}
+
+/* =========================
+   COUNTERS
+========================= */
+.counters{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+    margin-bottom:24px;
+}
+
+.counter-card{
+    border-radius:30px;
+    padding:26px;
+    overflow:hidden;
+}
+
+.counter-card:nth-child(1){
+    box-shadow:
+    0 0 20px rgba(255,255,255,.6),
+    0 0 40px rgba(255,255,255,.3);
+}
+
+.counter-card:nth-child(2){
+    box-shadow:
+    0 0 20px rgba(255,255,0,.5),
+    0 0 40px rgba(255,255,0,.25);
+}
+
+.counter-title{
+    text-align:center;
+    margin-bottom:20px;
+    font-weight:700;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.box{
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:20px;
+    padding:18px 10px;
+    text-align:center;
+}
+
+.number{
+    display:block;
+    font-size:1.5rem;
+    font-weight:800;
+    margin-bottom:5px;
+}
+
+.label{
+    font-size:.9rem;
+    color:rgba(255,255,255,.8);
+}
+
+/* =========================
+   MESSAGE
+========================= */
+.message-card{
+    border-radius:30px;
+    padding:28px;
+    text-align:center;
+}
+
+.message-card h2{
+    margin-bottom:16px;
+}
+
+.message{
+    font-size:clamp(1rem,2vw,1.4rem);
+    line-height:1.8;
+    font-weight:700;
+}
+
+.date{
+    margin-top:18px;
+    color:rgba(255,255,255,.75);
+}
+
+/* =========================
+   COELHO
+========================= */
+#rabbit-container{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+}
+
+.rabbit{
+    position:absolute;
+    width:80px;
+    height:90px;
+    z-index:10;
+    transition:transform .08s linear;
+    will-change:transform;
+}
+
+.rabbit svg{
+    width:100%;
+    height:100%;
+}
+
+@keyframes rabbitFloat{
+    0%{ transform:translateY(0px); }
+    50%{ transform:translateY(-3px); }
+    100%{ transform:translateY(0px); }
+}
+
+.rabbit .inner{
+    animation:rabbitFloat 2s ease-in-out infinite;
+}
+
+/* =========================
+   PARTICULAS
+========================= */
+#particle-canvas{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:1;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+@media(max-width:850px){
+    .counters{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:520px){
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .rabbit{
+        width:65px;
+        height:75px;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <!-- ===== SPLASH ===== -->
-    <div id="splash">
-        <img src="sua-imagem-aqui.png" alt="Carregando..." />
+<!-- SPLASH -->
+<div id="splash">
+    <img src="intro-image.png" alt="Intro">
+</div>
+
+<!-- LOGIN -->
+<div id="loginScreen" class="screen">
+    <div id="loginCard" class="login-card glass">
+        <h1 style="font-size:2.2rem;margin-bottom:8px;">Nosso Tempo</h1>
+
+        <p style="margin-bottom:28px;color:var(--text);">
+            Um cantinho simples para guardar o tempo.
+        </p>
+
+        <input id="password" type="password" placeholder="Digite a senha">
+
+        <button id="enterBtn">Entrar</button>
+
+        <div id="error" class="error"></div>
+    </div>
+</div>
+
+<!-- SITE -->
+<div id="site">
+
+    <div class="header">
+        <h1>Nosso Tempo</h1>
+        <p>Cada segundo continua sendo especial.</p>
     </div>
 
-    <!-- ===== LOGIN ===== -->
-    <div id="loginScreen" class="screen">
-        <div id="loginCard" class="login-card glass">
-            <h1 style="font-size:2.2rem;margin-bottom:6px;">Nosso Tempo</h1>
-            <p style="margin-bottom:28px;color:var(--text);">
-                Um cantinho simples para guardar o tempo.
-            </p>
-            <input id="password" type="password" placeholder="Digite a senha" autocomplete="off" />
-            <button id="enterBtn">Entrar</button>
-            <div id="error" class="error"></div>
-        </div>
-    </div>
+    <div class="counters">
 
-    <!-- ===== SITE ===== -->
-    <div id="site">
-        <div class="header">
-            <h1 id="title-text">
-                <span class="letter">N</span><span class="letter">o</span><span class="letter">s</span><span class="letter">s</span><span class="letter">o</span>
-                &nbsp;
-                <span class="letter">T</span><span class="letter">e</span><span class="letter">m</span><span class="letter">p</span><span class="letter">o</span>
-            </h1>
-            <p>Cada segundo continua sendo especial.</p>
-        </div>
+        <div class="counter-card glass">
+            <div class="counter-title">🌸 Oficial</div>
 
-        <div class="counters">
-            <div class="counter-card glass" data-platform="oficial">
-                <div class="counter-title">🌸 Oficial</div>
-                <div class="grid">
-                    <div class="box"><span class="number" id="oficial-anos">0</span><span class="label">anos</span></div>
-                    <div class="box"><span class="number" id="oficial-meses">0</span><span class="label">meses</span></div>
-                    <div class="box"><span class="number" id="oficial-dias">0</span><span class="label">dias</span></div>
-                    <div class="box"><span class="number" id="oficial-horas">0</span><span class="label">horas</span></div>
-                    <div class="box"><span class="number" id="oficial-minutos">0</span><span class="label">minutos</span></div>
-                    <div class="box"><span class="number" id="oficial-segundos">0</span><span class="label">segundos</span></div>
-                </div>
-            </div>
-
-            <div class="counter-card glass" data-platform="naooficial">
-                <div class="counter-title">🌟 Não Oficial</div>
-                <div class="grid">
-                    <div class="box"><span class="number" id="naooficial-anos">0</span><span class="label">anos</span></div>
-                    <div class="box"><span class="number" id="naooficial-meses">0</span><span class="label">meses</span></div>
-                    <div class="box"><span class="number" id="naooficial-dias">0</span><span class="label">dias</span></div>
-                    <div class="box"><span class="number" id="naooficial-horas">0</span><span class="label">horas</span></div>
-                    <div class="box"><span class="number" id="naooficial-minutos">0</span><span class="label">minutos</span></div>
-                    <div class="box"><span class="number" id="naooficial-segundos">0</span><span class="label">segundos</span></div>
-                </div>
+            <div class="grid">
+                <div class="box"><span class="number" id="oficial-anos">0</span><span class="label">anos</span></div>
+                <div class="box"><span class="number" id="oficial-meses">0</span><span class="label">meses</span></div>
+                <div class="box"><span class="number" id="oficial-dias">0</span><span class="label">dias</span></div>
+                <div class="box"><span class="number" id="oficial-horas">0</span><span class="label">horas</span></div>
+                <div class="box"><span class="number" id="oficial-minutos">0</span><span class="label">minutos</span></div>
+                <div class="box"><span class="number" id="oficial-segundos">0</span><span class="label">segundos</span></div>
             </div>
         </div>
 
-        <div class="message-card glass">
-            <h2>💌 Mensagem do mês</h2>
-            <div id="monthly-message" class="message">Carregando...</div>
-            <div id="monthly-date" class="date"></div>
+        <div class="counter-card glass">
+            <div class="counter-title">🌟 Não Oficial</div>
+
+            <div class="grid">
+                <div class="box"><span class="number" id="naooficial-anos">0</span><span class="label">anos</span></div>
+                <div class="box"><span class="number" id="naooficial-meses">0</span><span class="label">meses</span></div>
+                <div class="box"><span class="number" id="naooficial-dias">0</span><span class="label">dias</span></div>
+                <div class="box"><span class="number" id="naooficial-horas">0</span><span class="label">horas</span></div>
+                <div class="box"><span class="number" id="naooficial-minutos">0</span><span class="label">minutos</span></div>
+                <div class="box"><span class="number" id="naooficial-segundos">0</span><span class="label">segundos</span></div>
+            </div>
         </div>
 
-        <!-- Container do Coelho -->
-        <div id="rabbit-container"></div>
-        <div id="ground-sensor"></div>
     </div>
 
-    <!-- Canvas de partículas -->
-    <canvas id="particle-canvas"></canvas>
-
-    <script>
-        // ============================================================
-        // CONFIG
-        // ============================================================
-        const PASSWORD = "210425";
-        const officialDate = new Date(2025, 3, 21);
-        const unofficialDate = new Date(2024, 9, 9);
-
-        const monthlyMessages = [
-            { date: "2026-05-21",
-            text: "O tempo passa, mas continuar ao seu lado ainda é uma das melhores partes dos meus dias." },
-            { date: "2026-06-21", text: "Mesmo depois de tantos dias, ainda gosto de cada momento que passamos juntos." },
-            { date: "2026-07-21", text: "Você transformou momentos simples em lembranças que eu nunca quero esquecer." },
-            { date: "2026-08-21", text: "Ainda acho incrível como alguém pode significar tanto na vida de outra pessoa." },
-            { date: "2026-09-21", text: "Espero que o tempo continue sendo gentil com a nossa história." },
-            { date: "2026-10-21", text: "Não importa quanto tempo passe, algumas pessoas continuam especiais do mesmo jeito." },
-            { date: "2026-11-21", text: "Tem dias que tudo parece melhor só por lembrar de você." },
-            { date: "2026-12-21", text: "Mais um ano chegando e eu ainda gosto de olhar para tudo que construímos." }
-        ];
-
-        // ===== ELEMENTOS =====
-        const splash = document.getElementById('splash');
-        const loginScreen = document.getElementById('loginScreen');
-        const loginCard = document.getElementById('loginCard');
-        const site = document.getElementById('site');
-        const passwordInput = document.getElementById('password');
-        const enterBtn = document.getElementById('enterBtn');
-        const error = document.getElementById('error');
-        const rabbitContainer = document.getElementById('rabbit-container');
-        const particleCanvas = document.getElementById('particle-canvas');
-        const ctx = particleCanvas.getContext('2d');
-
-        // ===== SPLASH =====
-        setTimeout(() => {
-            splash.classList.add('hidden');
-            setTimeout(() => {
-                loginCard.classList.add('visible');
-            }, 3000);
-        }, 5000);
-
-        // ===== LOGIN =====
-        function enterSite() {
-            if (passwordInput.value.trim() !== PASSWORD) {
-                error.textContent = "Senha incorreta";
-                return;
-            }
-            document.body.classList.add('inside');
-            loginScreen.classList.add('hidden');
-            setTimeout(() => {
-                site.classList.add('show');
-                initRabbit();
-                initParticles();
-            }, 100);
-            updateCounters();
-            setInterval(updateCounters, 1000);
-            setupMessage();
-        }
-
-        enterBtn.addEventListener('click', enterSite);
-        passwordInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') enterSite();
-        });
-
-        // ===== COUNTERS =====
-        function preciseDiff(start, end) {
-            let years = end.getFullYear() - start.getFullYear();
-            let months = end.getMonth() - start.getMonth();
-            let days = end.getDate() - start.getDate();
-            let hours = end.getHours() - start.getHours();
-            let minutes = end.getMinutes() - start.getMinutes();
-            let seconds = end.getSeconds() - start.getSeconds();
-
-            if (seconds < 0) { seconds += 60;
-                minutes--; }
-            if (minutes < 0) { minutes += 60;
-                hours--; }
-            if (hours < 0) { hours += 24;
-                days--; }
-            if (days < 0) {
-                const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
-                days += prevMonth.getDate();
-                months--;
-            }
-            if (months < 0) { months += 12;
-                years--; }
-
-            return { years, months, days, hours, minutes, seconds };
-        }
-
-        function updateCounters() {
-            const now = new Date();
-            const o = preciseDiff(officialDate, now);
-            const u = preciseDiff(unofficialDate, now);
-
-            document.getElementById('oficial-anos').textContent = o.years;
-            document.getElementById('oficial-meses').textContent = o.months;
-            document.getElementById('oficial-dias').textContent = o.days;
-            document.getElementById('oficial-horas').textContent = o.hours;
-            document.getElementById('oficial-minutos').textContent = o.minutes;
-            document.getElementById('oficial-segundos').textContent = o.seconds;
-
-            document.getElementById('naooficial-anos').textContent = u.years;
-            document.getElementById('naooficial-meses').textContent = u.months;
-            document.getElementById('naooficial-dias').textContent = u.days;
-            document.getElementById('naooficial-horas').textContent = u.hours;
-            document.getElementById('naooficial-minutos').textContent = u.minutes;
-            document.getElementById('naooficial-segundos').textContent = u.seconds;
-        }
-
-        // ===== MENSAGEM =====
-        function setupMessage() {
-            const now = new Date();
-            let found = null;
-            for (const msg of monthlyMessages) {
-                const d = new Date(msg.date + 'T00:00:00');
-                if (d <= now) found = msg;
-            }
-            if (found) {
-                document.getElementById('monthly-message').textContent = found.text;
-                const d = new Date(found.date + 'T00:00:00');
-                document.getElementById('monthly-date').textContent =
-                    `— ${d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}`;
-            } else {
-                document.getElementById('monthly-message').textContent = "Ainda não há mensagem para este mês.";
-                document.getElementById('monthly-date').textContent = "";
-            }
-        }
-
-        // ================================================================
-        // 🐇 RABBIT MASCOT — SVG + FÍSICA + IA
-        // ================================================================
-
-        // ---- SVG do Coelho (partes animáveis) ----
-        const RABBIT_SVG = `
-      <svg viewBox="0 0 80 90" xmlns="http://www.w3.org/2000/svg">
-        <!-- Glow filter -->
-        <defs>
-          <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="3" result="blur"/>
-            <feMerge>
-              <feMergeNode in="blur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-          <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="6" result="blur"/>
-            <feMerge>
-              <feMergeNode in="blur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-          <radialGradient id="bodyGrad" cx="40%" cy="30%" r="70%">
-            <stop offset="0%" stop-color="#ffffff"/>
-            <stop offset="80%" stop-color="#f0f0f5"/>
-            <stop offset="100%" stop-color="#e0e0ea"/>
-          </radialGradient>
-          <radialGradient id="earGrad" cx="50%" cy="20%" r="80%">
-            <stop offset="0%" stop-color="#ffffff"/>
-            <stop offset="70%" stop-color="#f5f0ff"/>
-            <stop offset="100%" stop-color="#e8e0f0"/>
-          </radialGradient>
-        </defs>
-
-        <!-- Sombra -->
-        <ellipse cx="40" cy="85" rx="26" ry="6" fill="rgba(0,0,0,0.08)" filter="url(#softGlow)"/>
-
-        <!-- Corpo -->
-        <ellipse class="rabbit-body" cx="40" cy="62" rx="22" ry="26" fill="url(#bodyGrad)" filter="url(#glow)"/>
-
-        <!-- Blush esquerdo -->
-        <ellipse cx="26" cy="53" rx="6" ry="4" fill="rgba(255,180,180,0.35)" filter="url(#glow)"/>
-        <!-- Blush direito -->
-        <ellipse cx="54" cy="53" rx="6" ry="4" fill="rgba(255,180,180,0.35)" filter="url(#glow)"/>
-
-        <!-- Cabeça -->
-        <ellipse class="rabbit-head" cx="40" cy="38" rx="20" ry="19" fill="url(#bodyGrad)" filter="url(#glow)"/>
-
-        <!-- Orelha esquerda -->
-        <g class="ear-left" transform-origin="32 22">
-          <ellipse cx="32" cy="12" rx="7" ry="16" fill="url(#earGrad)" filter="url(#glow)"/>
-          <ellipse cx="32" cy="14" rx="4" ry="11" fill="rgba(255,200,210,0.4)"/>
-        </g>
-
-        <!-- Orelha direita -->
-        <g class="ear-right" transform-origin="48 22">
-          <ellipse cx="48" cy="12" rx="7" ry="16" fill="url(#earGrad)" filter="url(#glow)"/>
-          <ellipse cx="48" cy="14" rx="4" ry="11" fill="rgba(255,200,210,0.4)"/>
-        </g>
-
-        <!-- Olhos (abertos) -->
-        <g class="eye-open">
-          <ellipse cx="32" cy="36" rx="5" ry="5.5" fill="#1a1a2e"/>
-          <ellipse cx="32.8" cy="34.5" rx="2" ry="1.8" fill="white" opacity="0.8"/>
-          <ellipse cx="48" cy="36" rx="5" ry="5.5" fill="#1a1a2e"/>
-          <ellipse cx="48.8" cy="34.5" rx="2" ry="1.8" fill="white" opacity="0.8"/>
-          <!-- brilho extra -->
-          <ellipse cx="30.5" cy="37.5" rx="0.8" ry="0.8" fill="white" opacity="0.3"/>
-          <ellipse cx="46.5" cy="37.5" rx="0.8" ry="0.8" fill="white" opacity="0.3"/>
-        </g>
-
-        <!-- Olhos (fechados — zZz) -->
-        <g class="eye-closed" style="display:none;">
-          <path d="M27 37 Q32 33 37 37" stroke="#1a1a2e" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-          <path d="M43 37 Q48 33 53 37" stroke="#1a1a2e" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-        </g>
-
-        <!-- Nariz -->
-        <ellipse cx="40" cy="42" rx="2.8" ry="2" fill="rgba(255,150,160,0.5)"/>
-
-        <!-- Boca -->
-        <path d="M36 45 Q40 49 44 45" stroke="rgba(0,0,0,0.15)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-
-        <!-- Patas dianteiras -->
-        <ellipse class="paw-left" cx="24" cy="70" rx="7" ry="5" fill="url(#bodyGrad)" filter="url(#glow)"/>
-        <ellipse class="paw-right" cx="56" cy="70" rx="7" ry="5" fill="url(#bodyGrad)" filter="url(#glow)"/>
-
-        <!-- Patas traseiras -->
-        <ellipse class="foot-left" cx="18" cy="78" rx="9" ry="6" fill="url(#bodyGrad)" filter="url(#glow)"/>
-        <ellipse class="foot-right" cx="62" cy="78" rx="9" ry="6" fill="url(#bodyGrad)" filter="url(#glow)"/>
-
-        <!-- Rabo -->
-        <ellipse cx="62" cy="60" rx="7" ry="6" fill="url(#bodyGrad)" filter="url(#glow)"/>
-      </svg>
-    `;
-
-        // ---- Estado do Coelho ----
-        const rabbitState = {
-            el: null,
-            x: 200,
-            y: 300,
-            vx: 0,
-            vy: 0,
-            width: 80,
-            height: 90,
-            groundY: 0,
-            onGround: false,
-            sleeping: false,
-            state: 'idle', // idle | walking | running | jumping | sleeping | reacting
-            direction: 1, // 1 = direita, -1 = esquerda
-            blinkTimer: 0,
-            earTimer: 0,
-            idleTimer: 0,
-            sleepTimer: 0,
-            reactionTimer: 0,
-            stolenLetter: null,
-            stolenLetterEl: null,
-            stealing: false,
-            returnTimer: 0,
-            targetX: null,
-            targetY: null,
-            speed: 1.2,
-            jumpForce: -5.5,
-            gravity: 0.25,
-            friction: 0.88,
-            bounce: 0.3,
-            moveCooldown: 0,
-            emoteTimer: 0,
-            trail: [],
-        };
-
-        // ---- Detecção de plataformas (elementos HTML) ----
-        function getPlatforms() {
-            const elements = document.querySelectorAll('.counter-card, .message-card, .header h1, .box');
-            const rects = [];
-            const siteRect = site.getBoundingClientRect();
-            const scrollY = window.scrollY;
-
-            elements.forEach(el => {
-                const r = el.getBoundingClientRect();
-                // Só considera se estiver dentro da área do site
-                if (r.bottom < siteRect.top || r.top > siteRect.bottom) return;
-                rects.push({
-                    left: r.left - siteRect.left,
-                    top: r.top - siteRect.top + scrollY,
-                    right: r.right - siteRect.left,
-                    bottom: r.bottom - siteRect.top + scrollY,
-                    el: el
-                });
-            });
-
-            // Adiciona o chão no final do site
-            const siteHeight = site.scrollHeight;
-            rects.push({
-                left: 0,
-                top: siteHeight - 4,
-                right: site.clientWidth,
-                bottom: siteHeight + 20,
-                el: null
-            });
-
-            return rects;
-        }
-
-        // ---- Inicializar Coelho ----
-        function initRabbit() {
-            const container = rabbitContainer;
-            container.style.position = 'absolute';
-            container.style.top = '0';
-            container.style.left = '0';
-            container.style.width = '100%';
-            container.style.height = '100%';
-            container.style.pointerEvents = 'none';
-
-            const rabbit = document.createElement('div');
-            rabbit.className = 'rabbit';
-            rabbit.innerHTML = RABBIT_SVG + `<div class="glow-ring"></div><div class="zzz">💤</div><div class="emote">❤️</div>`;
-            rabbit.style.position = 'absolute';
-            rabbit.style.bottom = 'auto';
-            rabbit.style.left = '0';
-            rabbit.style.top = '0';
-            container.appendChild(rabbit);
-
-            rabbitState.el = rabbit;
-            rabbitState.groundY = container.clientHeight - 20;
-            rabbitState.x = 150;
-            rabbitState.y = 200;
-
-            // Ajusta groundY com base no conteúdo
-            setTimeout(() => {
-                const scroller = site;
-                rabbitState.groundY = scroller.scrollHeight - 30;
-            }, 200);
-
-            // Torna interativo
-            container.style.pointerEvents = 'auto';
-            rabbit.style.pointerEvents = 'auto';
-
-            // Eventos
-            rabbit.addEventListener('click', (e) => {
-                e.stopPropagation();
-                reactHappy();
-            });
-
-            rabbit.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                reactHappy();
-            }, { passive: false });
-
-            // Mouse move — seguir ou fugir?
-            document.addEventListener('mousemove', (e) => {
-                if (site.classList.contains('show')) {
-                    const rect = container.getBoundingClientRect();
-                    const mx = e.clientX - rect.left;
-                    const my = e.clientY - rect.top;
-                    const dx = rabbitState.x - mx;
-                    const dy = rabbitState.y - my;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 120) {
-                        // Foge um pouco
-                        rabbitState.targetX = rabbitState.x + (dx / dist) * 80;
-                        rabbitState.targetY = rabbitState.y + (dy / dist) * 40;
-                        if (rabbitState.state !== 'sleeping') {
-                            rabbitState.state = 'running';
-                            rabbitState.direction = dx > 0 ? 1 : -1;
-                        }
-                    }
-                }
-            });
-
-            // Touch move (celular)
-            document.addEventListener('touchmove', (e) => {
-                if (site.classList.contains('show') && e.touches.length > 0) {
-                    const rect = container.getBoundingClientRect();
-                    const mx = e.touches[0].clientX - rect.left;
-                    const my = e.touches[0].clientY - rect.top;
-                    const dx = rabbitState.x - mx;
-                    const dy = rabbitState.y - my;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 150) {
-                        rabbitState.targetX = rabbitState.x + (dx / dist) * 70;
-                        rabbitState.targetY = rabbitState.y + (dy / dist) * 35;
-                        if (rabbitState.state !== 'sleeping') {
-                            rabbitState.state = 'running';
-                            rabbitState.direction = dx > 0 ? 1 : -1;
-                        }
-                    }
-                }
-            }, { passive: true });
-
-            // Letras — roubar
-            const letters = document.querySelectorAll('.letter');
-            letters.forEach((l, idx) => {
-                l.dataset.index = idx;
-                l.dataset.original = l.textContent;
-            });
-
-            // Loop principal
-            requestAnimationFrame(rabbitLoop);
-        }
-
-        // ---- Reações ----
-        function reactHappy() {
-            const emote = rabbitState.el.querySelector('.emote');
-            emote.textContent = '❤️';
-            emote.classList.add('show');
-            rabbitState.emoteTimer = 80;
-            rabbitState.reactionTimer = 60;
-            rabbitState.state = 'reacting';
-            // Brilho extra
-            createSparkles(rabbitState.x + 40, rabbitState.y + 20, 6);
-            // Não dormir por um tempo
-            rabbitState.sleepTimer = 0;
-        }
-
-        function reactSad() {
-            const emote = rabbitState.el.querySelector('.emote');
-            emote.textContent = '😢';
-            emote.classList.add('show');
-            rabbitState.emoteTimer = 60;
-            rabbitState.reactionTimer = 50;
-        }
-
-        function reactAngry() {
-            const emote = rabbitState.el.querySelector('.emote');
-            emote.textContent = '😤';
-            emote.classList.add('show');
-            rabbitState.emoteTimer = 50;
-            rabbitState.reactionTimer = 40;
-        }
-
-        function reactScared() {
-            const emote = rabbitState.el.querySelector('.emote');
-            emote.textContent = '😱';
-            emote.classList.add('show');
-            rabbitState.emoteTimer = 50;
-            rabbitState.reactionTimer = 40;
-        }
-
-        // ---- Partículas decorativas ----
-        function createSparkles(x, y, count = 4) {
-            for (let i = 0; i < count; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.style.left = (x + (Math.random() - 0.5) * 40) + 'px';
-                sparkle.style.top = (y + (Math.random() - 0.5) * 30) + 'px';
-                sparkle.style.width = (4 + Math.random() * 5) + 'px';
-                sparkle.style.height = sparkle.style.width;
-                const colors = ['rgba(255,255,200,0.9)', 'rgba(255,220,150,0.8)', 'rgba(200,255,200,0.8)'];
-                sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
-                document.body.appendChild(sparkle);
-                setTimeout(() => sparkle.remove(), 800);
-            }
-        }
-
-        function createRunParticles(x, y) {
-            for (let i = 0; i < 2; i++) {
-                const p = document.createElement('div');
-                p.className = 'run-particle';
-                p.style.left = (x + (Math.random() - 0.5) * 20) + 'px';
-                p.style.top = (y + 20 + Math.random() * 10) + 'px';
-                document.body.appendChild(p);
-                setTimeout(() => p.remove(), 500);
-            }
-        }
-
-        function createDust(x, y) {
-            for (let i = 0; i < 8; i++) {
-                const d = document.createElement('div');
-                d.className = 'dust';
-                d.style.left = (x + (Math.random() - 0.5) * 30) + 'px';
-                d.style.top = (y + 20 + Math.random() * 10) + 'px';
-                d.style.width = (10 + Math.random() * 15) + 'px';
-                d.style.height = d.style.width;
-                d.style.background = `rgba(255,255,255,${0.1 + Math.random() * 0.2})`;
-                document.body.appendChild(d);
-                setTimeout(() => d.remove(), 600);
-            }
-        }
-
-        // ---- Roubar letras ----
-        function tryStealLetter() {
-            if (rabbitState.stealing || rabbitState.stolenLetter !== null) return;
-            const letters = document.querySelectorAll('.letter');
-            const available = [];
-            letters.forEach(l => {
-                if (!l.classList.contains('stolen')) available.push(l);
-            });
-            if (available.length === 0) return;
-
-            const target = available[Math.floor(Math.random() * available.length)];
-            const rect = target.getBoundingClientRect();
-            const containerRect = rabbitContainer.getBoundingClientRect();
-            const tx = rect.left - containerRect.left + rect.width / 2 - rabbitState.width / 2;
-            const ty = rect.top - containerRect.top + rect.height / 2 - rabbitState.height / 2;
-
-            rabbitState.targetX = tx;
-            rabbitState.targetY = ty - 30;
-            rabbitState.stealing = true;
-            rabbitState.stolenLetterEl = target;
-            rabbitState.state = 'walking';
-            rabbitState.direction = tx > rabbitState.x ? 1 : -1;
-
-            // Quando chegar perto, rouba
-            const checkSteal = setInterval(() => {
-                const dx = rabbitState.x - tx;
-                const dy = rabbitState.y - (ty - 30);
-                if (Math.abs(dx) < 20 && Math.abs(dy) < 20) {
-                    clearInterval(checkSteal);
-                    // Rouba!
-                    target.classList.add('stolen');
-                    rabbitState.stolenLetter = target.textContent;
-                    target.textContent = '○';
-                    rabbitState.stealing = false;
-                    rabbitState.state = 'running';
-                    rabbitState.direction = Math.random() > 0.5 ? 1 : -1;
-                    rabbitState.targetX = rabbitState.x + (Math.random() > 0.5 ? 150 : -150);
-                    rabbitState.targetY = rabbitState.y - 20;
-                    createSparkles(rect.left + rect.width / 2, rect.top + rect.height / 2, 8);
-
-                    // Devolve depois
-                    setTimeout(() => {
-                        returnLetter(target);
-                    }, 4000 + Math.random() * 3000);
-                }
-            }, 100);
-        }
-
-        function returnLetter(el) {
-            if (!el) return;
-            el.textContent = rabbitState.stolenLetter || el.dataset.original || '?';
-            el.classList.remove('stolen');
-            el.classList.add('returning');
-            setTimeout(() => el.classList.remove('returning'), 600);
-            rabbitState.stolenLetter = null;
-            rabbitState.stolenLetterEl = null;
-            createSparkles(
-                rabbitState.x + rabbitState.width / 2,
-                rabbitState.y + 10,
-                5
-            );
-        }
-
-        // ---- Loop Físico + IA ----
-        function rabbitLoop(timestamp) {
-            if (!site.classList.contains('show')) {
-                requestAnimationFrame(rabbitLoop);
-                return;
-            }
-
-            const el = rabbitState.el;
-            const container = rabbitContainer;
-            const containerRect = container.getBoundingClientRect();
-            const scrollY = window.scrollY;
-
-            // Atualiza groundY com base no conteúdo
-            const siteHeight = site.scrollHeight;
-            const containerHeight = container.clientHeight;
-            rabbitState.groundY = siteHeight - 20;
-
-            // Gravidade
-            if (!rabbitState.onGround) {
-                rabbitState.vy += rabbitState.gravity;
-            }
-
-            // Atrito
-            rabbitState.vx *= rabbitState.friction;
-
-            // Limite de velocidade
-            const maxSpeed = rabbitState.state === 'running' ? 4 : 2.5;
-            if (Math.abs(rabbitState.vx) > maxSpeed) rabbitState.vx = Math.sign(rabbitState.vx) * maxSpeed;
-            if (Math.abs(rabbitState.vy) > 8) rabbitState.vy = Math.sign(rabbitState.vy) * 8;
-
-            // Atualiza posição
-            rabbitState.x += rabbitState.vx;
-            rabbitState.y += rabbitState.vy;
-
-            // ---- Colisão com plataformas ----
-            const platforms = getPlatforms();
-            rabbitState.onGround = false;
-
-            for (const p of platforms) {
-                const px = p.left,
-                    py = p.top,
-                    pr = p.right,
-                    pb = p.bottom;
-                const rx = rabbitState.x,
-                    ry = rabbitState.y,
-                    rw = rabbitState.width,
-                    rh = rabbitState.height;
-
-                // Colisão por cima (chão)
-                if (rx + rw > px && rx < pr && ry + rh > py && ry + rh < py + 20 && rabbitState.vy >= 0) {
-                    rabbitState.y = py - rh;
-                    rabbitState.vy = 0;
-                    rabbitState.onGround = true;
-                    if (rabbitState.state === 'jumping') {
-                        rabbitState.state = 'idle';
-                        createDust(rx + rw / 2, py);
-                    }
-                }
-
-                // Colisão por baixo (teto)
-                if (rx + rw > px && rx < pr && ry < pb && ry > pb - 10 && rabbitState.vy < 0) {
-                    rabbitState.y = pb;
-                    rabbitState.vy = 0;
-                }
-
-                // Colisão lateral
-                if (ry + rh > py && ry < pb) {
-                    if (rx + rw > px && rx < px && rabbitState.vx > 0) {
-                        rabbitState.x = px - rw;
-                        rabbitState.vx *= -0.3;
-                    }
-                    if (rx < pr && rx + rw > pr && rabbitState.vx < 0) {
-                        rabbitState.x = pr;
-                        rabbitState.vx *= -0.3;
-                    }
-                }
-            }
-
-            // Limite inferior absoluto
-            if (rabbitState.y > rabbitState.groundY) {
-                rabbitState.y = rabbitState.groundY;
-                rabbitState.vy = 0;
-                rabbitState.onGround = true;
-                if (rabbitState.state === 'jumping') {
-                    rabbitState.state = 'idle';
-                    createDust(rabbitState.x + rabbitState.width / 2, rabbitState.groundY);
-                }
-            }
-
-            // Limite horizontal
-            const maxX = container.clientWidth - rabbitState.width;
-            if (rabbitState.x < 0) { rabbitState.x = 0;
-                rabbitState.vx *= -0.3; }
-            if (rabbitState.x > maxX) { rabbitState.x = maxX;
-                rabbitState.vx *= -0.3; }
-
-            // ---- IA de comportamento ----
-            rabbitState.moveCooldown = Math.max(0, rabbitState.moveCooldown - 1);
-            rabbitState.blinkTimer++;
-            rabbitState.earTimer++;
-            rabbitState.idleTimer++;
-            rabbitState.sleepTimer++;
-            rabbitState.reactionTimer = Math.max(0, rabbitState.reactionTimer - 1);
-            rabbitState.emoteTimer = Math.max(0, rabbitState.emoteTimer - 1);
-
-            // Esconde emote após tempo
-            if (rabbitState.emoteTimer === 0) {
-                el.querySelector('.emote').classList.remove('show');
-            }
-
-            // Piscar
-            const eyes = el.querySelectorAll('.eye-open ellipse');
-            if (rabbitState.blinkTimer > 120 + Math.random() * 80) {
-                eyes.forEach(e => e.style.opacity = '0.1');
-                setTimeout(() => eyes.forEach(e => e.style.opacity = '1'), 150);
-                rabbitState.blinkTimer = 0;
-            }
-
-            // Orelhas mexerem
-            const earLeft = el.querySelector('.ear-left');
-            const earRight = el.querySelector('.ear-right');
-            if (earLeft && earRight) {
-                const earSway = Math.sin(timestamp / 600 + 1) * 0.04;
-                const earSway2 = Math.sin(timestamp / 700 + 3) * 0.05;
-                earLeft.style.transform = `rotate(${-3 + earSway * 8}deg)`;
-                earRight.style.transform = `rotate(${3 + earSway2 * 8}deg)`;
-            }
-
-            // ---- Estados comportamentais ----
-            if (rabbitState.reactionTimer > 0) {
-                // Em reação, não faz nada
-            } else if (rabbitState.sleepTimer > 600 && rabbitState.onGround && Math.abs(rabbitState.vx) < 0.1) {
-                // Dormir
-                rabbitState.state = 'sleeping';
-                rabbitState.sleeping = true;
-                el.classList.add('sleeping');
-                rabbitState.vx = 0;
-                rabbitState.vy = 0;
-            } else {
-                rabbitState.sleeping = false;
-                el.classList.remove('sleeping');
-
-                if (rabbitState.state === 'sleeping') {
-                    rabbitState.state = 'idle';
-                }
-
-                // Se está roubando letra, vai em direção ao alvo
-                if (rabbitState.stealing && rabbitState.stolenLetterEl) {
-                    const rect = rabbitState.stolenLetterEl.getBoundingClientRect();
-                    const cr = container.getBoundingClientRect();
-                    const tx = rect.left - cr.left + rect.width / 2 - rabbitState.width / 2;
-                    const ty = rect.top - cr.top + rect.height / 2 - rabbitState.height / 2;
-                    rabbitState.targetX = tx;
-                    rabbitState.targetY = ty - 30;
-                }
-
-                // Se tem targetX, move em direção a ele
-                if (rabbitState.targetX !== null && rabbitState.targetY !== null) {
-                    const dx = rabbitState.targetX - rabbitState.x;
-                    const dy = rabbitState.targetY - rabbitState.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < 15) {
-                        rabbitState.targetX = null;
-                        rabbitState.targetY = null;
-                        if (rabbitState.state === 'walking' || rabbitState.state === 'running') {
-                            rabbitState.state = 'idle';
-                            rabbitState.vx *= 0.3;
-                        }
-                    } else {
-                        const speed = rabbitState.state === 'running' ? 3.5 : 1.8;
-                        const moveX = (dx / dist) * speed;
-                        const moveY = (dy / dist) * speed * 0.6;
-                        rabbitState.vx += (moveX - rabbitState.vx) * 0.08;
-                        if (rabbitState.onGround) {
-                            rabbitState.vy += (moveY - rabbitState.vy) * 0.05;
-                        }
-                        rabbitState.direction = dx > 0 ? 1 : -1;
-
-                        if (rabbitState.state === 'idle') {
-                            rabbitState.state = 'walking';
-                        }
-
-                        // Partículas ao correr
-                        if (rabbitState.state === 'running' && Math.random() < 0.15) {
-                            createRunParticles(
-                                rabbitState.x + rabbitState.width / 2,
-                                rabbitState.y + rabbitState.height
-                            );
-                        }
-                    }
-                } else {
-                    // Comportamento aleatório
-                    if (rabbitState.moveCooldown === 0 && rabbitState.onGround && Math.random() < 0.02) {
-                        // Decide ação
-                        const action = Math.random();
-                        if (action < 0.35) {
-                            // Andar para um lado
-                            const dir = Math.random() > 0.5 ? 1 : -1;
-                            rabbitState.targetX = rabbitState.x + dir * (120 + Math.random() * 200);
-                            rabbitState.targetY = rabbitState.y;
-                            rabbitState.direction = dir;
-                            rabbitState.state = 'walking';
-                            rabbitState.moveCooldown = 60 + Math.random() * 80;
-                        } else if (action < 0.55 && rabbitState.onGround) {
-                            // Pular
-                            rabbitState.vy = rabbitState.jumpForce * (0.8 + Math.random() * 0.4);
-                            rabbitState.vx += (Math.random() - 0.5) * 2;
-                            rabbitState.state = 'jumping';
-                            rabbitState.moveCooldown = 30;
-                        } else if (action < 0.75) {
-                            // Correr
-                            const dir = Math.random() > 0.5 ? 1 : -1;
-                            rabbitState.targetX = rabbitState.x + dir * (200 + Math.random() * 300);
-                            rabbitState.targetY = rabbitState.y;
-                            rabbitState.direction = dir;
-                            rabbitState.state = 'running';
-                            rabbitState.moveCooldown = 40 + Math.random() * 60;
-                        } else if (action < 0.9) {
-                            // Roubar letra (só se não estiver roubando)
-                            if (!rabbitState.stealing && rabbitState.stolenLetter === null) {
-                                tryStealLetter();
-                            }
-                            rabbitState.moveCooldown = 100;
-                        } else {
-                            // Parado olhando
-                            rabbitState.state = 'idle';
-                            rabbitState.moveCooldown = 80 + Math.random() * 120;
-                        }
-                    }
-
-                    // Se ficou muito tempo parado, faz algo
-                    if (rabbitState.idleTimer > 200 && rabbitState.onGround && rabbitState.state === 'idle') {
-                        if (Math.random() < 0.03) {
-                            const dir = Math.random() > 0.5 ? 1 : -1;
-                            rabbitState.targetX = rabbitState.x + dir * (100 + Math.random() * 150);
-                            rabbitState.targetY = rabbitState.y;
-                            rabbitState.direction = dir;
-                            rabbitState.state = 'walking';
-                            rabbitState.moveCooldown = 40;
-                            rabbitState.idleTimer = 0;
-                        }
-                    }
-                }
-            }
-
-            // ---- Atualiza aparência ----
-            const scaleX = rabbitState.direction;
-            const breathing = Math.sin(timestamp / 400) * 0.02;
-            const bob = rabbitState.onGround ? Math.sin(timestamp / 300) * 1.2 : 0;
-
-            el.style.transform = `
-          translate(${rabbitState.x}px, ${rabbitState.y}px)
-          scaleX(${scaleX})
-          scale(${1 + breathing})
-          translateY(${bob}px)
+    <div class="message-card glass">
+        <h2>💌 Mensagem do mês</h2>
+
+        <div id="monthly-message" class="message">
+            O tempo passa, mas continuar ao seu lado ainda é uma das melhores partes dos meus dias.
+        </div>
+
+        <div class="date">
+            — Maio de 2026
+        </div>
+    </div>
+
+    <div id="rabbit-container"></div>
+
+</div>
+
+<canvas id="particle-canvas"></canvas>
+
+<script>
+/* =========================
+   CONFIG
+========================= */
+const PASSWORD = "210425";
+
+const officialDate = new Date(2025,3,21);
+const unofficialDate = new Date(2024,9,9);
+
+/* =========================
+   ELEMENTOS
+========================= */
+const splash = document.getElementById("splash");
+const loginCard = document.getElementById("loginCard");
+const loginScreen = document.getElementById("loginScreen");
+const site = document.getElementById("site");
+
+const passwordInput = document.getElementById("password");
+const enterBtn = document.getElementById("enterBtn");
+const error = document.getElementById("error");
+
+/* =========================
+   SPLASH
+========================= */
+setTimeout(() => {
+
+    splash.classList.add("hidden");
+
+    setTimeout(() => {
+        loginCard.classList.add("visible");
+    },500);
+
+},4500);
+
+/* =========================
+   LOGIN
+========================= */
+function enterSite(){
+
+    if(passwordInput.value.trim() !== PASSWORD){
+        error.textContent = "Senha incorreta";
+        return;
+    }
+
+    document.body.classList.add("inside");
+
+    loginScreen.classList.add("hidden");
+
+    setTimeout(() => {
+        site.classList.add("show");
+        initRabbit();
+    },100);
+
+    updateCounters();
+    setInterval(updateCounters,1000);
+
+    initParticles();
+}
+
+enterBtn.addEventListener("click", enterSite);
+
+passwordInput.addEventListener("keydown",(e)=>{
+    if(e.key === "Enter"){
+        enterSite();
+    }
+});
+
+/* =========================
+   COUNTERS
+========================= */
+function preciseDiff(start,end){
+
+    let years = end.getFullYear() - start.getFullYear();
+    let months = end.getMonth() - start.getMonth();
+    let days = end.getDate() - start.getDate();
+    let hours = end.getHours() - start.getHours();
+    let minutes = end.getMinutes() - start.getMinutes();
+    let seconds = end.getSeconds() - start.getSeconds();
+
+    if(seconds < 0){
+        seconds += 60;
+        minutes--;
+    }
+
+    if(minutes < 0){
+        minutes += 60;
+        hours--;
+    }
+
+    if(hours < 0){
+        hours += 24;
+        days--;
+    }
+
+    if(days < 0){
+        const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+        days += prevMonth.getDate();
+        months--;
+    }
+
+    if(months < 0){
+        months += 12;
+        years--;
+    }
+
+    return {
+        years,
+        months,
+        days,
+        hours,
+        minutes,
+        seconds
+    };
+}
+
+function updateCounters(){
+
+    const now = new Date();
+
+    const o = preciseDiff(officialDate, now);
+    const n = preciseDiff(unofficialDate, now);
+
+    document.getElementById("oficial-anos").textContent = o.years;
+    document.getElementById("oficial-meses").textContent = o.months;
+    document.getElementById("oficial-dias").textContent = o.days;
+    document.getElementById("oficial-horas").textContent = o.hours;
+    document.getElementById("oficial-minutos").textContent = o.minutes;
+    document.getElementById("oficial-segundos").textContent = o.seconds;
+
+    document.getElementById("naooficial-anos").textContent = n.years;
+    document.getElementById("naooficial-meses").textContent = n.months;
+    document.getElementById("naooficial-dias").textContent = n.days;
+    document.getElementById("naooficial-horas").textContent = n.hours;
+    document.getElementById("naooficial-minutos").textContent = n.minutes;
+    document.getElementById("naooficial-segundos").textContent = n.seconds;
+}
+
+/* =========================
+   COELHO ARRUMADO
+========================= */
+
+const rabbitContainer = document.getElementById("rabbit-container");
+
+let rabbit = null;
+
+const rabbitState = {
+    x:200,
+    y:350,
+    targetX:200,
+    direction:1
+};
+
+function rabbitSVG(){
+return `
+<div class="inner">
+<svg viewBox="0 0 80 90">
+
+<ellipse cx="40" cy="78" rx="22" ry="8" fill="rgba(0,0,0,.12)"/>
+
+<ellipse cx="40" cy="55" rx="22" ry="25" fill="white"/>
+<circle cx="40" cy="32" r="18" fill="white"/>
+
+<ellipse cx="30" cy="10" rx="7" ry="18" fill="white"/>
+<ellipse cx="50" cy="10" rx="7" ry="18" fill="white"/>
+
+<ellipse cx="30" cy="14" rx="3" ry="10" fill="pink"/>
+<ellipse cx="50" cy="14" rx="3" ry="10" fill="pink"/>
+
+<circle cx="33" cy="32" r="3.5" fill="#222"/>
+<circle cx="47" cy="32" r="3.5" fill="#222"/>
+
+<circle cx="34" cy="31" r="1" fill="white"/>
+<circle cx="48" cy="31" r="1" fill="white"/>
+
+<ellipse cx="40" cy="39" rx="2" ry="1.5" fill="pink"/>
+
+<path d="M36 43 Q40 47 44 43" stroke="#555" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+</svg>
+</div>
+`;
+}
+
+function initRabbit(){
+
+    rabbit = document.createElement("div");
+
+    rabbit.className = "rabbit";
+
+    rabbit.innerHTML = rabbitSVG();
+
+    rabbitContainer.appendChild(rabbit);
+
+    rabbit.style.transform = `translate(${rabbitState.x}px, ${rabbitState.y}px)`;
+
+    moveRabbit();
+
+    animateRabbit();
+
+    /* clique */
+    rabbit.addEventListener("click",()=>{
+
+        rabbit.style.scale = "1.15";
+
+        setTimeout(()=>{
+            rabbit.style.scale = "1";
+        },200);
+
+    });
+}
+
+/* movimento automático suave */
+function moveRabbit(){
+
+    setInterval(()=>{
+
+        const max = site.clientWidth - 100;
+
+        rabbitState.targetX = Math.random() * max;
+
+        rabbitState.direction =
+        rabbitState.targetX > rabbitState.x ? 1 : -1;
+
+    },3000);
+}
+
+/* animação */
+function animateRabbit(){
+
+    function loop(){
+
+        const speed = 0.03;
+
+        rabbitState.x +=
+        (rabbitState.targetX - rabbitState.x) * speed;
+
+        rabbit.style.transform =
+        `
+        translate(${rabbitState.x}px, ${rabbitState.y}px)
+        scaleX(${rabbitState.direction})
         `;
 
-            // Glow ring acompanha
-            const ring = el.querySelector('.glow-ring');
-            if (ring) {
-                ring.style.bottom = '-8px';
-            }
+        requestAnimationFrame(loop);
+    }
 
-            // ---- Trail (rastro de luz) ----
-            if (rabbitState.state === 'running' && Math.random() < 0.2) {
-                rabbitState.trail.push({ x: rabbitState.x + rabbitState.width / 2, y: rabbitState.y + rabbitState.height,
-                    life: 30 });
-            }
-            rabbitState.trail = rabbitState.trail.filter(t => t.life > 0);
-            rabbitState.trail.forEach(t => t.life--);
+    loop();
+}
 
-            requestAnimationFrame(rabbitLoop);
+/* =========================
+   PARTICULAS
+========================= */
+
+const canvas = document.getElementById("particle-canvas");
+const ctx = canvas.getContext("2d");
+
+let particles = [];
+
+function initParticles(){
+
+    resizeCanvas();
+
+    window.addEventListener("resize", resizeCanvas);
+
+    for(let i=0;i<35;i++){
+
+        particles.push({
+            x:Math.random()*canvas.width,
+            y:Math.random()*canvas.height,
+            r:Math.random()*3+1,
+            speed:Math.random()*0.5+0.2
+        });
+
+    }
+
+    drawParticles();
+}
+
+function resizeCanvas(){
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
+
+function drawParticles(){
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    particles.forEach(p=>{
+
+        p.y -= p.speed;
+
+        if(p.y < -10){
+            p.y = canvas.height + 10;
+            p.x = Math.random()*canvas.width;
         }
 
-        // ---- Canvas de Partículas (fundo) ----
-        let particles = [];
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
 
-        function initParticles() {
-            particleCanvas.width = window.innerWidth;
-            particleCanvas.height = window.innerHeight;
-            window.addEventListener('resize', () => {
-                particleCanvas.width = window.innerWidth;
-                particleCanvas.height = window.innerHeight;
-            });
+        ctx.fillStyle = "rgba(255,255,255,.4)";
+        ctx.fill();
+    });
 
-            // Cria partículas float
-            for (let i = 0; i < 35; i++) {
-                particles.push({
-                    x: Math.random() * particleCanvas.width,
-                    y: Math.random() * particleCanvas.height,
-                    r: 1.5 + Math.random() * 3,
-                    dx: (Math.random() - 0.5) * 0.3,
-                    dy: -0.2 - Math.random() * 0.4,
-                    alpha: 0.2 + Math.random() * 0.4,
-                    pulse: Math.random() * Math.PI * 2,
-                });
-            }
+    requestAnimationFrame(drawParticles);
+}
+</script>
 
-            function drawParticles() {
-                ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
-
-                for (const p of particles) {
-                    p.x += p.dx;
-                    p.y += p.dy;
-                    p.pulse += 0.02;
-
-                    if (p.y < -10) { p.y = particleCanvas.height + 10;
-                        p.x = Math.random() * particleCanvas.width; }
-                    if (p.x < -10) p.x = particleCanvas.width + 10;
-                    if (p.x > particleCanvas.width + 10) p.x = -10;
-
-                    const alpha = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.5})`;
-                    ctx.shadowColor = 'rgba(255, 255, 200, 0.3)';
-                    ctx.shadowBlur = 10;
-                    ctx.fill();
-                }
-
-                requestAnimationFrame(drawParticles);
-            }
-
-            drawParticles();
-        }
-
-        // ===== INICIALIZAÇÃO =====
-        console.log('🐇 Nosso Tempo + Coelho Mascote pronto!');
-    </script>
 </body>
 </html>
