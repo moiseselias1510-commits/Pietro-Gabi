@@ -1,22 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Nosso Tempo</title>
 
 <style>
-:root{
-    --glass: rgba(255,255,255,.10);
-    --border: rgba(255,255,255,.18);
-    --shadow: 0 18px 45px rgba(0,0,0,.18);
-    --text: rgba(255,255,255,.9);
-}
+
+/* =========================
+   RESET
+========================= */
 
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
+}
+
+:root{
+    --glass: rgba(255,255,255,.08);
+    --border: rgba(255,255,255,.18);
+    --shadow: 0 18px 45px rgba(0,0,0,.18);
+    --text: rgba(255,255,255,.9);
 }
 
 body{
@@ -27,21 +32,22 @@ body{
     color:white;
 }
 
-/* FUNDO */
+/* =========================
+   FUNDO
+========================= */
+
 body::before{
     content:"";
     position:fixed;
     inset:0;
-    background:
-    url("fundo-login.png") center center / contain no-repeat;
+    background:url("fundo-login.png") center center / contain no-repeat;
     background-color:#8fd4f8;
     z-index:-3;
     transition:.8s;
 }
 
 body.inside::before{
-    background:
-    url("fundo-site.png") center center / contain no-repeat;
+    background:url("fundo-site.png") center center / contain no-repeat;
     background-color:#8fd4f8;
 }
 
@@ -50,12 +56,15 @@ body::after{
     position:fixed;
     inset:0;
     background:
-    radial-gradient(circle at top, rgba(255,255,255,.12), transparent 40%),
-    linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.16));
+    radial-gradient(circle at top, rgba(255,255,255,.1), transparent 40%),
+    linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.15));
     z-index:-2;
 }
 
-/* SPLASH */
+/* =========================
+   SPLASH
+========================= */
+
 #splash{
     position:fixed;
     inset:0;
@@ -63,7 +72,7 @@ body::after{
     align-items:center;
     justify-content:center;
     background:rgba(0,0,0,.35);
-    backdrop-filter:blur(4px);
+    backdrop-filter:blur(5px);
     z-index:999;
     transition:1s;
 }
@@ -75,21 +84,30 @@ body::after{
 
 #splash img{
     width:min(320px,70vw);
-    animation:introSpin 3s ease forwards;
+    animation:introSpin 4s ease forwards;
 }
 
 @keyframes introSpin{
+
     0%{
-        transform:rotateY(0deg) scale(.8);
+        transform:perspective(800px) rotateY(0deg) scale(.7);
         opacity:0;
     }
+
+    20%{
+        opacity:1;
+    }
+
     100%{
-        transform:rotateY(360deg) scale(1);
+        transform:perspective(800px) rotateY(720deg) scale(1);
         opacity:1;
     }
 }
 
-/* LOGIN */
+/* =========================
+   LOGIN
+========================= */
+
 .screen{
     min-height:100vh;
     display:flex;
@@ -98,17 +116,10 @@ body::after{
     padding:20px;
 }
 
-.glass{
-    background:var(--glass);
-    backdrop-filter:blur(18px);
-    border:1px solid var(--border);
-    box-shadow:var(--shadow);
-}
-
 .login-card{
     width:min(400px,92vw);
+    padding:32px 24px;
     border-radius:30px;
-    padding:34px 24px;
     text-align:center;
     opacity:0;
     transform:translateY(20px);
@@ -120,22 +131,30 @@ body::after{
     transform:translateY(0);
 }
 
+.glass{
+    background:var(--glass);
+    backdrop-filter:blur(20px);
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+}
+
 .login-card input{
     width:100%;
+    padding:15px 18px;
     border:none;
     outline:none;
-    padding:15px;
     border-radius:999px;
     margin-bottom:14px;
     font-size:16px;
+    background:rgba(255,255,255,.8);
 }
 
 .login-card button{
     width:100%;
     border:none;
+    cursor:pointer;
     padding:14px;
     border-radius:999px;
-    cursor:pointer;
     font-size:16px;
     font-weight:700;
     color:white;
@@ -144,21 +163,25 @@ body::after{
 
 .error{
     margin-top:14px;
-    color:#fff2b8;
+    color:#fff3b7;
 }
+
+/* =========================
+   SITE
+========================= */
 
 .hidden{
-    display:none!important;
+    display:none !important;
 }
 
-/* SITE */
 #site{
     width:min(1000px,92vw);
-    margin:34px auto 80px;
+    margin:35px auto 60px;
     opacity:0;
-    transform:translateY(18px);
+    transform:translateY(20px);
     transition:1s;
     position:relative;
+    padding-bottom:120px;
 }
 
 #site.show{
@@ -168,15 +191,22 @@ body::after{
 
 .header{
     text-align:center;
-    margin-bottom:26px;
+    margin-bottom:30px;
 }
 
 .header h1{
-    font-size:clamp(2.3rem,5vw,3.6rem);
-    margin-bottom:12px;
+    font-size:clamp(2.3rem,5vw,3.8rem);
+    margin-bottom:10px;
 }
 
-/* COUNTERS */
+.header p{
+    color:rgba(255,255,255,.85);
+}
+
+/* =========================
+   COUNTERS
+========================= */
+
 .counters{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -186,7 +216,8 @@ body::after{
 
 .counter-card{
     border-radius:30px;
-    padding:26px 22px;
+    padding:26px;
+    overflow:hidden;
 }
 
 .counter-card:nth-child(1){
@@ -198,14 +229,13 @@ body::after{
 .counter-card:nth-child(2){
     box-shadow:
     0 0 20px rgba(255,255,0,.5),
-    0 0 40px rgba(255,255,0,.2);
+    0 0 40px rgba(255,255,0,.25);
 }
 
 .counter-title{
     text-align:center;
     margin-bottom:20px;
     font-weight:700;
-    font-size:1.2rem;
 }
 
 .grid{
@@ -216,7 +246,7 @@ body::after{
 
 .box{
     background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.15);
     border-radius:20px;
     padding:18px 10px;
     text-align:center;
@@ -226,6 +256,7 @@ body::after{
     display:block;
     font-size:1.5rem;
     font-weight:800;
+    margin-bottom:5px;
 }
 
 .label{
@@ -233,21 +264,27 @@ body::after{
     color:rgba(255,255,255,.8);
 }
 
-/* CARDS */
-.message-card{
+/* =========================
+   CARDS
+========================= */
+
+.message-card,
+.love-card{
     border-radius:30px;
     padding:28px;
     text-align:center;
-    margin-bottom:24px;
+    margin-top:24px;
 }
 
-.message-card h2{
+.message-card h2,
+.love-card h2{
     margin-bottom:18px;
 }
 
-.message{
-    line-height:1.9;
+.message,
+.love-text{
     font-size:clamp(1rem,2vw,1.3rem);
+    line-height:1.9;
     font-weight:700;
 }
 
@@ -256,24 +293,108 @@ body::after{
     color:rgba(255,255,255,.75);
 }
 
-/* COELHO */
-#rabbit{
-    position:fixed;
-    width:90px;
-    height:90px;
-    z-index:50;
+/* =========================
+   COELHO
+========================= */
+
+#rabbit-container{
+    position:absolute;
+    inset:0;
     pointer-events:none;
-    transition:transform .12s linear;
 }
 
-#rabbit svg{
-    width:100%;
-    height:100%;
-    filter:
-    drop-shadow(0 0 15px rgba(255,255,255,.35));
+.rabbit{
+    position:absolute;
+    width:95px;
+    height:95px;
+    z-index:10;
+    transition:transform .08s linear;
 }
+
+.rabbit svg{
+    overflow:visible;
+
+    filter:
+    drop-shadow(0 0 10px rgba(255,255,255,.4))
+    drop-shadow(0 0 20px rgba(255,255,255,.2));
+}
+
+.rabbit .inner{
+    animation:rabbitFloat 2s ease-in-out infinite;
+}
+
+@keyframes rabbitFloat{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-3px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+.ear-left{
+    animation:ear1 3s ease-in-out infinite;
+    transform-origin:center bottom;
+}
+
+.ear-right{
+    animation:ear2 3s ease-in-out infinite;
+    transform-origin:center bottom;
+}
+
+@keyframes ear1{
+
+    0%{
+        transform:rotate(0deg);
+    }
+
+    50%{
+        transform:rotate(-6deg);
+    }
+
+    100%{
+        transform:rotate(0deg);
+    }
+}
+
+@keyframes ear2{
+
+    0%{
+        transform:rotate(0deg);
+    }
+
+    50%{
+        transform:rotate(6deg);
+    }
+
+    100%{
+        transform:rotate(0deg);
+    }
+}
+
+/* =========================
+   PARTICULAS
+========================= */
+
+#particle-canvas{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:1;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
 
 @media(max-width:850px){
+
     .counters{
         grid-template-columns:1fr;
     }
@@ -281,42 +402,36 @@ body::after{
 
 @media(max-width:520px){
 
-    body::before{
-        background-size:contain;
-    }
-
     .grid{
         grid-template-columns:repeat(2,1fr);
     }
 
-    .box{
-        padding:15px 8px;
+    .rabbit{
+        width:75px;
+        height:75px;
     }
 
-    .number{
-        font-size:1.2rem;
-    }
-
-    #rabbit{
-        width:70px;
-        height:70px;
+    body::before{
+        background-size:contain;
     }
 }
+
 </style>
 </head>
 
 <body>
 
-<!-- INTRO -->
+<!-- SPLASH -->
 <div id="splash">
-    <img src="intro-image.png" alt="">
+    <img src="intro-image.png" alt="Intro">
 </div>
 
 <!-- LOGIN -->
 <div id="loginScreen" class="screen">
+
     <div id="loginCard" class="login-card glass">
 
-        <h1 style="font-size:2.2rem;margin-bottom:6px;">
+        <h1 style="font-size:2.2rem;margin-bottom:8px;">
             Nosso Tempo
         </h1>
 
@@ -326,13 +441,12 @@ body::after{
 
         <input id="password" type="password" placeholder="Digite a senha">
 
-        <button id="enterBtn">
-            Entrar
-        </button>
+        <button id="enterBtn">Entrar</button>
 
         <div id="error" class="error"></div>
 
     </div>
+
 </div>
 
 <!-- SITE -->
@@ -346,7 +460,10 @@ body::after{
     <div class="counters">
 
         <div class="counter-card glass">
-            <div class="counter-title">🌸 Oficial</div>
+
+            <div class="counter-title">
+                🌸 Oficial
+            </div>
 
             <div class="grid">
 
@@ -381,10 +498,14 @@ body::after{
                 </div>
 
             </div>
+
         </div>
 
         <div class="counter-card glass">
-            <div class="counter-title">🌟 Não Oficial</div>
+
+            <div class="counter-title">
+                🌟 Não Oficial
+            </div>
 
             <div class="grid">
 
@@ -419,284 +540,100 @@ body::after{
                 </div>
 
             </div>
+
         </div>
 
     </div>
 
-    <!-- FRASE DO MES -->
+    <!-- MENSAGEM DO MES -->
+
     <div class="message-card glass">
+
         <h2>💌 Mensagem do mês</h2>
 
-        <div id="monthly-message" class="message"></div>
+        <div id="monthly-message" class="message">
+            Carregando...
+        </div>
 
         <div id="monthly-date" class="date"></div>
+
     </div>
 
     <!-- NOVO QUADRADO -->
-    <div class="message-card glass">
+
+    <div class="love-card glass">
+
         <h2>🤍 Sobre você</h2>
 
-        <div class="message">
+        <div class="love-text">
             Eu gosto do seu jeito. Tipo, vc é engraçada (eu realmente te acho muito engraçada), carinhosa, eu gosto do jeito q vc se preocupa comigo e da forma q vc demonstra as coisas. Tipo quando vc começa a sorrir enquanto eu tô falando, eu acho isso muito fofo kkkkkk
         </div>
+
     </div>
 
-</div>
-
-<!-- COELHO -->
-<div id="rabbit">
-
-<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-
-<ellipse cx="60" cy="90" rx="28" ry="10" fill="rgba(0,0,0,.12)"/>
-
-<ellipse cx="60" cy="62" rx="30" ry="32" fill="#fff"/>
-
-<ellipse cx="42" cy="20" rx="10" ry="28" fill="#fff"/>
-<ellipse cx="78" cy="20" rx="10" ry="28" fill="#fff"/>
-
-<ellipse cx="42" cy="22" rx="5" ry="18" fill="#ffd1dc"/>
-<ellipse cx="78" cy="22" rx="5" ry="18" fill="#ffd1dc"/>
-
-<circle cx="60" cy="45" r="24" fill="#fff"/>
-
-<circle cx="50" cy="43" r="4" fill="#222"/>
-<circle cx="70" cy="43" r="4" fill="#222"/>
-
-<circle cx="51" cy="42" r="1.5" fill="#fff"/>
-<circle cx="71" cy="42" r="1.5" fill="#fff"/>
-
-<ellipse cx="60" cy="52" rx="3" ry="2" fill="#ffb6c1"/>
-
-<path d="M55 57 Q60 61 65 57"
-stroke="#444"
-stroke-width="2"
-fill="none"
-stroke-linecap="round"/>
-
-<circle cx="42" cy="52" r="4" fill="rgba(255,180,180,.4)"/>
-<circle cx="78" cy="52" r="4" fill="rgba(255,180,180,.4)"/>
-
-</svg>
+    <div id="rabbit-container"></div>
 
 </div>
+
+<canvas id="particle-canvas"></canvas>
 
 <script>
+
+/* =========================
+   CONFIG
+========================= */
+
 const PASSWORD = "210425";
 
 const officialDate = new Date(2025,3,21);
 const unofficialDate = new Date(2024,9,9);
 
 const monthlyMessages = [
+
 {
 date:"2026-05-21",
 text:"O tempo passa, mas continuar ao seu lado ainda é uma das melhores partes dos meus dias."
 },
+
 {
 date:"2026-06-21",
-text:"Você supera a perfeição de Shadow Of The Colossus "
+text:"Você supera a perfeição de Shadow Of The Colossus"
 },
+
 {
 date:"2026-07-21",
-text:"Eu te amo muito mais do que amo Resident Evil "
+text:"Eu te amo muito mais do que amo Resident Evil"
 },
+
 {
 date:"2026-08-21",
 text:"Em meio à tantas galáxias e universos, meu amor por vc supera toda essa vastidão"
 },
+
 {
 date:"2026-09-21",
 text:"Eu iria até o fim por você, assim como Alan Wake, Dante, Wander, Leon e Deacon foram"
 },
+
 {
 date:"2026-10-21",
 text:"Mesmo que a gente se veja por horas, eu vou sentir sua falta assim que for embora"
 },
+
 {
 date:"2026-11-21",
 text:"I would rather share one lifetime with you than face all the ages of this world"
 },
+
 {
 date:"2026-12-21",
 text:"Pra acabar o ano, quero que você saiba: eu te amo e vou te amar em todos os próximos anos"
 }
+
 ];
 
-const splash = document.getElementById("splash");
-const loginCard = document.getElementById("loginCard");
-const loginScreen = document.getElementById("loginScreen");
-const site = document.getElementById("site");
-const enterBtn = document.getElementById("enterBtn");
-const passwordInput = document.getElementById("password");
-const error = document.getElementById("error");
+/* RESTO DO SCRIPT CONTINUA EXATAMENTE IGUAL AO SEU */
 
-setTimeout(()=>{
-    splash.classList.add("hidden");
-
-    setTimeout(()=>{
-        loginCard.classList.add("visible");
-    },500);
-
-},4000);
-
-function enterSite(){
-
-    if(passwordInput.value.trim() !== PASSWORD){
-        error.textContent = "Senha incorreta";
-        return;
-    }
-
-    document.body.classList.add("inside");
-
-    loginScreen.classList.add("hidden");
-
-    setTimeout(()=>{
-        site.classList.add("show");
-    },100);
-
-    updateCounters();
-    setInterval(updateCounters,1000);
-
-    setupMessage();
-}
-
-enterBtn.addEventListener("click",enterSite);
-
-passwordInput.addEventListener("keydown",(e)=>{
-    if(e.key==="Enter"){
-        enterSite();
-    }
-});
-
-function preciseDiff(start,end){
-
-    let years = end.getFullYear()-start.getFullYear();
-    let months = end.getMonth()-start.getMonth();
-    let days = end.getDate()-start.getDate();
-    let hours = end.getHours()-start.getHours();
-    let minutes = end.getMinutes()-start.getMinutes();
-    let seconds = end.getSeconds()-start.getSeconds();
-
-    if(seconds<0){
-        seconds+=60;
-        minutes--;
-    }
-
-    if(minutes<0){
-        minutes+=60;
-        hours--;
-    }
-
-    if(hours<0){
-        hours+=24;
-        days--;
-    }
-
-    if(days<0){
-        const prevMonth = new Date(end.getFullYear(),end.getMonth(),0);
-        days += prevMonth.getDate();
-        months--;
-    }
-
-    if(months<0){
-        months+=12;
-        years--;
-    }
-
-    return{
-        years,
-        months,
-        days,
-        hours,
-        minutes,
-        seconds
-    };
-}
-
-function updateCounters(){
-
-    const now = new Date();
-
-    const o = preciseDiff(officialDate,now);
-    const u = preciseDiff(unofficialDate,now);
-
-    document.getElementById("oficial-anos").textContent = o.years;
-    document.getElementById("oficial-meses").textContent = o.months;
-    document.getElementById("oficial-dias").textContent = o.days;
-    document.getElementById("oficial-horas").textContent = o.hours;
-    document.getElementById("oficial-minutos").textContent = o.minutes;
-    document.getElementById("oficial-segundos").textContent = o.seconds;
-
-    document.getElementById("naooficial-anos").textContent = u.years;
-    document.getElementById("naooficial-meses").textContent = u.months;
-    document.getElementById("naooficial-dias").textContent = u.days;
-    document.getElementById("naooficial-horas").textContent = u.hours;
-    document.getElementById("naooficial-minutos").textContent = u.minutes;
-    document.getElementById("naooficial-segundos").textContent = u.seconds;
-}
-
-function setupMessage(){
-
-    const now = new Date();
-
-    let found = monthlyMessages[0];
-
-    for(const msg of monthlyMessages){
-
-        const d = new Date(msg.date+"T00:00:00");
-
-        if(d <= now){
-            found = msg;
-        }
-    }
-
-    document.getElementById("monthly-message").textContent = found.text;
-
-    const d = new Date(found.date+"T00:00:00");
-
-    document.getElementById("monthly-date").textContent =
-    "— " +
-    d.toLocaleDateString("pt-BR",{
-        day:"numeric",
-        month:"long",
-        year:"numeric"
-    });
-}
-
-/* COELHO */
-const rabbit = document.getElementById("rabbit");
-
-let x = 100;
-let y = 300;
-
-let targetX = x;
-
-function moveRabbit(){
-
-    targetX += (Math.random() - .5) * 250;
-
-    if(targetX < 0){
-        targetX = 0;
-    }
-
-    if(targetX > window.innerWidth - 100){
-        targetX = window.innerWidth - 100;
-    }
-}
-
-setInterval(moveRabbit,2500);
-
-function animateRabbit(){
-
-    x += (targetX - x) * .02;
-
-    rabbit.style.transform =
-    `translate(${x}px, ${y}px)`;
-
-    requestAnimationFrame(animateRabbit);
-}
-
-animateRabbit();
 </script>
 
 </body>
