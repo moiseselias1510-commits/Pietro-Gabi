@@ -357,14 +357,20 @@
     }
 
     .counter-card{
-      position:relative;
-      border-radius: var(--card-radius);
-      padding:28px 24px 24px;
-      min-height:430px;
-      overflow:visible;
-      isolation:isolate;
-      transform: translateZ(0);
-    }
+  position:relative;
+  border-radius: var(--card-radius);
+  padding:28px 24px 24px;
+  min-height:430px;
+
+  overflow:visible;
+
+  isolation:isolate;
+
+  transform: translateZ(0);
+
+  animation:
+    cardFloat 5s ease-in-out infinite;
+}
 
     .counter-card::before{
       content:"";
@@ -401,24 +407,41 @@
     }
 
     .outer-bloom{
-      position:absolute;
-      inset:-28px;
-      border-radius:46px;
-      pointer-events:none;
-      z-index:1;
-      filter: blur(16px);
-      opacity:.95;
-      background:
-        radial-gradient(circle at 50% 0%, var(--aura-glow-2), transparent 28%),
-        radial-gradient(circle at 100% 50%, var(--aura-glow-2), transparent 30%),
-        radial-gradient(circle at 50% 100%, var(--aura-glow-2), transparent 28%),
-        radial-gradient(circle at 0% 50%, var(--aura-glow-2), transparent 30%);
-      animation: bloomBreath 3.8s ease-in-out infinite;
-    }
+  position:absolute;
+  inset:-110px;
+  border-radius:60px;
+  pointer-events:none;
+  z-index:1;
+  opacity:1.4;
+  filter: blur(42px);
+
+  background:
+    radial-gradient(circle at 50% 0%,
+      var(--aura-glow-1) 0%,
+      var(--aura-glow-2) 18%,
+      transparent 42%),
+
+    radial-gradient(circle at 100% 50%,
+      var(--aura-glow-2) 0%,
+      transparent 38%),
+
+    radial-gradient(circle at 0% 50%,
+      var(--aura-glow-2) 0%,
+      transparent 38%),
+
+    radial-gradient(circle at 50% 100%,
+      var(--aura-glow-2) 0%,
+      transparent 42%);
+
+  animation:
+    auraPulse 1.8s ease-in-out infinite,
+    auraMove 3.5s ease-in-out infinite,
+    auraFlicker 0.12s linear infinite;
+}
 
     .energy-wrap{
       position:absolute;
-      inset:-20px;
+      inset:-55px;
       z-index:2;
       pointer-events:none;
     }
@@ -440,13 +463,13 @@
 
     .energy-line.big-glow{
       stroke: var(--aura-glow-2);
-      stroke-width: 8.5;
+      stroke-width:14;
       opacity:.26;
     }
 
     .energy-line.mid-glow{
       stroke: var(--aura-glow-1);
-      stroke-width: 4.8;
+      stroke-width:7;
       opacity:.48;
     }
 
@@ -495,7 +518,7 @@
     .spark{
       position:absolute;
       width:var(--size);
-      height:calc(var(--size) * 2.2);
+      height:calc(var(--size) * 3);
       border-radius:999px;
       opacity:0;
       transform: translate3d(0,0,0) rotate(var(--rot)) scale(.3);
@@ -633,6 +656,29 @@
       font-weight:600;
     }
 
+    .counter-card::after{
+  content:"";
+  position:absolute;
+  inset:-90px;
+  pointer-events:none;
+  z-index:0;
+
+  background:
+    repeating-conic-gradient(
+      from 0deg,
+      transparent 0deg 8deg,
+      rgba(255,255,255,.18) 12deg,
+      transparent 18deg
+    );
+
+  filter: blur(22px);
+
+  animation:
+    flameRotate 12s linear infinite;
+
+  opacity:.5;
+}
+    
     .page-shine{
       position:absolute;
       inset:0;
@@ -668,6 +714,74 @@
       50%{ transform:scale(1.08); opacity:1; }
     }
 
+    @keyframes auraPulse{
+  0%,100%{
+    transform:scale(1);
+    opacity:.9;
+  }
+
+  50%{
+    transform:scale(1.08);
+    opacity:1;
+  }
+}
+
+    @keyframes auraFlicker{
+  0%{
+    opacity:1;
+  }
+
+  25%{
+    opacity:.92;
+  }
+
+  50%{
+    opacity:1.08;
+  }
+
+  75%{
+    opacity:.95;
+  }
+
+  100%{
+    opacity:1;
+  }
+}
+    
+@keyframes auraMove{
+  0%{
+    filter:blur(20px);
+  }
+
+  50%{
+    filter:blur(32px);
+  }
+
+  100%{
+    filter:blur(20px);
+  }
+}
+
+@keyframes flameRotate{
+  from{
+    transform:
+      rotate(0deg)
+      scale(1);
+  }
+
+  50%{
+    transform:
+      rotate(180deg)
+      scale(1.08);
+  }
+
+  to{
+    transform:
+      rotate(360deg)
+      scale(1);
+  }
+}
+    
     @keyframes haloPulse{
       0%,100%{ transform:scale(1); opacity:.85; }
       50%{ transform:scale(1.018); opacity:1; }
@@ -696,6 +810,20 @@
       40%{ transform: translateX(135%); }
     }
 
+    @keyframes cardFloat{
+  0%,100%{
+    transform:
+      translateY(0px)
+      translateZ(0);
+  }
+
+  50%{
+    transform:
+      translateY(-6px)
+      translateZ(0);
+  }
+}
+    
     @keyframes floatOrb{
       0%,100%{ transform: translateY(0) scale(1); }
       50%{ transform: translateY(-18px) scale(1.04); }
@@ -995,7 +1123,7 @@
           id="dispWhite"
           in="SourceGraphic"
           in2="noiseWhiteResult"
-          scale="20"
+          scale="38"
           xChannelSelector="R"
           yChannelSelector="G"
           result="whiteDisplaced"
@@ -1020,7 +1148,7 @@
           id="dispGold"
           in="SourceGraphic"
           in2="noiseGoldResult"
-          scale="24"
+          scale="42"
           xChannelSelector="R"
           yChannelSelector="G"
           result="goldDisplaced"
