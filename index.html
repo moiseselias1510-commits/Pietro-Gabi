@@ -3,56 +3,73 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
 <title>Nosso Tempo</title>
 
 <style>
-
-:root{
-  --glass:rgba(255,255,255,.14);
-  --border:rgba(255,255,255,.22);
-  --shadow:0 18px 45px rgba(0,0,0,.18);
-  --text:rgba(255,255,255,.85);
+:root {
+  --glass: rgba(255,255,255,.12);
+  --border: rgba(255,255,255,.22);
+  --shadow: 0 18px 45px rgba(0,0,0,.18);
+  --text: rgba(255,255,255,.85);
 }
 
-*{
+* {
   margin:0;
   padding:0;
   box-sizing:border-box;
 }
 
-body{
+body {
   min-height:100vh;
   overflow-x:hidden;
   font-family:"Segoe UI",sans-serif;
   color:white;
   background:#8fd4f8;
+  position:relative;
 }
 
-body::before{
-  content:"";
+/* === FUNDOS SEPARADOS === */
+#bg-login,
+#bg-site {
   position:fixed;
   inset:0;
-  background:url("fundo-login.png") center/cover no-repeat;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
   z-index:-3;
-  transition:.8s;
+  transition:opacity 0.8s ease;
 }
 
-body.inside::before{
-  background:url("fundo-site.png") center/cover no-repeat;
+#bg-login {
+  background-image:url("fundo-login.png");
+  opacity:1;
 }
 
-body::after{
+#bg-site {
+  background-image:url("fundo-site.png");
+  opacity:0;
+}
+
+body.inside #bg-login {
+  opacity:0;
+}
+
+body.inside #bg-site {
+  opacity:1;
+}
+
+/* overlay escuro para melhor contraste */
+body::after {
   content:"";
   position:fixed;
   inset:0;
   background:
-  radial-gradient(circle at top, rgba(255,255,255,.16), transparent 40%),
-  linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.18));
+    radial-gradient(circle at top, rgba(255,255,255,.16), transparent 40%),
+    linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.18));
   z-index:-2;
 }
 
-.glass{
+.glass {
   background:var(--glass);
   backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
@@ -60,13 +77,12 @@ body::after{
   box-shadow:var(--shadow);
 }
 
-.hidden{
+.hidden {
   display:none !important;
 }
 
-/* LOGIN */
-
-.screen{
+/* === LOGIN === */
+.screen {
   min-height:100vh;
   display:flex;
   align-items:center;
@@ -74,7 +90,7 @@ body::after{
   padding:20px;
 }
 
-.login-card{
+.login-card {
   width:min(410px,92vw);
   border-radius:30px;
   padding:34px 24px;
@@ -82,7 +98,7 @@ body::after{
   animation:fadeUp 1s ease;
 }
 
-.heart{
+.heart {
   width:92px;
   height:92px;
   margin:0 auto 18px;
@@ -92,42 +108,43 @@ body::after{
   border-radius:16px;
   animation:pulse 2s infinite;
   box-shadow:
-  0 14px 30px rgba(255,65,120,.28),
-  inset 0 0 14px rgba(255,255,255,.22);
+    0 14px 30px rgba(255,65,120,.28),
+    inset 0 0 14px rgba(255,255,255,.22);
 }
 
 .heart::before,
-.heart::after{
+.heart::after {
   content:"";
   position:absolute;
   width:92px;
   height:92px;
   border-radius:50%;
+ 50%;
   background:linear-gradient(145deg,#ff6b9a,#ff3f7c);
 }
 
-.heart::before{
+.heart::before {
   top:-46px;
   left:0;
 }
 
-.heart::after{
+.heart::after {
   left:46px;
   top:0;
 }
 
-.login-card h1{
+.login-card h1 {
   font-size:2rem;
   margin-bottom:10px;
 }
 
-.login-card p{
+.login-card p {
   color:var(--text);
   line-height:1.6;
   margin-bottom:22px;
 }
 
-.login-card input{
+.login-card input {
   width:100%;
   border:none;
   outline:none;
@@ -135,10 +152,16 @@ body::after{
   border-radius:999px;
   font-size:16px;
   margin-bottom:14px;
-  background:rgba(255,255,255,.94);
+  background:rgba(255,255,255,0.25); /* mais transparente */
+  color:white;
+  backdrop-filter:blur(4px);
 }
 
-.login-card button{
+.login-card input::placeholder {
+  color:rgba(255,255,255,0.7);
+}
+
+.login-card button {
   width:100%;
   border:none;
   cursor:pointer;
@@ -147,24 +170,25 @@ body::after{
   font-size:16px;
   font-weight:700;
   color:white;
-  background:linear-gradient(135deg,#ff5f95,#ff3d7c);
+  background:rgba(255,65,120,0.6); /* mais transparente */
+  backdrop-filter:blur(4px);
   box-shadow:0 12px 28px rgba(255,65,120,.28);
   transition:.25s;
 }
 
-.login-card button:hover{
+.login-card button:hover {
+  background:rgba(255,65,120,0.8);
   transform:translateY(-2px);
 }
 
-.error{
+.error {
   margin-top:14px;
   color:#fff2b8;
   min-height:20px;
 }
 
-/* SITE */
-
-#site{
+/* === SITE === */
+#site {
   width:min(1000px,92vw);
   margin:34px auto 60px;
   opacity:0;
@@ -173,42 +197,89 @@ body::after{
   transition:1s;
 }
 
-#site.show{
+#site.show {
   opacity:1;
-  transform:translateY(0);
+  transform:transform:translateY(0);
   pointer-events:auto;
 }
 
-.header{
+.header {
   text-align:center;
   margin-bottom:26px;
 }
 
-.header h1{
+.header h1 {
   font-size:clamp(2.3rem,5vw,3.5rem);
   margin-bottom:12px;
   text-shadow:0 8px 24px rgba(0,0,0,.18);
 }
 
-.header p{
+.header p {
   color:var(--text);
 }
 
 /* CONTADORES */
-
-.counters{
+.counters {
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:22px;
   margin-bottom:24px;
 }
 
-.counter-card{
+.counter-card {
   border-radius:30px;
   padding:26px 22px;
+  position:relative; /* para o glow */
 }
 
-.counter-title{
+/* === GLOW NOS CARDS === */
+.counter-card.oficial {
+  box-shadow:
+    0 0 20px rgba(255,255,255,0.6),
+    0 0 40px rgba(255,255,255,0.4),
+    0 0 60px rgba(255,255,255,0.2);
+  animation:glowWhite 2s ease-in-out infinite alternate;
+}
+
+.counter-card.nao-oficial {
+  box-shadow:
+    0 0 20px rgba(255,255,0,0.6),
+    0 0 40px rgba(255,255,0,0.4),
+    0 0 60px rgba(255,255,0,0.2);
+  animation:glowYellow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowWhite {
+  from {
+    box-shadow:
+      0 0 20px rgba(255,255,255,0.6),
+      0 0 40px rgba(255,255,255,0.4),
+      0 0 60px rgba(255,255,255,0.2);
+  }
+  to {
+    box-shadow:
+      0 0 30px rgba(255,255,255,0.8),
+      0 0 60px rgba(255,255,255,0.5),
+      0 0 90px rgba(255,255,255,0.3);
+  }
+}
+
+@keyframes glowYellow {
+  from {
+    box-shadow:
+      0 0 20px rgba(255,255,0,0.6),
+      0 0 40px rgba(255,255,0,0.4),
+      0 0 60px rgba(255,255,0,0.2);
+  }
+  to {
+    box-shadow:
+      0 0 30px rgba(255,255,0,0.8),
+      0 0 60px rgba(255,255,0,0.5),
+      0 0 90px rgba(255,255,0,0.3);
+  }
+}
+
+.counter-title {
   text-align:center;
   margin-bottom:20px;
   font-size:1.2rem;
@@ -216,13 +287,13 @@ body::after{
   letter-spacing:.05em;
 }
 
-.grid{
+.grid {
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:12px;
 }
 
-.box{
+.box {
   border-radius:20px;
   padding:18px 10px;
   text-align:center;
@@ -230,463 +301,284 @@ body::after{
   border:1px solid rgba(255,255,255,.18);
 }
 
-.number{
+.number {
+  z-index:1; /* fica acima do glow */
+  position:relative;
+}
+
+.number {
   display:block;
   font-size:1.6rem;
   font-weight:800;
   margin-bottom:6px;
 }
 
-.label{
+.label {
   color:rgba(255,255,255,.85);
   font-size:.9rem;
 }
 
-/* MENSAGEM */
-
-.message-card{
+/* === MENSAGEM === */
+.message-card {
   border-radius:30px;
   padding:28px;
   text-align:center;
 }
 
-.message-card h2{
+.message-card h2 {
   margin-bottom:18px;
   font-size:1.1rem;
   letter-spacing:.05em;
   color:rgba(255,255,255,.9);
 }
 
-.message{
+.message {
   font-size:clamp(1.05rem,2vw,1.4rem);
   line-height:1.9;
   font-weight:700;
 }
 
-.date{
+.date {
   margin-top:18px;
   color:rgba(255,255,255,.75);
+  .75);
   font-size:.95rem;
 }
 
 /* ANIMAÇÕES */
-
-@keyframes fadeUp{
-  from{
+@keyframes fadeUp {
+  from {
     opacity:0;
     transform:translateY(18px);
   }
-  to{
+  to {
     opacity:1;
     transform:translateY(0);
   }
 }
 
-@keyframes pulse{
-  0%,100%{
+@keyframes pulse {
+  0%,100% {
     transform:rotate(-45deg) scale(1);
-  }
-  50%{
+  50% {
+  50% {
     transform:rotate(-45deg) scale(1.06);
   }
 }
 
 /* RESPONSIVO */
-
-@media(max-width:850px){
-
-  .counters{
+@media(max-width:850px) {
+  .counters {
     grid-template-columns:1fr;
   }
-
-  .grid{
+  .grid {
     grid-template-columns:repeat(2,1fr);
   }
 }
 
-@media(max-width:520px){
-
+@media(max-width:520px) {
   .login-card,
   .counter-card,
-  .message-card{
+  .message-card {
     padding:20px;
   }
-
-  .grid{
+  .grid {
     gap:10px;
   }
-
-  .number{
+  .number {
     font-size:1.3rem;
   }
-
-  .box{
+  .box {
     padding:16px 8px;
   }
 }
-
 </style>
 </head>
 <body>
 
+<!-- FUNDOS SEPARADOS -->
+<div id="bg-login"></div>
+<div id="bg-site"></div>
+
 <!-- LOGIN -->
-
 <section class="screen" id="loginScreen">
-
   <div class="login-card glass">
-
     <div class="heart"></div>
-
     <h1>Nosso Tempo</h1>
-
-    <p>
-      Um cantinho simples para guardar o tempo.
-    </p>
-
-    <input
-    type="password"
-    id="password"
-    placeholder="Senha">
-
-    <button id="enterBtn">
-      Entrar
-    </button>
-
+    <p>Um cantinho simples para guardar o tempo.</p>
+    <input type="password" id="password" placeholder="Senha">
+    <button id="enterBtn">Entrar</button>
     <div class="error" id="error"></div>
-
   </div>
-
 </section>
 
 <!-- SITE -->
-
 <main id="site">
-
   <div class="header">
-
     <h1>Nosso Tempo</h1>
-
-    <p>
-      Cada segundo continua sendo especial.
-    </p>
-
+    <p>Cada segundo continua sendo especial.</p>
   </div>
 
-  <!-- CONTADORES -->
-
   <section class="counters">
-
-    <!-- OFICIAL -->
-
-    <div class="counter-card glass">
-
-      <div class="counter-title">
-        Oficial
-      </div>
-
+    <!-- OFICIAL (luz branca) -->
+    <div class="counter-card glass oficial">
+      <div class="counter-title">Oficial</div>
       <div class="grid">
-
-        <div class="box">
-          <span class="number" id="oy">0</span>
-          <span class="label">anos</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="om">0</span>
-          <span class="label">meses</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="od">0</span>
-          <span class="label">dias</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="oh">0</span>
-          <span class="label">horas</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="omi">0</span>
-          <span class="label">minutos</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="os">0</span>
-          <span class="label">segundos</span>
-        </div>
-
+        <div class="box"><span class="number" id="oy">0</span><span class="label">anos</span></div>
+        <div class="box"><span class="number" id="om">0</span><span class="label">meses</span></div>
+        <div class="box"><span class="number" id="od">0</span><span class="label">dias</span></div>
+        <div class="box"><span class="number" id="oh">0</span><span class="label">horas</span></div>
+        <div class="box"><span class="number" id="omi">0</span><span class="label">minutos</span></div>
+        <div class="box"><span class="number" id="os">0</span><span class="label">segundos</span></div>
       </div>
-
     </div>
 
-    <!-- NÃO OFICIAL -->
-
-    <div class="counter-card glass">
-
-      <div class="counter-title">
-        Não Oficial
-      </div>
-
+    <!-- NÃO OFICIAL (luz amarela) -->
+    <div class="counter-card glass nao-oficial">
+      <div class="counter-title">Não Oficial</div>
       <div class="grid">
-
-        <div class="box">
-          <span class="number" id="ny">0</span>
-          <span class="label">anos</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="nm">0</span>
-          <span class="label">meses</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="nd">0</span>
-          <span class="label">dias</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="nh">0</span>
-          <span class="label">horas</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="nmi">0</span>
-          <span class="label">minutos</span>
-        </div>
-
-        <div class="box">
-          <span class="number" id="ns">0</span>
-          <span class="label">segundos</span>
-        </div>
-
+        <div class="box"><span class="number" id="ny">0</span><span class="label">anos</span></div>
+        <div class="box"><span class="number" id="nm">0</span><span class="label">meses</span></div>
+        <div class="box"><span class="number" id="nd">0</span><span class="label">dias</span></div>
+        <div class="box"><span class="number" id="nh">0</span><span class="label">horas</span></div>
+        <div class="box"><span class="number" id="nmi">0</span><span class="label">minutos</span></div>
+        <div class="box"><span class="number" id="ns">0</span><span class="label">segundos</span></div>
       </div>
-
     </div>
-
   </section>
-
-  <!-- MENSAGEM -->
 
   <section class="message-card glass">
-
     <h2>Mensagem do mês</h2>
-
     <div class="message" id="monthMessage"></div>
-
     <div class="date" id="monthDate"></div>
-
   </section>
-
 </main>
 
 <script>
-
 const PASSWORD = "210425";
-
 const officialDate = new Date(2025, 3, 21);
 const unofficialDate = new Date(2024, 9, 9);
 
-/* MENSAGENS */
-
 const monthlyMessages = [
-
-{
-  date:"2026-05-21",
-  text:"O tempo passa, mas continuar ao seu lado ainda é uma das melhores partes dos meus dias."
-},
-
-{
-  date:"2026-06-21",
-  text:"Mesmo depois de tantos dias, ainda gosto de cada momento que passamos juntos."
-},
-
-{
-  date:"2026-07-21",
-  text:"Você transformou momentos simples em lembranças que eu nunca quero esquecer."
-},
-
-{
-  date:"2026-08-21",
-  text:"Ainda acho incrível como alguém pode significar tanto na vida de outra pessoa."
-},
-
-{
-  date:"2026-09-21",
-  text:"Espero que o tempo continue sendo gentil com a nossa história."
-},
-
-{
-  date:"2026-10-21",
-  text:"Não importa quanto tempo passe, algumas pessoas continuam especiais do mesmo jeito."
-},
-
-{
-  date:"2026-11-21",
-  text:"Tem dias que tudo parece melhor só por lembrar de você."
-},
-
-{
-  date:"2026-12-21",
-  text:"Mais um fim de ano chegando e eu ainda gosto de olhar para tudo que construímos."
-}
-
+  {
+    date:"2026-05-21",
+    text:"O tempo passa, mas continuar ao seu lado ainda é uma das melhores partes dos meus dias."
+  },
+  {
+    date:"2026-06-21",
+    text:"Mesmo depois de tantos dias, ainda gosto de cada momento que passamos juntos."
+  },
+  {
+    date:"2026-07-21",
+    text:"Você transformou momentos simples em lembranças que eu nunca quero esquecer."
+  },
+  {
+    date:"2026-08-21",
+    text:"Ainda acho incrível como alguém pode significar tanto na vida de outra pessoa."
+  },
+  {
+    date:"2026-09-21",
+    text:"Espero que o tempo continue sendo gentil com a nossa história."
+  },
+  {
+    date:"2026-10-21",
+    text:"Não importa quanto tempo passe, algumas pessoas continuam especiais do mesmo jeito."
+  },
+  {
+    date:"2026-11-21",
+    text:"Tem dias que tudo parece melhor só por lembrar de você."
+  },
+  {
+    date:"2026-12-21",
+    text:"Mais um fim de ano chegando e eu ainda gosto de olhar para tudo que construímos."
+  }
 ];
-
-/* ELEMENTOS */
 
 const loginScreen = document.getElementById("loginScreen");
 const site = document.getElementById("site");
-
 const passwordInput = document.getElementById("password");
 const enterBtn = document.getElementById("enterBtn");
 const error = document.getElementById("error");
 
-/* LOGIN */
-
-function enterSite(){
-
-  if(passwordInput.value.trim() !== PASSWORD){
-
+function enterSite() {
+  if (passwordInput.value.trim() !== PASSWORD) {
     error.textContent = "Senha incorreta";
     return;
   }
 
   document.body.classList.add("inside");
-
   loginScreen.classList.add("hidden");
 
-  setTimeout(()=>{
+  setTimeout(() => {
     site.classList.add("show");
-  },100);
+  }, 100);
 
   updateCounters();
-
-  setInterval(updateCounters,1000);
-
+  setInterval(updateCounters, 1000);
   setupMessage();
 }
 
-enterBtn.addEventListener("click",enterSite);
-
-passwordInput.addEventListener("keydown",(e)=>{
-
-  if(e.key === "Enter"){
-    enterSite();
-  }
+enterBtn.addEventListener("click", enterSite);
+passwordInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") enterSite();
 });
 
-/* CONTADOR */
-
-function preciseDiff(start,end){
-
+function preciseDiff(start, end) {
   let years = end.getFullYear() - start.getFullYear();
   let months = end.getMonth() - start.getMonth();
   let days = end.getDate() - start.getDate();
-
   let hours = end.getHours() - start.getHours();
   let minutes = end.getMinutes() - start.getMinutes();
   let seconds = end.getSeconds() - start.getSeconds();
 
-  if(seconds < 0){
-    seconds += 60;
-    minutes--;
-  }
-
-  if(minutes < 0){
-    minutes += 60;
-    hours--;
-  }
-
-  if(hours < 0){
-    hours += 24;
-    days--;
-  }
-
-  if(days < 0){
-
-    const lastMonth = new Date(
-      end.getFullYear(),
-      end.getMonth(),
-      0
-    ).getDate();
-
+  if (seconds < 0) { seconds += 60; minutes--; }
+  if (minutes < 0) { minutes += 60; hours--; }
+  if (hours < 0) { hours += 24; days--; }
+  if (days < 0) {
+    const lastMonth = new Date(end.getFullYear(), end.getMonth(), 0).getDate();
     days += lastMonth;
     months--;
   }
+  if (months < 0) { months += 12; years--; }
 
-  if(months < 0){
-    months += 12;
-    years--;
-  }
-
-  return {
-    years,
-    months,
-    days,
-    hours,
-    minutes,
-    seconds
-  };
+  return { years, months, days, hours, minutes, seconds };
 }
 
-function setValues(prefix,diff){
-
-  document.getElementById(prefix+"y").textContent = diff.years;
-  document.getElementById(prefix+"m").textContent = diff.months;
-  document.getElementById(prefix+"d").textContent = diff.days;
-
-  document.getElementById(prefix+"h").textContent = diff.hours;
-  document.getElementById(prefix+"mi").textContent = diff.minutes;
-  document.getElementById(prefix+"s").textContent = diff.seconds;
+function setValues(prefix, diff) {
+  document.getElementById(prefix + "y").textContent = diff.years;
+  document.getElementById(prefix + "m").textContent = diff.months;
+  document.getElementById(prefix + "d").textContent = diff.days;
+  document.getElementById(prefix + "h").textContent = diff.hours;
+  document.getElementById(prefix + "mi").textContent = diff.minutes;
+  document.getElementById(prefix + "s").textContent = diff.seconds;
 }
 
-function updateCounters(){
-
+function updateCounters() {
   const now = new Date();
-
-  const official = preciseDiff(officialDate,now);
-  const unofficial = preciseDiff(unofficialDate,now);
-
-  setValues("o",official);
-  setValues("n",unofficial);
+  const official = preciseDiff(officialDate, now);
+  const unofficial = preciseDiff(unofficialDate, now);
+  setValues("o", official);
+  setValues("n", unofficial);
 }
 
-/* MENSAGEM */
-
-function setupMessage(){
-
+function setupMessage() {
   const now = new Date();
-
-  const visible = monthlyMessages.filter(item=>{
-
+  const visible = monthlyMessages.filter(item => {
     const d = new Date(item.date + "T00:00:00");
-
     return d <= now;
   });
+  const current = visible.length ? visible[visible.length - 1] : monthlyMessages[0];
+  document.getElementById("monthMessage").textContent = current.text;
 
-  const current = visible.length
-  ? visible[visible.length - 1]
-  : monthlyMessages[0];
-
-  document.getElementById("monthMessage").textContent =
-  current.text;
-
-  /* CORREÇÃO DO BUG DE FUSO */
-
-  const [year, month, day] =
-  current.date.split("-").map(Number);
-
+  const [year, month, day] = current.date.split("-").map(Number);
   const date = new Date(year, month - 1, day);
-
   document.getElementById("monthDate").textContent =
-  date.toLocaleDateString("pt-BR",{
-    day:"numeric",
-    month:"long",
-    year:"numeric"
-  });
+    date.toLocaleDateString("pt-BR", {
+      day:"numeric",
+      month:"long",
+      year:"numeric"
+    });
 }
-
 </script>
 
 </body>
