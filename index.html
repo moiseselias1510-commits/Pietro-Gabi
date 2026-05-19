@@ -40,14 +40,14 @@ body::before{
     content:"";
     position:fixed;
     inset:0;
-    background:url("fundo-login.png") center center / contain no-repeat;
+    background:url("fundo-login.png") center/contain no-repeat;
     background-color:#8fd4f8;
     z-index:-3;
     transition:.8s;
 }
 
 body.inside::before{
-    background:url("fundo-site.png") center center / contain no-repeat;
+    background:url("fundo-site.png") center/contain no-repeat;
     background-color:#8fd4f8;
 }
 
@@ -301,22 +301,25 @@ body::after{
     position:absolute;
     inset:0;
     pointer-events:none;
+    overflow:visible;
+    z-index:20;
 }
 
 .rabbit{
     position:absolute;
     width:95px;
     height:95px;
-    z-index:10;
+    z-index:20;
     transition:transform .08s linear;
+    will-change:transform;
 }
 
 .rabbit svg{
     overflow:visible;
 
     filter:
-    drop-shadow(0 0 10px rgba(255,255,255,.4))
-    drop-shadow(0 0 20px rgba(255,255,255,.2));
+    drop-shadow(0 0 10px rgba(255,255,255,.45))
+    drop-shadow(0 0 25px rgba(255,255,255,.25));
 }
 
 .rabbit .inner{
@@ -386,7 +389,7 @@ body::after{
     position:fixed;
     inset:0;
     pointer-events:none;
-    z-index:1;
+    z-index:0;
 }
 
 /* =========================
@@ -421,12 +424,10 @@ body::after{
 
 <body>
 
-<!-- SPLASH -->
 <div id="splash">
     <img src="intro-image.png" alt="Intro">
 </div>
 
-<!-- LOGIN -->
 <div id="loginScreen" class="screen">
 
     <div id="loginCard" class="login-card glass">
@@ -449,7 +450,6 @@ body::after{
 
 </div>
 
-<!-- SITE -->
 <div id="site">
 
     <div class="header">
@@ -545,8 +545,6 @@ body::after{
 
     </div>
 
-    <!-- MENSAGEM DO MES -->
-
     <div class="message-card glass">
 
         <h2>💌 Mensagem do mês</h2>
@@ -558,8 +556,6 @@ body::after{
         <div id="monthly-date" class="date"></div>
 
     </div>
-
-    <!-- NOVO QUADRADO -->
 
     <div class="love-card glass">
 
@@ -579,10 +575,6 @@ body::after{
 
 <script>
 
-/* =========================
-   CONFIG
-========================= */
-
 const PASSWORD = "210425";
 
 const officialDate = new Date(2025,3,21);
@@ -597,12 +589,12 @@ text:"O tempo passa, mas continuar ao seu lado ainda é uma das melhores partes 
 
 {
 date:"2026-06-21",
-text:"Você supera a perfeição de Shadow Of The Colossus"
+text:"Você supera a perfeição de Shadow Of The Colossus "
 },
 
 {
 date:"2026-07-21",
-text:"Eu te amo muito mais do que amo Resident Evil"
+text:"Eu te amo muito mais do que amo Resident Evil "
 },
 
 {
@@ -632,7 +624,351 @@ text:"Pra acabar o ano, quero que você saiba: eu te amo e vou te amar em todos 
 
 ];
 
-/* RESTO DO SCRIPT CONTINUA EXATAMENTE IGUAL AO SEU */
+const splash = document.getElementById("splash");
+const loginCard = document.getElementById("loginCard");
+const loginScreen = document.getElementById("loginScreen");
+const site = document.getElementById("site");
+
+const passwordInput = document.getElementById("password");
+const enterBtn = document.getElementById("enterBtn");
+const error = document.getElementById("error");
+
+setTimeout(()=>{
+
+    splash.classList.add("hidden");
+
+    setTimeout(()=>{
+        loginCard.classList.add("visible");
+    },500);
+
+},4500);
+
+function enterSite(){
+
+    if(passwordInput.value.trim() !== PASSWORD){
+
+        error.textContent = "Senha incorreta";
+        return;
+    }
+
+    document.body.classList.add("inside");
+
+    loginScreen.classList.add("hidden");
+
+    setTimeout(()=>{
+        site.classList.add("show");
+        initRabbit();
+    },100);
+
+    updateCounters();
+
+    setInterval(updateCounters,1000);
+
+    setupMessage();
+
+    initParticles();
+}
+
+enterBtn.addEventListener("click", enterSite);
+
+passwordInput.addEventListener("keydown",(e)=>{
+
+    if(e.key === "Enter"){
+        enterSite();
+    }
+
+});
+
+function preciseDiff(start,end){
+
+    let years = end.getFullYear() - start.getFullYear();
+    let months = end.getMonth() - start.getMonth();
+    let days = end.getDate() - start.getDate();
+    let hours = end.getHours() - start.getHours();
+    let minutes = end.getMinutes() - start.getMinutes();
+    let seconds = end.getSeconds() - start.getSeconds();
+
+    if(seconds < 0){
+        seconds += 60;
+        minutes--;
+    }
+
+    if(minutes < 0){
+        minutes += 60;
+        hours--;
+    }
+
+    if(hours < 0){
+        hours += 24;
+        days--;
+    }
+
+    if(days < 0){
+
+        const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+
+        days += prevMonth.getDate();
+
+        months--;
+    }
+
+    if(months < 0){
+        months += 12;
+        years--;
+    }
+
+    return {
+        years,
+        months,
+        days,
+        hours,
+        minutes,
+        seconds
+    };
+}
+
+function updateCounters(){
+
+    const now = new Date();
+
+    const o = preciseDiff(officialDate, now);
+    const n = preciseDiff(unofficialDate, now);
+
+    document.getElementById("oficial-anos").textContent = o.years;
+    document.getElementById("oficial-meses").textContent = o.months;
+    document.getElementById("oficial-dias").textContent = o.days;
+    document.getElementById("oficial-horas").textContent = o.hours;
+    document.getElementById("oficial-minutos").textContent = o.minutes;
+    document.getElementById("oficial-segundos").textContent = o.seconds;
+
+    document.getElementById("naooficial-anos").textContent = n.years;
+    document.getElementById("naooficial-meses").textContent = n.months;
+    document.getElementById("naooficial-dias").textContent = n.days;
+    document.getElementById("naooficial-horas").textContent = n.hours;
+    document.getElementById("naooficial-minutos").textContent = n.minutes;
+    document.getElementById("naooficial-segundos").textContent = n.seconds;
+}
+
+function setupMessage(){
+
+    const now = new Date();
+
+    let found = monthlyMessages[0];
+
+    for(const msg of monthlyMessages){
+
+        const d = new Date(msg.date + "T00:00:00");
+
+        if(now >= d){
+            found = msg;
+        }
+    }
+
+    document.getElementById("monthly-message").textContent = found.text;
+
+    const d = new Date(found.date + "T00:00:00");
+
+    document.getElementById("monthly-date").textContent =
+    "— " +
+    d.toLocaleDateString("pt-BR",{
+        day:"numeric",
+        month:"long",
+        year:"numeric"
+    });
+}
+
+const rabbitContainer = document.getElementById("rabbit-container");
+
+let rabbit = null;
+
+const rabbitState = {
+    x:200,
+    y:380,
+    targetX:200,
+    direction:1
+};
+
+function rabbitSVG(){
+
+return `
+<div class="inner">
+
+<svg viewBox="0 0 120 120">
+
+<ellipse cx="60" cy="105" rx="28" ry="10"
+fill="rgba(0,0,0,0.12)"/>
+
+<g class="ear-left">
+<ellipse cx="38" cy="28" rx="12" ry="34"
+fill="#ffffff"/>
+<ellipse cx="38" cy="32" rx="5" ry="22"
+fill="#ffd1dc"/>
+</g>
+
+<g class="ear-right">
+<ellipse cx="82" cy="28" rx="12" ry="34"
+fill="#ffffff"/>
+<ellipse cx="82" cy="32" rx="5" ry="22"
+fill="#ffd1dc"/>
+</g>
+
+<ellipse cx="60" cy="74" rx="30" ry="28"
+fill="#ffffff"/>
+
+<circle cx="60" cy="50" r="26"
+fill="#ffffff"/>
+
+<ellipse cx="42" cy="58" rx="6" ry="4"
+fill="rgba(255,180,190,.5)"/>
+
+<ellipse cx="78" cy="58" rx="6" ry="4"
+fill="rgba(255,180,190,.5)"/>
+
+<ellipse cx="50" cy="50" rx="4" ry="6"
+fill="#1f1f1f"/>
+
+<ellipse cx="70" cy="50" rx="4" ry="6"
+fill="#1f1f1f"/>
+
+<circle cx="51" cy="48" r="1.3"
+fill="white"/>
+
+<circle cx="71" cy="48" r="1.3"
+fill="white"/>
+
+<ellipse cx="60" cy="60" rx="3" ry="2"
+fill="#ffb6c1"/>
+
+<path d="M55 64 Q60 69 65 64"
+stroke="#666"
+stroke-width="1.8"
+fill="none"
+stroke-linecap="round"/>
+
+<ellipse cx="45" cy="92" rx="9" ry="6"
+fill="#ffffff"/>
+
+<ellipse cx="75" cy="92" rx="9" ry="6"
+fill="#ffffff"/>
+
+<circle cx="88" cy="76" r="8"
+fill="#ffffff"/>
+
+</svg>
+
+</div>
+`;
+
+}
+
+function initRabbit(){
+
+    rabbit = document.createElement("div");
+
+    rabbit.className = "rabbit";
+
+    rabbit.innerHTML = rabbitSVG();
+
+    rabbitContainer.appendChild(rabbit);
+
+    rabbit.style.transform =
+    `translate(${rabbitState.x}px, ${rabbitState.y}px)`;
+
+    moveRabbit();
+
+    animateRabbit();
+}
+
+function moveRabbit(){
+
+    setInterval(()=>{
+
+        const max = site.clientWidth - 100;
+
+        rabbitState.targetX = Math.random() * max;
+
+        rabbitState.direction =
+        rabbitState.targetX > rabbitState.x ? 1 : -1;
+
+    },3000);
+}
+
+function animateRabbit(){
+
+    function loop(){
+
+        rabbitState.x +=
+        (rabbitState.targetX - rabbitState.x) * 0.03;
+
+        rabbit.style.transform =
+        `
+        translate(${rabbitState.x}px, ${rabbitState.y}px)
+        scaleX(${rabbitState.direction})
+        `;
+
+        requestAnimationFrame(loop);
+    }
+
+    loop();
+}
+
+const canvas = document.getElementById("particle-canvas");
+const ctx = canvas.getContext("2d");
+
+let particles = [];
+
+function initParticles(){
+
+    resizeCanvas();
+
+    window.addEventListener("resize", resizeCanvas);
+
+    for(let i=0;i<35;i++){
+
+        particles.push({
+
+            x:Math.random()*canvas.width,
+            y:Math.random()*canvas.height,
+            r:Math.random()*3+1,
+            speed:Math.random()*0.5+0.2
+        });
+    }
+
+    drawParticles();
+}
+
+function resizeCanvas(){
+
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
+
+function drawParticles(){
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    particles.forEach(p=>{
+
+        p.y -= p.speed;
+
+        if(p.y < -10){
+
+            p.y = canvas.height + 10;
+
+            p.x = Math.random()*canvas.width;
+        }
+
+        ctx.beginPath();
+
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+
+        ctx.fillStyle = "rgba(255,255,255,.4)";
+
+        ctx.fill();
+    });
+
+    requestAnimationFrame(drawParticles);
+}
 
 </script>
 
