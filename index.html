@@ -304,7 +304,7 @@ body::after{
 }
 
 /* =========================
-   NOSSA IMAGEM
+   NOSSO RANK
 ========================= */
 
 .shared-image-card{
@@ -458,44 +458,8 @@ body::after{
     margin-top:10px;
 }
 
-.sparkle-layer{
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-    z-index:4;
-    overflow:hidden;
-}
-
-.sparkle{
-    position:absolute;
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    background:radial-gradient(circle, rgba(255,255,255,.95), rgba(255,255,255,.15));
-    box-shadow:
-        0 0 10px rgba(255,255,255,.9),
-        0 0 18px rgba(255,239,170,.6),
-        0 0 26px rgba(164,235,255,.55);
-    animation:sparkleUp 1.1s ease forwards;
-    opacity:0;
-}
-
-@keyframes sparkleUp{
-    0%{
-        transform:translateY(0) scale(.4);
-        opacity:0;
-    }
-    20%{
-        opacity:1;
-    }
-    100%{
-        transform:translateY(-55px) scale(1.35);
-        opacity:0;
-    }
-}
-
 /* =========================
-   FLOR / CAIXINHA
+   CLIQUE AQUI / PRESENTE / FLOR
 ========================= */
 
 .flower-card{
@@ -506,44 +470,138 @@ body::after{
 
 .flower-stage{
     display:flex;
+    flex-direction:column;
     align-items:center;
     justify-content:center;
-    min-height:220px;
+    min-height:280px;
     position:relative;
     overflow:visible;
 }
 
-.flower-box{
+.gift-button{
     border:none;
+    background:transparent;
     cursor:pointer;
-    color:white;
-    font-weight:700;
-    font-size:1rem;
-    letter-spacing:.4px;
-    padding:18px 28px;
-    border-radius:22px;
-    background:
-        linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.08));
-    border:1px solid rgba(255,255,255,.25);
-    box-shadow:
-        0 0 22px rgba(255,255,255,.18),
-        0 0 36px rgba(255,235,145,.10);
-    backdrop-filter:blur(12px);
-    transition:transform .25s ease, box-shadow .25s ease, opacity .45s ease;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    transition:transform .25s ease, opacity .35s ease;
 }
 
-.flower-box:hover{
-    transform:translateY(-2px) scale(1.02);
-    box-shadow:
-        0 0 26px rgba(255,255,255,.24),
-        0 0 42px rgba(164,235,255,.14);
+.gift-button:hover{
+    transform:translateY(-4px) scale(1.02);
 }
 
-.flower-box.hide{
+.gift-button.hide{
     opacity:0;
-    transform:scale(.82);
+    transform:scale(.75);
     pointer-events:none;
     display:none;
+}
+
+.gift-text{
+    font-size:1rem;
+    font-weight:700;
+    color:rgba(255,255,255,.95);
+    text-shadow:0 0 12px rgba(255,255,255,.18);
+}
+
+.gift-box-visual{
+    position:relative;
+    width:130px;
+    height:120px;
+    filter:
+        drop-shadow(0 0 16px rgba(255,255,255,.25))
+        drop-shadow(0 0 30px rgba(164,235,255,.20));
+}
+
+.gift-lid{
+    position:absolute;
+    top:16px;
+    left:8px;
+    width:114px;
+    height:28px;
+    border-radius:16px;
+    background:linear-gradient(135deg, #8fd4f8, #bcecff);
+    border:1px solid rgba(255,255,255,.45);
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+
+.gift-base{
+    position:absolute;
+    bottom:8px;
+    left:16px;
+    width:98px;
+    height:72px;
+    border-radius:18px;
+    background:linear-gradient(135deg, #9fe5ff, #dff7ff);
+    border:1px solid rgba(255,255,255,.48);
+    box-shadow:
+        inset 0 0 12px rgba(255,255,255,.35),
+        0 12px 24px rgba(0,0,0,.12);
+}
+
+.ribbon-v{
+    position:absolute;
+    left:50%;
+    top:16px;
+    width:16px;
+    height:88px;
+    transform:translateX(-50%);
+    border-radius:999px;
+    background:linear-gradient(180deg, #ffd2e2, #ff8db5);
+    z-index:2;
+    box-shadow:0 0 12px rgba(255,145,185,.28);
+}
+
+.ribbon-h{
+    position:absolute;
+    left:16px;
+    top:48px;
+    width:98px;
+    height:16px;
+    border-radius:999px;
+    background:linear-gradient(135deg, #ffd2e2, #ff8db5);
+    z-index:2;
+    box-shadow:0 0 12px rgba(255,145,185,.28);
+}
+
+.bow-center{
+    position:absolute;
+    top:4px;
+    left:50%;
+    width:20px;
+    height:20px;
+    transform:translateX(-50%);
+    border-radius:50%;
+    background:linear-gradient(135deg, #ffd8e6, #ff8bb2);
+    z-index:3;
+}
+
+.bow-left,
+.bow-right{
+    position:absolute;
+    top:-2px;
+    width:28px;
+    height:22px;
+    border:6px solid #ff9fc0;
+    border-radius:50%;
+    z-index:2;
+}
+
+.bow-left{
+    left:38px;
+    transform:rotate(-25deg);
+    border-right-color:transparent;
+    background:rgba(255,255,255,.1);
+}
+
+.bow-right{
+    right:38px;
+    transform:rotate(25deg) scaleX(-1);
+    border-right-color:transparent;
+    background:rgba(255,255,255,.1);
 }
 
 .flower-wrap{
@@ -554,7 +612,6 @@ body::after{
     opacity:0;
     transform:scale(.72);
     transition:opacity .75s ease, transform .75s cubic-bezier(.2,.9,.2,1.1);
-
     z-index:5;
 }
 
@@ -566,10 +623,26 @@ body::after{
 .forget-flower{
     position:relative;
     width:180px;
-    height:180px;
+    height:210px;
     filter:
         drop-shadow(0 0 12px rgba(255,255,255,.40))
         drop-shadow(0 0 24px rgba(126,203,255,.30));
+    animation:flowerBloom 1.2s ease;
+}
+
+@keyframes flowerBloom{
+    0%{
+        transform:scale(.3) rotate(-10deg);
+        opacity:0;
+    }
+    60%{
+        transform:scale(1.08) rotate(2deg);
+        opacity:1;
+    }
+    100%{
+        transform:scale(1) rotate(0deg);
+        opacity:1;
+    }
 }
 
 .petal{
@@ -642,8 +715,9 @@ body::after{
 
 .flower-caption{
     margin-top:16px;
-    color:rgba(255,255,255,.88);
-    font-size:1rem;
+    color:rgba(255,255,255,.92);
+    font-size:1.05rem;
+    font-weight:700;
     text-shadow:0 0 12px rgba(255,255,255,.12);
 }
 
@@ -837,7 +911,7 @@ body::after{
 
     .forget-flower{
         width:150px;
-        height:150px;
+        height:180px;
     }
 
     .petal{
@@ -864,6 +938,26 @@ body::after{
 
     .leaf.right{
         right:48px;
+    }
+
+    .gift-box-visual{
+        width:110px;
+        height:105px;
+    }
+
+    .gift-lid{
+        width:96px;
+        left:7px;
+    }
+
+    .gift-base{
+        width:84px;
+        left:13px;
+    }
+
+    .ribbon-h{
+        width:84px;
+        left:13px;
     }
 }
 
@@ -1019,38 +1113,50 @@ body::after{
 
         <div class="shared-image-header">
             <h2 id="sharedImageTrigger" class="shared-image-title">Nosso Rank</h2>
-            <span class="live-badge">ao vivo</span>
+            <span class="live-badge">github</span>
         </div>
 
         <p class="shared-image-subtitle">
-            Uma memória compartilhada, salva online e sincronizada para todos.
+            Essa imagem vem direto do arquivo fixo do repositório.
         </p>
 
         <div id="sharedImageFrame" class="shared-image-frame">
             <div id="sharedImagePlaceholder" class="shared-image-placeholder">
-                Nossa imagem especial vai aparecer aqui ✨
+                Coloque a imagem <strong style="margin-left:6px;">nosso-rank.png</strong> na mesma pasta do HTML ✨
             </div>
 
-            <img id="sharedImage" alt="Nossa imagem compartilhada">
+            <img id="sharedImage" alt="Nosso Rank">
 
             <div id="sparkleLayer" class="sparkle-layer"></div>
         </div>
 
         <div id="imageMeta" class="image-meta">
-            Carregando imagem compartilhada...
+            Carregando imagem do GitHub...
         </div>
 
         <div class="upload-hint">
-            Toque em <strong>Nossa Imagem</strong> para atualizar com a conta do dono.
+            Para trocar a imagem, substitua o arquivo <strong>nosso-rank.png</strong> no GitHub.
         </div>
     </div>
 
     <div class="flower-card glass">
 
-        <h2>🩵 Uma coisinha pra você</h2>
+        <h2>clique aqui</h2>
 
         <div class="flower-stage">
-            <button id="flowerBox" class="flower-box" type="button">clique aqui</button>
+            <button id="giftButton" class="gift-button" type="button" aria-label="Abrir presente">
+                <div class="gift-box-visual">
+                    <div class="gift-lid"></div>
+                    <div class="gift-base"></div>
+                    <div class="ribbon-v"></div>
+                    <div class="ribbon-h"></div>
+                    <div class="bow-left"></div>
+                    <div class="bow-right"></div>
+                    <div class="bow-center"></div>
+                </div>
+
+                <div class="gift-text">🎁</div>
+            </button>
 
             <div id="flowerWrap" class="flower-wrap" aria-hidden="true">
                 <div>
@@ -1066,7 +1172,7 @@ body::after{
                         <div class="leaf right"></div>
                     </div>
 
-                    <div class="flower-caption">não-me-esqueças</div>
+                    <div class="flower-caption">Não-me-esqueças</div>
                 </div>
             </div>
         </div>
@@ -1083,77 +1189,22 @@ body::after{
 
 <div id="toast" class="toast"></div>
 
-<input id="sharedImageInput" type="file" accept="image/*" class="hidden">
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-    getFirestore,
-    doc,
-    setDoc,
-    onSnapshot,
-    serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import {
-    getStorage,
-    ref,
-    uploadBytes,
-    getDownloadURL,
-    deleteObject
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signInWithRedirect,
-    getRedirectResult,
-    signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+<script>
 /* =========================
    CONFIGURAÇÕES
 ========================= */
 
 const PASSWORD = "210425";
 
-/* COLE AQUI O SEU FIREBASE CONFIG EXATO */
-const firebaseConfig = {
-  apiKey: "AIzaSyDLzL9aK_kNHj4Lw7VBaDQwikSREGKlQIs",
-  authDomain: "foto-895a6.firebaseapp.com",
-  projectId: "foto-895a6",
-  storageBucket: "foto-895a6.firebasestorage.app",
-  messagingSenderId: "239192911039",
-  appId: "1:239192911039:web:fd9e994b08d7a101b2aa0a",
-  measurementId: "G-427SE7GM1G"
-};
-   
-/* E-mail Google do dono do site */
-const OWNER_EMAIL = "moises.elias1510@gmail.com";
-
-/* Documento do Firestore onde a URL da imagem será salva */
-const IMAGE_DOC_PATH = ["siteShared", "mainImage"];
+/* Nome da imagem do quadro "Nosso Rank"
+   Coloque esse arquivo na mesma pasta do HTML */
+const RANK_IMAGE_NAME = "nosso-rank.png";
 
 /* Nomes dos áudios de fundo */
 const AUDIO_TRACKS = [
     "musica-fundo-01.mp3",
     "musica-fundo-02.mp3"
 ];
-
-/* =========================
-   FIREBASE
-========================= */
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-
-provider.setCustomParameters({
-    prompt: "select_account"
-});
-
-const imageDocRef = doc(db, IMAGE_DOC_PATH[0], IMAGE_DOC_PATH[1]);
 
 /* =========================
    DADOS FIXOS
@@ -1169,11 +1220,11 @@ text:"O tempo passa, mas continuar ao seu lado ainda é uma das melhores partes 
 },
 {
 date:"2026-06-21",
-text:"Você supera a perfeição de Shadow Of The Colossus "
+text:"Você supera a perfeição de Shadow Of The Colossus"
 },
 {
 date:"2026-07-21",
-text:"Eu te amo muito mais do que amo Resident Evil "
+text:"Eu te amo muito mais do que amo Resident Evil"
 },
 {
 date:"2026-08-21",
@@ -1211,14 +1262,13 @@ const enterBtn = document.getElementById("enterBtn");
 const error = document.getElementById("error");
 
 const sharedImageTrigger = document.getElementById("sharedImageTrigger");
-const sharedImageInput = document.getElementById("sharedImageInput");
 const sharedImage = document.getElementById("sharedImage");
 const sharedImageFrame = document.getElementById("sharedImageFrame");
 const sharedImagePlaceholder = document.getElementById("sharedImagePlaceholder");
 const imageMeta = document.getElementById("imageMeta");
 const sparkleLayer = document.getElementById("sparkleLayer");
 
-const flowerBox = document.getElementById("flowerBox");
+const giftButton = document.getElementById("giftButton");
 const flowerWrap = document.getElementById("flowerWrap");
 
 const soundToggle = document.getElementById("soundToggle");
@@ -1233,9 +1283,7 @@ let particlesInitialized = false;
 let rabbitInitialized = false;
 let countersInterval = null;
 
-let currentImageData = null;
 let currentDisplayUrl = "";
-let tempPreviewUrl = "";
 
 let audioPlayers = [];
 let currentTrackIndex = 0;
@@ -1301,6 +1349,7 @@ function enterSite(){
         countersInterval = setInterval(updateCounters,1000);
 
         setupMessage();
+        loadRankImage();
 
         if(!particlesInitialized){
             initParticles();
@@ -1666,167 +1715,57 @@ soundToggle.addEventListener("click", ()=>{
 updateSoundButton();
 
 /* =========================
-   FLOR
+   PRESENTE / FLOR
 ========================= */
 
-flowerBox.addEventListener("click", ()=>{
-    flowerBox.classList.add("hide");
+giftButton.addEventListener("click", ()=>{
+    giftButton.classList.add("hide");
 
     setTimeout(()=>{
         flowerWrap.classList.add("show");
+        flowerWrap.setAttribute("aria-hidden","false");
+        createSparkles();
     },260);
 });
 
 /* =========================
-   NOSSA IMAGEM - FIREBASE
+   NOSSO RANK - IMAGEM FIXA DO GITHUB
 ========================= */
 
-function isOwnerUser(user){
-    return !!user && !!user.email && user.email.toLowerCase() === OWNER_EMAIL.toLowerCase();
-}
+function loadRankImage(forceRefresh = false){
+    const version = forceRefresh ? Date.now() : Date.now();
+    const imageUrl = `${RANK_IMAGE_NAME}?v=${version}`;
 
-async function tryOwnerLogin(){
-    try{
-        const result = await signInWithPopup(auth, provider);
+    sharedImageFrame.classList.add("switching");
+    imageMeta.textContent = "Carregando imagem do GitHub...";
 
-        if(result?.user && isOwnerUser(result.user)){
-            showToast("Login concluído. Toque novamente em Nossa Imagem.");
-            return true;
-        }
+    const preload = new Image();
 
-        if(result?.user && !isOwnerUser(result.user)){
-            await signOut(auth);
-            showToast("Esta conta não tem permissão para alterar a imagem.");
-            return false;
-        }
+    preload.onload = ()=>{
+        currentDisplayUrl = imageUrl;
+        sharedImage.src = imageUrl;
+    };
 
-        return false;
-    }catch(err){
-        const code = err?.code || "";
-
-        if(code === "auth/popup-closed-by-user"){
-            return false;
-        }
-
-        if(
-            code.includes("popup") ||
-            code.includes("cancelled-popup-request") ||
-            code.includes("blocked")
-        ){
-            await signInWithRedirect(auth, provider);
-            return false;
-        }
-
-        showToast("Não foi possível abrir o login do administrador.");
-        return false;
-    }
-}
-
-async function handleSharedImageClick(){
-    if(isOwnerUser(auth.currentUser)){
-        sharedImageInput.click();
-        return;
-    }
-
-    await tryOwnerLogin();
-}
-
-sharedImageTrigger.addEventListener("click", handleSharedImageClick);
-
-sharedImageInput.addEventListener("change", async (e)=>{
-    const file = e.target.files?.[0];
-    if(!file) return;
-
-    if(!file.type.startsWith("image/")){
-        showToast("Escolha um arquivo de imagem válido.");
-        sharedImageInput.value = "";
-        return;
-    }
-
-    if(!auth.currentUser || !isOwnerUser(auth.currentUser)){
-        showToast("Somente o dono pode trocar a imagem.");
-        sharedImageInput.value = "";
-        return;
-    }
-
-    const previousImageUrl = currentImageData?.imageUrl || "";
-    const previousStoragePath = currentImageData?.storagePath || "";
-
-    try{
-        imageMeta.textContent = "Preparando nova imagem...";
-        sharedImageFrame.classList.add("switching");
-
-        const previewUrl = URL.createObjectURL(file);
-        tempPreviewUrl = previewUrl;
-        setSharedImage(previewUrl, true);
-
-        const optimizedBlob = await compressImage(file, 1600, 0.88);
-
-        imageMeta.textContent = "Enviando imagem...";
-        const fileName = `shared-image-${Date.now()}.jpg`;
-        const storagePath = `shared/nossa-imagem/${fileName}`;
-        const storageRef = ref(storage, storagePath);
-
-        await uploadBytes(storageRef, optimizedBlob, {
-            contentType: "image/jpeg",
-            cacheControl: "public,max-age=31536000,immutable"
-        });
-
-        const downloadURL = await getDownloadURL(storageRef);
-
-        await setDoc(imageDocRef, {
-            imageUrl: downloadURL,
-            storagePath,
-            updatedAt: serverTimestamp(),
-            updatedBy: auth.currentUser.email
-        }, { merge:true });
-
-        if(previousStoragePath && previousStoragePath !== storagePath){
-            const oldRef = ref(storage, previousStoragePath);
-            deleteObject(oldRef).catch(()=>{});
-        }
-
-        imageMeta.textContent = "Imagem atualizada com sucesso.";
-        createSparkles();
-        showToast("Nossa imagem foi atualizada ✨");
-    }catch(err){
-        console.error(err);
-
-        if(previousImageUrl){
-            setSharedImage(previousImageUrl, false);
-        }else{
-            clearSharedImage();
-        }
-
-        imageMeta.textContent = "Não foi possível atualizar a imagem.";
-        showToast("Erro ao trocar a imagem.");
-    }finally{
-        sharedImageInput.value = "";
-        sharedImageFrame.classList.remove("switching");
-    }
-});
-
-onSnapshot(imageDocRef, (snap)=>{
-    const data = snap.data();
-
-    if(data && data.imageUrl){
-        currentImageData = data;
-        setSharedImage(data.imageUrl, false);
-
-        let metaText = "Imagem sincronizada para todos";
-        if(data.updatedBy){
-            metaText = `Imagem atualizada online • ${data.updatedBy}`;
-        }
-
-        imageMeta.textContent = metaText;
-    }else{
-        currentImageData = null;
+    preload.onerror = ()=>{
         clearSharedImage();
-        imageMeta.textContent = "Nenhuma imagem enviada ainda.";
-    }
-}, ()=>{
-    imageMeta.textContent = "Erro ao carregar a imagem compartilhada.";
-});
+        imageMeta.textContent = `Não encontrei ${RANK_IMAGE_NAME}. Coloque esse arquivo na mesma pasta do HTML.`;
+    };
+
+    preload.src = imageUrl;
+}
+
+sharedImage.onload = ()=>{
+    sharedImage.classList.add("visible");
+    sharedImagePlaceholder.style.display = "none";
+    sharedImageFrame.classList.remove("switching");
+    imageMeta.textContent = `Imagem carregada: ${RANK_IMAGE_NAME}`;
+    createSparkles();
+};
+
+sharedImage.onerror = ()=>{
+    clearSharedImage();
+    imageMeta.textContent = `Erro ao carregar ${RANK_IMAGE_NAME}.`;
+};
 
 function clearSharedImage(){
     currentDisplayUrl = "";
@@ -1836,78 +1775,18 @@ function clearSharedImage(){
     sharedImageFrame.classList.remove("switching");
 }
 
-function setSharedImage(url, isTemporary = false){
-    if(!url) return;
-    if(url === currentDisplayUrl) return;
+sharedImageTrigger.addEventListener("click", ()=>{
+    loadRankImage(true);
+    showToast("Recarregando a imagem do GitHub...");
+});
 
-    currentDisplayUrl = url;
-    sharedImageFrame.classList.add("switching");
+sharedImageFrame.addEventListener("click", ()=>{
+    loadRankImage(true);
+});
 
-    sharedImage.onload = ()=>{
-        sharedImage.classList.add("visible");
-        sharedImagePlaceholder.style.display = "none";
-
-        requestAnimationFrame(()=>{
-            sharedImageFrame.classList.remove("switching");
-        });
-
-        if(!isTemporary && tempPreviewUrl){
-            URL.revokeObjectURL(tempPreviewUrl);
-            tempPreviewUrl = "";
-        }
-    };
-
-    sharedImage.onerror = ()=>{
-        sharedImageFrame.classList.remove("switching");
-        if(!isTemporary){
-            imageMeta.textContent = "Não foi possível carregar a imagem.";
-        }
-    };
-
-    sharedImage.src = url;
-}
-
-async function compressImage(file, maxSize = 1600, quality = 0.88){
-    const imageUrl = URL.createObjectURL(file);
-
-    try{
-        const img = await loadImage(imageUrl);
-
-        const canvas = document.createElement("canvas");
-        let { width, height } = img;
-
-        if(width > height && width > maxSize){
-            height = Math.round(height * (maxSize / width));
-            width = maxSize;
-        }else if(height >= width && height > maxSize){
-            width = Math.round(width * (maxSize / height));
-            height = maxSize;
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-
-        const ctx2 = canvas.getContext("2d");
-        ctx2.drawImage(img, 0, 0, width, height);
-
-        const blob = await new Promise(resolve=>{
-            canvas.toBlob(resolve, "image/jpeg", quality);
-        });
-
-        return blob || file;
-    }finally{
-        URL.revokeObjectURL(imageUrl);
-    }
-}
-
-function loadImage(src){
-    return new Promise((resolve, reject)=>{
-        const img = new Image();
-        img.onload = ()=> resolve(img);
-        img.onerror = reject;
-        img.src = src;
-    });
-}
+/* =========================
+   BRILHINHOS
+========================= */
 
 function createSparkles(){
     sparkleLayer.innerHTML = "";
@@ -1934,28 +1813,6 @@ function createSparkles(){
         sparkleLayer.innerHTML = "";
     },1400);
 }
-
-/* =========================
-   RESULTADO DO REDIRECT LOGIN
-========================= */
-
-(async ()=>{
-    try{
-        const result = await getRedirectResult(auth);
-
-        if(result?.user){
-            if(isOwnerUser(result.user)){
-                showToast("Login concluído. Toque em Nossa Imagem para enviar a foto.");
-            }else{
-                await signOut(auth);
-                showToast("Esta conta não tem permissão para alterar a imagem.");
-            }
-        }
-    }catch(err){
-        console.error(err);
-    }
-})();
-
 </script>
 
 </body>
