@@ -1123,6 +1123,9 @@ body::after{
             Carregando imagem do GitHub...
         </div>
 
+        <div class="upload-hint">
+            Para trocar a imagem, substitua o arquivo <strong>nosso-rank.png</strong> no GitHub.
+        </div>
     </div>
 
     <div class="flower-card glass">
@@ -1732,7 +1735,7 @@ sharedImage.onload = ()=>{
     sharedImage.classList.add("visible");
     sharedImagePlaceholder.style.display = "none";
     sharedImageFrame.classList.remove("switching");
-    imageMeta.textContent = ${RANK_IMAGE_NAME}`;
+    imageMeta.textContent = `Imagem carregada: ${RANK_IMAGE_NAME}`;
     createSparkles();
 };
 
