@@ -334,7 +334,6 @@ body::after{
 
 .shared-image-title{
     margin:0;
-    cursor:pointer;
     user-select:none;
     transition:transform .22s ease, text-shadow .22s ease, opacity .22s ease;
     text-shadow:0 0 12px rgba(255,255,255,.18);
@@ -358,12 +357,6 @@ body::after{
     box-shadow:0 0 18px rgba(255,255,255,.14);
 }
 
-.shared-image-subtitle{
-    color:rgba(255,255,255,.82);
-    margin-bottom:18px;
-    font-size:.98rem;
-}
-
 .shared-image-frame{
     position:relative;
     width:min(100%, 760px);
@@ -382,6 +375,7 @@ body::after{
         0 0 48px rgba(148,226,255,.16),
         0 0 68px rgba(255,235,145,.08);
     isolation:isolate;
+    cursor:pointer;
 }
 
 .shared-image-frame::before{
@@ -459,7 +453,7 @@ body::after{
 }
 
 /* =========================
-   CLIQUE AQUI / PRESENTE / FLOR
+   PRESENTE / FLOR
 ========================= */
 
 .flower-card{
@@ -605,19 +599,34 @@ body::after{
 }
 
 .flower-wrap{
-    position:absolute;
-    display:flex;
+    display:none;
     align-items:center;
     justify-content:center;
+    margin-top:8px;
     opacity:0;
     transform:scale(.72);
-    transition:opacity .75s ease, transform .75s cubic-bezier(.2,.9,.2,1.1);
-    z-index:5;
 }
 
 .flower-wrap.show{
+    display:flex;
     opacity:1;
     transform:scale(1);
+    animation:flowerAppear .8s cubic-bezier(.2,.9,.2,1.1) forwards;
+}
+
+@keyframes flowerAppear{
+    0%{
+        opacity:0;
+        transform:scale(.4) translateY(20px);
+    }
+    60%{
+        opacity:1;
+        transform:scale(1.08) translateY(-4px);
+    }
+    100%{
+        opacity:1;
+        transform:scale(1) translateY(0);
+    }
 }
 
 .forget-flower{
@@ -627,22 +636,6 @@ body::after{
     filter:
         drop-shadow(0 0 12px rgba(255,255,255,.40))
         drop-shadow(0 0 24px rgba(126,203,255,.30));
-    animation:flowerBloom 1.2s ease;
-}
-
-@keyframes flowerBloom{
-    0%{
-        transform:scale(.3) rotate(-10deg);
-        opacity:0;
-    }
-    60%{
-        transform:scale(1.08) rotate(2deg);
-        opacity:1;
-    }
-    100%{
-        transform:scale(1) rotate(0deg);
-        opacity:1;
-    }
 }
 
 .petal{
@@ -1112,13 +1105,9 @@ body::after{
     <div class="shared-image-card glass">
 
         <div class="shared-image-header">
-            <h2 id="sharedImageTrigger" class="shared-image-title">Nosso Rank</h2>
+            <h2 class="shared-image-title">Nosso Rank</h2>
             <span class="live-badge">github</span>
         </div>
-
-        <p class="shared-image-subtitle">
-            Essa imagem vem direto do arquivo fixo do repositório.
-        </p>
 
         <div id="sharedImageFrame" class="shared-image-frame">
             <div id="sharedImagePlaceholder" class="shared-image-placeholder">
@@ -1195,12 +1184,8 @@ body::after{
 ========================= */
 
 const PASSWORD = "210425";
-
-/* Nome da imagem do quadro "Nosso Rank"
-   Coloque esse arquivo na mesma pasta do HTML */
 const RANK_IMAGE_NAME = "nosso-rank.png";
 
-/* Nomes dos áudios de fundo */
 const AUDIO_TRACKS = [
     "musica-fundo-01.mp3",
     "musica-fundo-02.mp3"
@@ -1261,7 +1246,6 @@ const passwordInput = document.getElementById("password");
 const enterBtn = document.getElementById("enterBtn");
 const error = document.getElementById("error");
 
-const sharedImageTrigger = document.getElementById("sharedImageTrigger");
 const sharedImage = document.getElementById("sharedImage");
 const sharedImageFrame = document.getElementById("sharedImageFrame");
 const sharedImagePlaceholder = document.getElementById("sharedImagePlaceholder");
@@ -1282,8 +1266,6 @@ let siteInitialized = false;
 let particlesInitialized = false;
 let rabbitInitialized = false;
 let countersInterval = null;
-
-let currentDisplayUrl = "";
 
 let audioPlayers = [];
 let currentTrackIndex = 0;
@@ -1720,21 +1702,17 @@ updateSoundButton();
 
 giftButton.addEventListener("click", ()=>{
     giftButton.classList.add("hide");
-
-    setTimeout(()=>{
-        flowerWrap.classList.add("show");
-        flowerWrap.setAttribute("aria-hidden","false");
-        createSparkles();
-    },260);
+    flowerWrap.classList.add("show");
+    flowerWrap.setAttribute("aria-hidden","false");
+    createSparkles();
 });
 
 /* =========================
-   NOSSO RANK - IMAGEM FIXA DO GITHUB
+   NOSSO RANK - IMAGEM FIXA
 ========================= */
 
-function loadRankImage(forceRefresh = false){
-    const version = forceRefresh ? Date.now() : Date.now();
-    const imageUrl = `${RANK_IMAGE_NAME}?v=${version}`;
+function loadRankImage(){
+    const imageUrl = `${RANK_IMAGE_NAME}?v=${Date.now()}`;
 
     sharedImageFrame.classList.add("switching");
     imageMeta.textContent = "Carregando imagem do GitHub...";
@@ -1742,7 +1720,6 @@ function loadRankImage(forceRefresh = false){
     const preload = new Image();
 
     preload.onload = ()=>{
-        currentDisplayUrl = imageUrl;
         sharedImage.src = imageUrl;
     };
 
@@ -1768,20 +1745,15 @@ sharedImage.onerror = ()=>{
 };
 
 function clearSharedImage(){
-    currentDisplayUrl = "";
     sharedImage.removeAttribute("src");
     sharedImage.classList.remove("visible");
     sharedImagePlaceholder.style.display = "flex";
     sharedImageFrame.classList.remove("switching");
 }
 
-sharedImageTrigger.addEventListener("click", ()=>{
-    loadRankImage(true);
-    showToast("Recarregando a imagem do GitHub...");
-});
-
 sharedImageFrame.addEventListener("click", ()=>{
-    loadRankImage(true);
+    loadRankImage();
+    showToast("Recarregando imagem...");
 });
 
 /* =========================
