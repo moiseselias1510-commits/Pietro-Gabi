@@ -22,6 +22,11 @@
     --border: rgba(255,255,255,.18);
     --shadow: 0 18px 45px rgba(0,0,0,.18);
     --text: rgba(255,255,255,.9);
+    --soft-white: rgba(255,255,255,.92);
+    --soft-blue: #dff5ff;
+    --soft-yellow: #fff5b7;
+    --accent-blue: #9fe5ff;
+    --accent-yellow: #ffe88a;
 }
 
 body{
@@ -88,7 +93,6 @@ body::after{
 }
 
 @keyframes introSpin{
-
     0%{
         transform:perspective(800px) rotateY(0deg) scale(.7);
         opacity:0;
@@ -181,7 +185,7 @@ body::after{
     transform:translateY(20px);
     transition:1s;
     position:relative;
-    padding-bottom:120px;
+    padding-bottom:140px;
 }
 
 #site.show{
@@ -269,15 +273,21 @@ body::after{
 ========================= */
 
 .message-card,
-.love-card{
+.love-card,
+.shared-image-card,
+.flower-card{
     border-radius:30px;
     padding:28px;
     text-align:center;
     margin-top:24px;
+    position:relative;
+    overflow:hidden;
 }
 
 .message-card h2,
-.love-card h2{
+.love-card h2,
+.shared-image-card h2,
+.flower-card h2{
     margin-bottom:18px;
 }
 
@@ -291,6 +301,346 @@ body::after{
 .date{
     margin-top:18px;
     color:rgba(255,255,255,.75);
+}
+
+/* =========================
+   NOSSA IMAGEM
+========================= */
+
+.shared-image-card{
+    box-shadow:
+    0 0 22px rgba(255,255,255,.20),
+    0 0 55px rgba(173,234,255,.16),
+    0 0 85px rgba(255,232,138,.12);
+}
+
+.shared-image-card::before{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    background:linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+    pointer-events:none;
+    border-radius:inherit;
+}
+
+.shared-image-header{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+}
+
+.shared-image-title{
+    margin:0;
+    cursor:pointer;
+    user-select:none;
+    transition:transform .22s ease, text-shadow .22s ease, opacity .22s ease;
+    text-shadow:0 0 12px rgba(255,255,255,.18);
+}
+
+.shared-image-title:hover{
+    transform:translateY(-2px) scale(1.015);
+    text-shadow:
+    0 0 12px rgba(255,255,255,.35),
+    0 0 24px rgba(255,238,170,.20),
+    0 0 28px rgba(164,235,255,.25);
+}
+
+.live-badge{
+    padding:7px 12px;
+    border-radius:999px;
+    font-size:.78rem;
+    color:rgba(255,255,255,.95);
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.22);
+    box-shadow:0 0 18px rgba(255,255,255,.14);
+}
+
+.shared-image-subtitle{
+    color:rgba(255,255,255,.82);
+    margin-bottom:18px;
+    font-size:.98rem;
+}
+
+.shared-image-frame{
+    position:relative;
+    width:min(100%, 760px);
+    aspect-ratio:16 / 9;
+    margin:0 auto;
+    border-radius:28px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.22);
+    background:
+        linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.05)),
+        radial-gradient(circle at top left, rgba(255,255,255,.20), transparent 35%),
+        linear-gradient(135deg, rgba(201,240,255,.18), rgba(255,244,182,.10));
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.05),
+        0 0 24px rgba(255,255,255,.18),
+        0 0 48px rgba(148,226,255,.16),
+        0 0 68px rgba(255,235,145,.08);
+    isolation:isolate;
+}
+
+.shared-image-frame::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(120deg, transparent 0%, rgba(255,255,255,.10) 48%, transparent 100%);
+    transform:translateX(-120%);
+    animation:frameShine 6s linear infinite;
+    pointer-events:none;
+    z-index:3;
+}
+
+@keyframes frameShine{
+    100%{
+        transform:translateX(120%);
+    }
+}
+
+.shared-image-placeholder{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+    color:rgba(255,255,255,.92);
+    font-size:clamp(1rem,2vw,1.15rem);
+    line-height:1.7;
+    z-index:1;
+    background:
+        radial-gradient(circle at center, rgba(255,255,255,.12), rgba(255,255,255,.03) 55%, rgba(255,255,255,.01));
+}
+
+#sharedImage{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0;
+    transform:scale(1.035);
+    transition:
+        opacity .65s ease,
+        transform 1s ease,
+        filter .5s ease;
+    z-index:2;
+    filter:saturate(1.04) contrast(1.02);
+}
+
+#sharedImage.visible{
+    opacity:1;
+    transform:scale(1);
+}
+
+.shared-image-frame.switching #sharedImage{
+    opacity:.18;
+    transform:scale(1.02);
+    filter:blur(2px);
+}
+
+.image-meta{
+    margin-top:15px;
+    color:rgba(255,255,255,.80);
+    font-size:.94rem;
+    min-height:22px;
+}
+
+.upload-hint{
+    color:rgba(255,255,255,.68);
+    font-size:.86rem;
+    margin-top:10px;
+}
+
+.sparkle-layer{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:4;
+    overflow:hidden;
+}
+
+.sparkle{
+    position:absolute;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,.95), rgba(255,255,255,.15));
+    box-shadow:
+        0 0 10px rgba(255,255,255,.9),
+        0 0 18px rgba(255,239,170,.6),
+        0 0 26px rgba(164,235,255,.55);
+    animation:sparkleUp 1.1s ease forwards;
+    opacity:0;
+}
+
+@keyframes sparkleUp{
+    0%{
+        transform:translateY(0) scale(.4);
+        opacity:0;
+    }
+    20%{
+        opacity:1;
+    }
+    100%{
+        transform:translateY(-55px) scale(1.35);
+        opacity:0;
+    }
+}
+
+/* =========================
+   FLOR / CAIXINHA
+========================= */
+
+.flower-card{
+    box-shadow:
+    0 0 22px rgba(255,255,255,.16),
+    0 0 48px rgba(175,228,255,.12);
+}
+
+.flower-stage{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:220px;
+    position:relative;
+}
+
+.flower-box{
+    border:none;
+    cursor:pointer;
+    color:white;
+    font-weight:700;
+    font-size:1rem;
+    letter-spacing:.4px;
+    padding:18px 28px;
+    border-radius:22px;
+    background:
+        linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.08));
+    border:1px solid rgba(255,255,255,.25);
+    box-shadow:
+        0 0 22px rgba(255,255,255,.18),
+        0 0 36px rgba(255,235,145,.10);
+    backdrop-filter:blur(12px);
+    transition:transform .25s ease, box-shadow .25s ease, opacity .45s ease;
+}
+
+.flower-box:hover{
+    transform:translateY(-2px) scale(1.02);
+    box-shadow:
+        0 0 26px rgba(255,255,255,.24),
+        0 0 42px rgba(164,235,255,.14);
+}
+
+.flower-box.hide{
+    opacity:0;
+    transform:scale(.82);
+    pointer-events:none;
+}
+
+.flower-wrap{
+    position:absolute;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    transform:scale(.72);
+    transition:opacity .75s ease, transform .75s cubic-bezier(.2,.9,.2,1.1);
+}
+
+.flower-wrap.show{
+    opacity:1;
+    transform:scale(1);
+}
+
+.forget-flower{
+    position:relative;
+    width:180px;
+    height:180px;
+    filter:
+        drop-shadow(0 0 12px rgba(255,255,255,.40))
+        drop-shadow(0 0 24px rgba(126,203,255,.30));
+}
+
+.petal{
+    position:absolute;
+    width:54px;
+    height:54px;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, #ffffff, #9dd8ff 38%, #60aef2 72%, #4b90e8 100%);
+    left:50%;
+    top:50%;
+    margin-left:-27px;
+    margin-top:-27px;
+    box-shadow:
+        inset 0 0 8px rgba(255,255,255,.65),
+        0 0 12px rgba(255,255,255,.22);
+}
+
+.petal.p1{ transform:translate(-42px,-42px); }
+.petal.p2{ transform:translate(0,-56px); }
+.petal.p3{ transform:translate(42px,-42px); }
+.petal.p4{ transform:translate(-18px,0); }
+.petal.p5{ transform:translate(18px,0); }
+
+.flower-center{
+    position:absolute;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, #fffce2, #ffe874 55%, #ffc93d 100%);
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    z-index:2;
+    box-shadow:
+        0 0 12px rgba(255,235,145,.75),
+        0 0 24px rgba(255,235,145,.45);
+}
+
+.stem{
+    position:absolute;
+    width:7px;
+    height:92px;
+    border-radius:999px;
+    background:linear-gradient(180deg, #99f3bc, #49bf74);
+    left:50%;
+    top:60%;
+    transform:translateX(-50%);
+    box-shadow:0 0 12px rgba(126,255,170,.18);
+}
+
+.leaf{
+    position:absolute;
+    width:34px;
+    height:18px;
+    background:linear-gradient(135deg, #88e8a4, #43bc72);
+    border-radius:100% 0 100% 0;
+    top:112px;
+    box-shadow:0 0 10px rgba(140,255,180,.15);
+}
+
+.leaf.left{
+    left:54px;
+    transform:rotate(-28deg);
+}
+
+.leaf.right{
+    right:54px;
+    transform:scaleX(-1) rotate(-28deg);
+}
+
+.flower-caption{
+    margin-top:16px;
+    color:rgba(255,255,255,.88);
+    font-size:1rem;
+    text-shadow:0 0 12px rgba(255,255,255,.12);
 }
 
 /* =========================
@@ -316,7 +666,6 @@ body::after{
 
 .rabbit svg{
     overflow:visible;
-
     filter:
     drop-shadow(0 0 10px rgba(255,255,255,.45))
     drop-shadow(0 0 25px rgba(255,255,255,.25));
@@ -327,7 +676,6 @@ body::after{
 }
 
 @keyframes rabbitFloat{
-
     0%{
         transform:translateY(0px);
     }
@@ -352,7 +700,6 @@ body::after{
 }
 
 @keyframes ear1{
-
     0%{
         transform:rotate(0deg);
     }
@@ -367,7 +714,6 @@ body::after{
 }
 
 @keyframes ear2{
-
     0%{
         transform:rotate(0deg);
     }
@@ -393,18 +739,81 @@ body::after{
 }
 
 /* =========================
+   BOTÃO DE SOM
+========================= */
+
+.sound-toggle{
+    position:fixed;
+    right:18px;
+    bottom:18px;
+    z-index:120;
+    border:none;
+    cursor:pointer;
+    color:white;
+    font-weight:700;
+    padding:12px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.20);
+    box-shadow:
+        0 0 16px rgba(255,255,255,.16),
+        0 0 30px rgba(155,222,255,.12);
+    backdrop-filter:blur(16px);
+    transition:transform .25s ease, background .25s ease, box-shadow .25s ease, opacity .25s ease;
+}
+
+.sound-toggle:hover{
+    transform:translateY(-2px);
+}
+
+.sound-toggle.off{
+    background:rgba(255,255,255,.08);
+    opacity:.85;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:90px;
+    transform:translateX(-50%) translateY(20px);
+    min-width:min(90vw, 320px);
+    max-width:min(92vw, 420px);
+    padding:14px 18px;
+    text-align:center;
+    border-radius:18px;
+    color:white;
+    background:rgba(21,40,68,.38);
+    border:1px solid rgba(255,255,255,.18);
+    box-shadow:
+        0 0 22px rgba(255,255,255,.16),
+        0 0 36px rgba(155,222,255,.12);
+    backdrop-filter:blur(16px);
+    z-index:160;
+    opacity:0;
+    pointer-events:none;
+    transition:.35s ease;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+/* =========================
    RESPONSIVO
 ========================= */
 
 @media(max-width:850px){
-
     .counters{
         grid-template-columns:1fr;
     }
 }
 
 @media(max-width:520px){
-
     .grid{
         grid-template-columns:repeat(2,1fr);
     }
@@ -416,6 +825,41 @@ body::after{
 
     body::before{
         background-size:contain;
+    }
+
+    .shared-image-frame{
+        aspect-ratio:4 / 5;
+    }
+
+    .forget-flower{
+        width:150px;
+        height:150px;
+    }
+
+    .petal{
+        width:46px;
+        height:46px;
+        margin-left:-23px;
+        margin-top:-23px;
+    }
+
+    .petal.p1{ transform:translate(-35px,-35px); }
+    .petal.p2{ transform:translate(0,-47px); }
+    .petal.p3{ transform:translate(35px,-35px); }
+    .petal.p4{ transform:translate(-15px,0); }
+    .petal.p5{ transform:translate(15px,0); }
+
+    .stem{
+        height:78px;
+        top:61%;
+    }
+
+    .leaf.left{
+        left:48px;
+    }
+
+    .leaf.right{
+        right:48px;
     }
 }
 
@@ -567,62 +1011,190 @@ body::after{
 
     </div>
 
+    <div class="shared-image-card glass">
+
+        <div class="shared-image-header">
+            <h2 id="sharedImageTrigger" class="shared-image-title">Nossa Imagem</h2>
+            <span class="live-badge">ao vivo</span>
+        </div>
+
+        <p class="shared-image-subtitle">
+            Uma memória compartilhada, salva online e sincronizada para todos.
+        </p>
+
+        <div id="sharedImageFrame" class="shared-image-frame">
+            <div id="sharedImagePlaceholder" class="shared-image-placeholder">
+                Nossa imagem especial vai aparecer aqui ✨
+            </div>
+
+            <img id="sharedImage" alt="Nossa imagem compartilhada">
+
+            <div id="sparkleLayer" class="sparkle-layer"></div>
+        </div>
+
+        <div id="imageMeta" class="image-meta">
+            Carregando imagem compartilhada...
+        </div>
+
+        <div class="upload-hint">
+            Toque em <strong>Nossa Imagem</strong> para atualizar com a conta do dono.
+        </div>
+    </div>
+
+    <div class="flower-card glass">
+
+        <h2>🩵 Uma coisinha pra você</h2>
+
+        <div class="flower-stage">
+            <button id="flowerBox" class="flower-box" type="button">clique aqui</button>
+
+            <div id="flowerWrap" class="flower-wrap" aria-hidden="true">
+                <div>
+                    <div class="forget-flower">
+                        <div class="petal p1"></div>
+                        <div class="petal p2"></div>
+                        <div class="petal p3"></div>
+                        <div class="petal p4"></div>
+                        <div class="petal p5"></div>
+                        <div class="flower-center"></div>
+                        <div class="stem"></div>
+                        <div class="leaf left"></div>
+                        <div class="leaf right"></div>
+                    </div>
+
+                    <div class="flower-caption">não-me-esqueças</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <div id="rabbit-container"></div>
 
 </div>
 
 <canvas id="particle-canvas"></canvas>
 
-<script>
+<button id="soundToggle" class="sound-toggle off" type="button">🔈 Som</button>
+
+<div id="toast" class="toast"></div>
+
+<input id="sharedImageInput" type="file" accept="image/*" class="hidden">
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+    getFirestore,
+    doc,
+    setDoc,
+    onSnapshot,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signInWithRedirect,
+    getRedirectResult,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+/* =========================
+   CONFIGURAÇÕES
+========================= */
 
 const PASSWORD = "210425";
+
+/* COLE AQUI O SEU FIREBASE CONFIG EXATO */
+const firebaseConfig = {
+    apiKey: "SUA_API_KEY",
+    authDomain: "SEU_PROJETO.firebaseapp.com",
+    projectId: "SEU_PROJECT_ID",
+    storageBucket: "SEU_PROJECT_ID.appspot.com",
+    messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+    appId: "SEU_APP_ID"
+};
+
+/* E-mail Google do dono do site */
+const OWNER_EMAIL = "seuemail@gmail.com";
+
+/* Documento do Firestore onde a URL da imagem será salva */
+const IMAGE_DOC_PATH = ["siteShared", "mainImage"];
+
+/* Nomes dos áudios de fundo */
+const AUDIO_TRACKS = [
+    "musica-fundo-01.mp3",
+    "musica-fundo-02.mp3"
+];
+
+/* =========================
+   FIREBASE
+========================= */
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+provider.setCustomParameters({
+    prompt: "select_account"
+});
+
+const imageDocRef = doc(db, IMAGE_DOC_PATH[0], IMAGE_DOC_PATH[1]);
+
+/* =========================
+   DADOS FIXOS
+========================= */
 
 const officialDate = new Date(2025,3,21);
 const unofficialDate = new Date(2024,9,9);
 
 const monthlyMessages = [
-
 {
 date:"2026-05-21",
 text:"O tempo passa, mas continuar ao seu lado ainda é uma das melhores partes dos meus dias."
 },
-
 {
 date:"2026-06-21",
 text:"Você supera a perfeição de Shadow Of The Colossus "
 },
-
 {
 date:"2026-07-21",
 text:"Eu te amo muito mais do que amo Resident Evil "
 },
-
 {
 date:"2026-08-21",
 text:"Em meio à tantas galáxias e universos, meu amor por vc supera toda essa vastidão"
 },
-
 {
 date:"2026-09-21",
 text:"Eu iria até o fim por você, assim como Alan Wake, Dante, Wander, Leon e Deacon foram"
 },
-
 {
 date:"2026-10-21",
 text:"Mesmo que a gente se veja por horas, eu vou sentir sua falta assim que for embora"
 },
-
 {
 date:"2026-11-21",
 text:"I would rather share one lifetime with you than face all the ages of this world"
 },
-
 {
 date:"2026-12-21",
 text:"Pra acabar o ano, quero que você saiba: eu te amo e vou te amar em todos os próximos anos"
 }
-
 ];
+
+/* =========================
+   ELEMENTOS
+========================= */
 
 const splash = document.getElementById("splash");
 const loginCard = document.getElementById("loginCard");
@@ -633,54 +1205,120 @@ const passwordInput = document.getElementById("password");
 const enterBtn = document.getElementById("enterBtn");
 const error = document.getElementById("error");
 
-setTimeout(()=>{
+const sharedImageTrigger = document.getElementById("sharedImageTrigger");
+const sharedImageInput = document.getElementById("sharedImageInput");
+const sharedImage = document.getElementById("sharedImage");
+const sharedImageFrame = document.getElementById("sharedImageFrame");
+const sharedImagePlaceholder = document.getElementById("sharedImagePlaceholder");
+const imageMeta = document.getElementById("imageMeta");
+const sparkleLayer = document.getElementById("sparkleLayer");
 
+const flowerBox = document.getElementById("flowerBox");
+const flowerWrap = document.getElementById("flowerWrap");
+
+const soundToggle = document.getElementById("soundToggle");
+const toast = document.getElementById("toast");
+
+/* =========================
+   ESTADO
+========================= */
+
+let siteInitialized = false;
+let particlesInitialized = false;
+let rabbitInitialized = false;
+let countersInterval = null;
+
+let currentImageData = null;
+let currentDisplayUrl = "";
+let tempPreviewUrl = "";
+
+let audioPlayers = [];
+let currentTrackIndex = 0;
+let currentPlayer = null;
+let backgroundAudioInitialized = false;
+let audioEnabled = false;
+
+/* =========================
+   SPLASH
+========================= */
+
+setTimeout(()=>{
     splash.classList.add("hidden");
 
     setTimeout(()=>{
         loginCard.classList.add("visible");
     },500);
-
 },4500);
 
+/* =========================
+   TOAST
+========================= */
+
+let toastTimer = null;
+
+function showToast(message){
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>{
+        toast.classList.remove("show");
+    },2600);
+}
+
+/* =========================
+   LOGIN / ENTRADA
+========================= */
+
 function enterSite(){
-
     if(passwordInput.value.trim() !== PASSWORD){
-
         error.textContent = "Senha incorreta";
         return;
     }
 
+    error.textContent = "";
     document.body.classList.add("inside");
-
     loginScreen.classList.add("hidden");
 
-    setTimeout(()=>{
-        site.classList.add("show");
-        initRabbit();
-    },100);
+    if(!siteInitialized){
+        siteInitialized = true;
 
-    updateCounters();
+        setTimeout(()=>{
+            site.classList.add("show");
 
-    setInterval(updateCounters,1000);
+            if(!rabbitInitialized){
+                initRabbit();
+                rabbitInitialized = true;
+            }
+        },100);
 
-    setupMessage();
+        updateCounters();
+        countersInterval = setInterval(updateCounters,1000);
 
-    initParticles();
+        setupMessage();
+
+        if(!particlesInitialized){
+            initParticles();
+            particlesInitialized = true;
+        }
+
+        setupBackgroundMusic();
+    }
 }
 
 enterBtn.addEventListener("click", enterSite);
 
 passwordInput.addEventListener("keydown",(e)=>{
-
     if(e.key === "Enter"){
         enterSite();
     }
-
 });
 
-function preciseDiff(start,end){
+/* =========================
+   CONTADORES
+========================= */
 
+function preciseDiff(start,end){
     let years = end.getFullYear() - start.getFullYear();
     let months = end.getMonth() - start.getMonth();
     let days = end.getDate() - start.getDate();
@@ -704,11 +1342,8 @@ function preciseDiff(start,end){
     }
 
     if(days < 0){
-
         const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
-
         days += prevMonth.getDate();
-
         months--;
     }
 
@@ -728,7 +1363,6 @@ function preciseDiff(start,end){
 }
 
 function updateCounters(){
-
     const now = new Date();
 
     const o = preciseDiff(officialDate, now);
@@ -749,16 +1383,16 @@ function updateCounters(){
     document.getElementById("naooficial-segundos").textContent = n.seconds;
 }
 
+/* =========================
+   MENSAGEM
+========================= */
+
 function setupMessage(){
-
     const now = new Date();
-
     let found = monthlyMessages[0];
 
     for(const msg of monthlyMessages){
-
         const d = new Date(msg.date + "T00:00:00");
-
         if(now >= d){
             found = msg;
         }
@@ -777,6 +1411,10 @@ function setupMessage(){
     });
 }
 
+/* =========================
+   COELHO
+========================= */
+
 const rabbitContainer = document.getElementById("rabbit-container");
 
 let rabbit = null;
@@ -789,55 +1427,34 @@ const rabbitState = {
 };
 
 function rabbitSVG(){
-
 return `
 <div class="inner">
-
 <svg viewBox="0 0 120 120">
-
-<ellipse cx="60" cy="105" rx="28" ry="10"
-fill="rgba(0,0,0,0.12)"/>
+<ellipse cx="60" cy="105" rx="28" ry="10" fill="rgba(0,0,0,0.12)"/>
 
 <g class="ear-left">
-<ellipse cx="38" cy="28" rx="12" ry="34"
-fill="#ffffff"/>
-<ellipse cx="38" cy="32" rx="5" ry="22"
-fill="#ffd1dc"/>
+<ellipse cx="38" cy="28" rx="12" ry="34" fill="#ffffff"/>
+<ellipse cx="38" cy="32" rx="5" ry="22" fill="#ffd1dc"/>
 </g>
 
 <g class="ear-right">
-<ellipse cx="82" cy="28" rx="12" ry="34"
-fill="#ffffff"/>
-<ellipse cx="82" cy="32" rx="5" ry="22"
-fill="#ffd1dc"/>
+<ellipse cx="82" cy="28" rx="12" ry="34" fill="#ffffff"/>
+<ellipse cx="82" cy="32" rx="5" ry="22" fill="#ffd1dc"/>
 </g>
 
-<ellipse cx="60" cy="74" rx="30" ry="28"
-fill="#ffffff"/>
+<ellipse cx="60" cy="74" rx="30" ry="28" fill="#ffffff"/>
+<circle cx="60" cy="50" r="26" fill="#ffffff"/>
 
-<circle cx="60" cy="50" r="26"
-fill="#ffffff"/>
+<ellipse cx="42" cy="58" rx="6" ry="4" fill="rgba(255,180,190,.5)"/>
+<ellipse cx="78" cy="58" rx="6" ry="4" fill="rgba(255,180,190,.5)"/>
 
-<ellipse cx="42" cy="58" rx="6" ry="4"
-fill="rgba(255,180,190,.5)"/>
+<ellipse cx="50" cy="50" rx="4" ry="6" fill="#1f1f1f"/>
+<ellipse cx="70" cy="50" rx="4" ry="6" fill="#1f1f1f"/>
 
-<ellipse cx="78" cy="58" rx="6" ry="4"
-fill="rgba(255,180,190,.5)"/>
+<circle cx="51" cy="48" r="1.3" fill="white"/>
+<circle cx="71" cy="48" r="1.3" fill="white"/>
 
-<ellipse cx="50" cy="50" rx="4" ry="6"
-fill="#1f1f1f"/>
-
-<ellipse cx="70" cy="50" rx="4" ry="6"
-fill="#1f1f1f"/>
-
-<circle cx="51" cy="48" r="1.3"
-fill="white"/>
-
-<circle cx="71" cy="48" r="1.3"
-fill="white"/>
-
-<ellipse cx="60" cy="60" rx="3" ry="2"
-fill="#ffb6c1"/>
+<ellipse cx="60" cy="60" rx="3" ry="2" fill="#ffb6c1"/>
 
 <path d="M55 64 Q60 69 65 64"
 stroke="#666"
@@ -845,66 +1462,42 @@ stroke-width="1.8"
 fill="none"
 stroke-linecap="round"/>
 
-<ellipse cx="45" cy="92" rx="9" ry="6"
-fill="#ffffff"/>
+<ellipse cx="45" cy="92" rx="9" ry="6" fill="#ffffff"/>
+<ellipse cx="75" cy="92" rx="9" ry="6" fill="#ffffff"/>
 
-<ellipse cx="75" cy="92" rx="9" ry="6"
-fill="#ffffff"/>
-
-<circle cx="88" cy="76" r="8"
-fill="#ffffff"/>
-
+<circle cx="88" cy="76" r="8" fill="#ffffff"/>
 </svg>
-
 </div>
 `;
-
 }
 
 function initRabbit(){
-
     rabbit = document.createElement("div");
-
     rabbit.className = "rabbit";
-
     rabbit.innerHTML = rabbitSVG();
-
     rabbitContainer.appendChild(rabbit);
-
-    rabbit.style.transform =
-    `translate(${rabbitState.x}px, ${rabbitState.y}px)`;
+    rabbit.style.transform = `translate(${rabbitState.x}px, ${rabbitState.y}px)`;
 
     moveRabbit();
-
     animateRabbit();
 }
 
 function moveRabbit(){
-
     setInterval(()=>{
-
-        const max = site.clientWidth - 100;
-
+        const max = Math.max(40, site.clientWidth - 100);
         rabbitState.targetX = Math.random() * max;
-
-        rabbitState.direction =
-        rabbitState.targetX > rabbitState.x ? 1 : -1;
-
+        rabbitState.direction = rabbitState.targetX > rabbitState.x ? 1 : -1;
     },3000);
 }
 
 function animateRabbit(){
-
     function loop(){
+        rabbitState.x += (rabbitState.targetX - rabbitState.x) * 0.03;
 
-        rabbitState.x +=
-        (rabbitState.targetX - rabbitState.x) * 0.03;
-
-        rabbit.style.transform =
-        `
-        translate(${rabbitState.x}px, ${rabbitState.y}px)
-        scaleX(${rabbitState.direction})
-        `;
+        if(rabbit){
+            rabbit.style.transform =
+            `translate(${rabbitState.x}px, ${rabbitState.y}px) scaleX(${rabbitState.direction})`;
+        }
 
         requestAnimationFrame(loop);
     }
@@ -912,21 +1505,20 @@ function animateRabbit(){
     loop();
 }
 
+/* =========================
+   PARTICULAS
+========================= */
+
 const canvas = document.getElementById("particle-canvas");
 const ctx = canvas.getContext("2d");
-
 let particles = [];
 
 function initParticles(){
-
     resizeCanvas();
-
     window.addEventListener("resize", resizeCanvas);
 
     for(let i=0;i<35;i++){
-
         particles.push({
-
             x:Math.random()*canvas.width,
             y:Math.random()*canvas.height,
             r:Math.random()*3+1,
@@ -938,37 +1530,426 @@ function initParticles(){
 }
 
 function resizeCanvas(){
-
     canvas.width = innerWidth;
     canvas.height = innerHeight;
 }
 
 function drawParticles(){
-
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
     particles.forEach(p=>{
-
         p.y -= p.speed;
 
         if(p.y < -10){
-
             p.y = canvas.height + 10;
-
             p.x = Math.random()*canvas.width;
         }
 
         ctx.beginPath();
-
         ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-
         ctx.fillStyle = "rgba(255,255,255,.4)";
-
         ctx.fill();
     });
 
     requestAnimationFrame(drawParticles);
 }
+
+/* =========================
+   SOM DE FUNDO
+========================= */
+
+function setupBackgroundMusic(){
+    if(backgroundAudioInitialized) return;
+
+    backgroundAudioInitialized = true;
+
+    audioPlayers = AUDIO_TRACKS.map(src=>{
+        const audio = new Audio(src);
+        audio.preload = "auto";
+        audio.loop = false;
+        audio.volume = 0.35;
+        return audio;
+    });
+
+    playTrack(0);
+}
+
+function playTrack(index){
+    if(!audioPlayers.length) return;
+
+    if(currentPlayer){
+        currentPlayer.onended = null;
+        currentPlayer.pause();
+        currentPlayer.currentTime = 0;
+    }
+
+    currentTrackIndex = index;
+    currentPlayer = audioPlayers[index];
+    currentPlayer.onended = ()=>{
+        const nextIndex = (currentTrackIndex + 1) % audioPlayers.length;
+        playTrack(nextIndex);
+    };
+
+    currentPlayer.play()
+    .then(()=>{
+        audioEnabled = true;
+        updateSoundButton();
+    })
+    .catch(()=>{
+        audioEnabled = false;
+        updateSoundButton();
+        showToast("Toque no botão de som para ativar a música.");
+    });
+}
+
+function pauseAllTracks(){
+    audioPlayers.forEach(audio=>{
+        audio.pause();
+    });
+}
+
+function resumeCurrentTrack(){
+    if(!audioPlayers.length){
+        setupBackgroundMusic();
+        return;
+    }
+
+    if(!currentPlayer){
+        playTrack(currentTrackIndex);
+        return;
+    }
+
+    currentPlayer.play()
+    .then(()=>{
+        audioEnabled = true;
+        updateSoundButton();
+    })
+    .catch(()=>{
+        audioEnabled = false;
+        updateSoundButton();
+        showToast("O navegador pediu outro toque para liberar o som.");
+    });
+}
+
+function updateSoundButton(){
+    if(audioEnabled){
+        soundToggle.classList.remove("off");
+        soundToggle.textContent = "🔊 Som";
+    }else{
+        soundToggle.classList.add("off");
+        soundToggle.textContent = "🔈 Som";
+    }
+}
+
+soundToggle.addEventListener("click", ()=>{
+    if(!backgroundAudioInitialized){
+        setupBackgroundMusic();
+        return;
+    }
+
+    if(audioEnabled){
+        audioEnabled = false;
+        pauseAllTracks();
+        updateSoundButton();
+        return;
+    }
+
+    audioEnabled = true;
+    resumeCurrentTrack();
+});
+
+updateSoundButton();
+
+/* =========================
+   FLOR
+========================= */
+
+flowerBox.addEventListener("click", ()=>{
+    flowerBox.classList.add("hide");
+
+    setTimeout(()=>{
+        flowerWrap.classList.add("show");
+    },260);
+});
+
+/* =========================
+   NOSSA IMAGEM - FIREBASE
+========================= */
+
+function isOwnerUser(user){
+    return !!user && !!user.email && user.email.toLowerCase() === OWNER_EMAIL.toLowerCase();
+}
+
+async function tryOwnerLogin(){
+    try{
+        const result = await signInWithPopup(auth, provider);
+
+        if(result?.user && isOwnerUser(result.user)){
+            showToast("Login concluído. Toque novamente em Nossa Imagem.");
+            return true;
+        }
+
+        if(result?.user && !isOwnerUser(result.user)){
+            await signOut(auth);
+            showToast("Esta conta não tem permissão para alterar a imagem.");
+            return false;
+        }
+
+        return false;
+    }catch(err){
+        const code = err?.code || "";
+
+        if(code === "auth/popup-closed-by-user"){
+            return false;
+        }
+
+        if(
+            code.includes("popup") ||
+            code.includes("cancelled-popup-request") ||
+            code.includes("blocked")
+        ){
+            await signInWithRedirect(auth, provider);
+            return false;
+        }
+
+        showToast("Não foi possível abrir o login do administrador.");
+        return false;
+    }
+}
+
+async function handleSharedImageClick(){
+    if(isOwnerUser(auth.currentUser)){
+        sharedImageInput.click();
+        return;
+    }
+
+    await tryOwnerLogin();
+}
+
+sharedImageTrigger.addEventListener("click", handleSharedImageClick);
+
+sharedImageInput.addEventListener("change", async (e)=>{
+    const file = e.target.files?.[0];
+    if(!file) return;
+
+    if(!file.type.startsWith("image/")){
+        showToast("Escolha um arquivo de imagem válido.");
+        sharedImageInput.value = "";
+        return;
+    }
+
+    if(!auth.currentUser || !isOwnerUser(auth.currentUser)){
+        showToast("Somente o dono pode trocar a imagem.");
+        sharedImageInput.value = "";
+        return;
+    }
+
+    const previousImageUrl = currentImageData?.imageUrl || "";
+    const previousStoragePath = currentImageData?.storagePath || "";
+
+    try{
+        imageMeta.textContent = "Preparando nova imagem...";
+        sharedImageFrame.classList.add("switching");
+
+        const previewUrl = URL.createObjectURL(file);
+        tempPreviewUrl = previewUrl;
+        setSharedImage(previewUrl, true);
+
+        const optimizedBlob = await compressImage(file, 1600, 0.88);
+
+        imageMeta.textContent = "Enviando imagem...";
+        const fileName = `shared-image-${Date.now()}.jpg`;
+        const storagePath = `shared/nossa-imagem/${fileName}`;
+        const storageRef = ref(storage, storagePath);
+
+        await uploadBytes(storageRef, optimizedBlob, {
+            contentType: "image/jpeg",
+            cacheControl: "public,max-age=31536000,immutable"
+        });
+
+        const downloadURL = await getDownloadURL(storageRef);
+
+        await setDoc(imageDocRef, {
+            imageUrl: downloadURL,
+            storagePath,
+            updatedAt: serverTimestamp(),
+            updatedBy: auth.currentUser.email
+        }, { merge:true });
+
+        if(previousStoragePath && previousStoragePath !== storagePath){
+            const oldRef = ref(storage, previousStoragePath);
+            deleteObject(oldRef).catch(()=>{});
+        }
+
+        imageMeta.textContent = "Imagem atualizada com sucesso.";
+        createSparkles();
+        showToast("Nossa imagem foi atualizada ✨");
+    }catch(err){
+        console.error(err);
+
+        if(previousImageUrl){
+            setSharedImage(previousImageUrl, false);
+        }else{
+            clearSharedImage();
+        }
+
+        imageMeta.textContent = "Não foi possível atualizar a imagem.";
+        showToast("Erro ao trocar a imagem.");
+    }finally{
+        sharedImageInput.value = "";
+        sharedImageFrame.classList.remove("switching");
+    }
+});
+
+onSnapshot(imageDocRef, (snap)=>{
+    const data = snap.data();
+
+    if(data && data.imageUrl){
+        currentImageData = data;
+        setSharedImage(data.imageUrl, false);
+
+        let metaText = "Imagem sincronizada para todos";
+        if(data.updatedBy){
+            metaText = `Imagem atualizada online • ${data.updatedBy}`;
+        }
+
+        imageMeta.textContent = metaText;
+    }else{
+        currentImageData = null;
+        clearSharedImage();
+        imageMeta.textContent = "Nenhuma imagem enviada ainda.";
+    }
+}, ()=>{
+    imageMeta.textContent = "Erro ao carregar a imagem compartilhada.";
+});
+
+function clearSharedImage(){
+    currentDisplayUrl = "";
+    sharedImage.removeAttribute("src");
+    sharedImage.classList.remove("visible");
+    sharedImagePlaceholder.style.display = "flex";
+    sharedImageFrame.classList.remove("switching");
+}
+
+function setSharedImage(url, isTemporary = false){
+    if(!url) return;
+    if(url === currentDisplayUrl) return;
+
+    currentDisplayUrl = url;
+    sharedImageFrame.classList.add("switching");
+
+    sharedImage.onload = ()=>{
+        sharedImage.classList.add("visible");
+        sharedImagePlaceholder.style.display = "none";
+
+        requestAnimationFrame(()=>{
+            sharedImageFrame.classList.remove("switching");
+        });
+
+        if(!isTemporary && tempPreviewUrl){
+            URL.revokeObjectURL(tempPreviewUrl);
+            tempPreviewUrl = "";
+        }
+    };
+
+    sharedImage.onerror = ()=>{
+        sharedImageFrame.classList.remove("switching");
+        if(!isTemporary){
+            imageMeta.textContent = "Não foi possível carregar a imagem.";
+        }
+    };
+
+    sharedImage.src = url;
+}
+
+async function compressImage(file, maxSize = 1600, quality = 0.88){
+    const imageUrl = URL.createObjectURL(file);
+
+    try{
+        const img = await loadImage(imageUrl);
+
+        const canvas = document.createElement("canvas");
+        let { width, height } = img;
+
+        if(width > height && width > maxSize){
+            height = Math.round(height * (maxSize / width));
+            width = maxSize;
+        }else if(height >= width && height > maxSize){
+            width = Math.round(width * (maxSize / height));
+            height = maxSize;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx2 = canvas.getContext("2d");
+        ctx2.drawImage(img, 0, 0, width, height);
+
+        const blob = await new Promise(resolve=>{
+            canvas.toBlob(resolve, "image/jpeg", quality);
+        });
+
+        return blob || file;
+    }finally{
+        URL.revokeObjectURL(imageUrl);
+    }
+}
+
+function loadImage(src){
+    return new Promise((resolve, reject)=>{
+        const img = new Image();
+        img.onload = ()=> resolve(img);
+        img.onerror = reject;
+        img.src = src;
+    });
+}
+
+function createSparkles(){
+    sparkleLayer.innerHTML = "";
+
+    for(let i=0;i<14;i++){
+        const particle = document.createElement("span");
+        particle.className = "sparkle";
+
+        const x = Math.random() * 100;
+        const y = 55 + Math.random() * 35;
+        const size = 5 + Math.random() * 7;
+        const delay = Math.random() * 0.25;
+
+        particle.style.left = `${x}%`;
+        particle.style.top = `${y}%`;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.animationDelay = `${delay}s`;
+
+        sparkleLayer.appendChild(particle);
+    }
+
+    setTimeout(()=>{
+        sparkleLayer.innerHTML = "";
+    },1400);
+}
+
+/* =========================
+   RESULTADO DO REDIRECT LOGIN
+========================= */
+
+(async ()=>{
+    try{
+        const result = await getRedirectResult(auth);
+
+        if(result?.user){
+            if(isOwnerUser(result.user)){
+                showToast("Login concluído. Toque em Nossa Imagem para enviar a foto.");
+            }else{
+                await signOut(auth);
+                showToast("Esta conta não tem permissão para alterar a imagem.");
+            }
+        }
+    }catch(err){
+        console.error(err);
+    }
+})();
 
 </script>
 
