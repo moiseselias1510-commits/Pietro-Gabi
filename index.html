@@ -486,6 +486,21 @@ body::after{
 .gift-button:hover{
     transform:translateY(-4px) scale(1.02);
 }
+   .gift-image{
+    width:140px;
+    height:auto;
+    display:block;
+
+    filter:
+    drop-shadow(0 0 12px rgba(255,255,255,.35))
+    drop-shadow(0 0 28px rgba(173,235,255,.25));
+
+    transition:transform .25s ease;
+}
+
+.gift-button:hover .gift-image{
+    transform:scale(1.04);
+}
 
 .gift-button.hide{
     opacity:0;
@@ -499,103 +514,6 @@ body::after{
     font-weight:700;
     color:rgba(255,255,255,.95);
     text-shadow:0 0 12px rgba(255,255,255,.18);
-}
-
-.gift-box-visual{
-    position:relative;
-    width:130px;
-    height:120px;
-    filter:
-        drop-shadow(0 0 16px rgba(255,255,255,.25))
-        drop-shadow(0 0 30px rgba(164,235,255,.20));
-}
-
-.gift-lid{
-    position:absolute;
-    top:16px;
-    left:8px;
-    width:114px;
-    height:28px;
-    border-radius:16px;
-    background:linear-gradient(135deg, #8fd4f8, #bcecff);
-    border:1px solid rgba(255,255,255,.45);
-    box-shadow:0 8px 20px rgba(0,0,0,.12);
-}
-
-.gift-base{
-    position:absolute;
-    bottom:8px;
-    left:16px;
-    width:98px;
-    height:72px;
-    border-radius:18px;
-    background:linear-gradient(135deg, #9fe5ff, #dff7ff);
-    border:1px solid rgba(255,255,255,.48);
-    box-shadow:
-        inset 0 0 12px rgba(255,255,255,.35),
-        0 12px 24px rgba(0,0,0,.12);
-}
-
-.ribbon-v{
-    position:absolute;
-    left:50%;
-    top:16px;
-    width:16px;
-    height:88px;
-    transform:translateX(-50%);
-    border-radius:999px;
-    background:linear-gradient(180deg, #ffd2e2, #ff8db5);
-    z-index:2;
-    box-shadow:0 0 12px rgba(255,145,185,.28);
-}
-
-.ribbon-h{
-    position:absolute;
-    left:16px;
-    top:48px;
-    width:98px;
-    height:16px;
-    border-radius:999px;
-    background:linear-gradient(135deg, #ffd2e2, #ff8db5);
-    z-index:2;
-    box-shadow:0 0 12px rgba(255,145,185,.28);
-}
-
-.bow-center{
-    position:absolute;
-    top:4px;
-    left:50%;
-    width:20px;
-    height:20px;
-    transform:translateX(-50%);
-    border-radius:50%;
-    background:linear-gradient(135deg, #ffd8e6, #ff8bb2);
-    z-index:3;
-}
-
-.bow-left,
-.bow-right{
-    position:absolute;
-    top:-2px;
-    width:28px;
-    height:22px;
-    border:6px solid #ff9fc0;
-    border-radius:50%;
-    z-index:2;
-}
-
-.bow-left{
-    left:38px;
-    transform:rotate(-25deg);
-    border-right-color:transparent;
-    background:rgba(255,255,255,.1);
-}
-
-.bow-right{
-    right:38px;
-    transform:rotate(25deg) scaleX(-1);
-    border-right-color:transparent;
-    background:rgba(255,255,255,.1);
 }
 
 .flower-wrap{
@@ -1117,35 +1035,20 @@ body::after{
             <img id="sharedImage" alt="Nosso Rank">
 
             <div id="sparkleLayer" class="sparkle-layer"></div>
-        </div>
+       </div>
 
-        <div id="imageMeta" class="image-meta">
-            Carregando imagem do GitHub...
-        </div>
+<div id="imageMeta" class="image-meta"></div>
 
-        <div class="upload-hint">
-            Para trocar a imagem, substitua o arquivo <strong>nosso-rank.png</strong> no GitHub.
-        </div>
-    </div>
+</div>
 
-    <div class="flower-card glass">
+<div class="flower-card glass">
 
         <h2>clique aqui</h2>
 
         <div class="flower-stage">
-            <button id="giftButton" class="gift-button" type="button" aria-label="Abrir presente">
-                <div class="gift-box-visual">
-                    <div class="gift-lid"></div>
-                    <div class="gift-base"></div>
-                    <div class="ribbon-v"></div>
-                    <div class="ribbon-h"></div>
-                    <div class="bow-left"></div>
-                    <div class="bow-right"></div>
-                    <div class="bow-center"></div>
-                </div>
-
-                <div class="gift-text">🎁</div>
-            </button>
+         <button id="giftButton" class="gift-button" type="button" aria-label="Abrir presente">
+    <img src="presente.png" class="gift-image" alt="Presente">
+</button>
 
             <div id="flowerWrap" class="flower-wrap" aria-hidden="true">
                 <div>
@@ -1699,7 +1602,7 @@ updateSoundButton();
 /* =========================
    PRESENTE / FLOR
 ========================= */
-
+ 
 giftButton.addEventListener("click", ()=>{
     giftButton.classList.add("hide");
     flowerWrap.classList.add("show");
@@ -1715,8 +1618,7 @@ function loadRankImage(){
     const imageUrl = `${RANK_IMAGE_NAME}?v=${Date.now()}`;
 
     sharedImageFrame.classList.add("switching");
-    imageMeta.textContent = "Carregando imagem do GitHub...";
-
+  
     const preload = new Image();
 
     preload.onload = ()=>{
@@ -1725,7 +1627,6 @@ function loadRankImage(){
 
     preload.onerror = ()=>{
         clearSharedImage();
-        imageMeta.textContent = `Não encontrei ${RANK_IMAGE_NAME}. Coloque esse arquivo na mesma pasta do HTML.`;
     };
 
     preload.src = imageUrl;
@@ -1735,13 +1636,11 @@ sharedImage.onload = ()=>{
     sharedImage.classList.add("visible");
     sharedImagePlaceholder.style.display = "none";
     sharedImageFrame.classList.remove("switching");
-    imageMeta.textContent = `Imagem carregada: ${RANK_IMAGE_NAME}`;
     createSparkles();
 };
 
 sharedImage.onerror = ()=>{
     clearSharedImage();
-    imageMeta.textContent = `Erro ao carregar ${RANK_IMAGE_NAME}.`;
 };
 
 function clearSharedImage(){
