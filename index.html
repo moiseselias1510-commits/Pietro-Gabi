@@ -168,6 +168,7 @@ body::after{
 .error{
     margin-top:14px;
     color:#fff3b7;
+    min-height:20px;
 }
 
 /* =========================
@@ -205,6 +206,89 @@ body::after{
 
 .header p{
     color:rgba(255,255,255,.85);
+}
+
+/* =========================
+   DIA DOS NAMORADOS
+========================= */
+
+.valentines-card{
+    border-radius:30px;
+    padding:28px;
+    text-align:center;
+    margin-bottom:24px;
+    display:none;
+    overflow:hidden;
+    position:relative;
+}
+
+.valentines-card.show{
+    display:block;
+}
+
+.valentines-card::before{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    border-radius:inherit;
+    pointer-events:none;
+    background:linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+}
+
+.valentines-top{
+    position:relative;
+    z-index:1;
+}
+
+.valentines-top h2{
+    margin-bottom:10px;
+}
+
+.valentines-subtitle{
+    color:rgba(255,255,255,.82);
+    line-height:1.6;
+}
+
+.valentines-grid{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-top:20px;
+}
+
+.valentines-box{
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:20px;
+    padding:18px 10px;
+    text-align:center;
+}
+
+.valentines-number{
+    display:block;
+    font-size:1.45rem;
+    font-weight:800;
+    margin-bottom:5px;
+}
+
+.valentines-label{
+    font-size:.9rem;
+    color:rgba(255,255,255,.82);
+}
+
+.valentines-message{
+    position:relative;
+    z-index:1;
+    margin-top:20px;
+    font-size:clamp(1.1rem,2vw,1.5rem);
+    line-height:1.8;
+    font-weight:800;
+    color:rgba(255,255,255,.98);
+    text-shadow:
+        0 0 12px rgba(255,255,255,.18),
+        0 0 22px rgba(255,105,180,.18);
 }
 
 /* =========================
@@ -453,6 +537,43 @@ body::after{
 }
 
 /* =========================
+   BRILHINHOS
+========================= */
+
+.sparkle-layer{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:4;
+    overflow:hidden;
+}
+
+.sparkle{
+    position:absolute;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,.65) 35%, rgba(255,255,255,0) 72%);
+    box-shadow:
+        0 0 10px rgba(255,255,255,.8),
+        0 0 20px rgba(173,234,255,.45),
+        0 0 26px rgba(255,232,138,.25);
+    animation:sparklePop 1.1s ease forwards;
+}
+
+@keyframes sparklePop{
+    0%{
+        opacity:0;
+        transform:scale(.2) translateY(12px);
+    }
+    30%{
+        opacity:1;
+    }
+    100%{
+        opacity:0;
+        transform:scale(1.8) translateY(-20px);
+    }
+}
+
+/* =========================
    PRESENTE / FLOR
 ========================= */
 
@@ -486,15 +607,14 @@ body::after{
 .gift-button:hover{
     transform:translateY(-4px) scale(1.02);
 }
-   .gift-image{
+
+.gift-image{
     width:140px;
     height:auto;
     display:block;
-
     filter:
     drop-shadow(0 0 12px rgba(255,255,255,.35))
     drop-shadow(0 0 28px rgba(173,235,255,.25));
-
     transition:transform .25s ease;
 }
 
@@ -636,11 +756,9 @@ body::after{
     width:180px;
     height:auto;
     display:block;
-
     filter:
     drop-shadow(0 0 14px rgba(255,255,255,.40))
     drop-shadow(0 0 30px rgba(126,203,255,.30));
-
     animation:flowerFloat 3s ease-in-out infinite;
 }
 
@@ -650,7 +768,7 @@ body::after{
     }
 
     50%{
-         transform:translateY(-10px) scale(1.02);
+        transform:translateY(-10px) scale(1.02);
     }
 
     100%{
@@ -826,6 +944,10 @@ body::after{
     .counters{
         grid-template-columns:1fr;
     }
+
+    .valentines-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 }
 
 @media(max-width:520px){
@@ -877,24 +999,8 @@ body::after{
         right:48px;
     }
 
-    .gift-box-visual{
-        width:110px;
-        height:105px;
-    }
-
-    .gift-lid{
-        width:96px;
-        left:7px;
-    }
-
-    .gift-base{
-        width:84px;
-        left:13px;
-    }
-
-    .ribbon-h{
-        width:84px;
-        left:13px;
+    .valentines-card{
+        padding:22px;
     }
 }
 
@@ -908,9 +1014,7 @@ body::after{
 </div>
 
 <div id="loginScreen" class="screen">
-
     <div id="loginCard" class="login-card glass">
-
         <h1 style="font-size:2.2rem;margin-bottom:8px;">
             Nosso Tempo
         </h1>
@@ -920,13 +1024,9 @@ body::after{
         </p>
 
         <input id="password" type="password" placeholder="Digite a senha">
-
         <button id="enterBtn">Entrar</button>
-
         <div id="error" class="error"></div>
-
     </div>
-
 </div>
 
 <div id="site">
@@ -936,16 +1036,45 @@ body::after{
         <p>Cada segundo continua sendo especial.</p>
     </div>
 
+    <div id="valentinesCard" class="valentines-card glass" aria-live="polite">
+        <div class="valentines-top">
+            <h2>💘 Dia dos Namorados</h2>
+            <p id="valentinesSubtitle" class="valentines-subtitle"></p>
+        </div>
+
+        <div id="valentinesCountdown" class="valentines-grid">
+            <div class="valentines-box">
+                <span id="valentines-days" class="valentines-number">0</span>
+                <span class="valentines-label">dias</span>
+            </div>
+
+            <div class="valentines-box">
+                <span id="valentines-hours" class="valentines-number">0</span>
+                <span class="valentines-label">horas</span>
+            </div>
+
+            <div class="valentines-box">
+                <span id="valentines-minutes" class="valentines-number">0</span>
+                <span class="valentines-label">minutos</span>
+            </div>
+
+            <div class="valentines-box">
+                <span id="valentines-seconds" class="valentines-number">0</span>
+                <span class="valentines-label">segundos</span>
+            </div>
+        </div>
+
+        <div id="valentinesMessage" class="valentines-message hidden">
+            Feliz Dia dos Namorados, Amor ❤️
+        </div>
+    </div>
+
     <div class="counters">
 
         <div class="counter-card glass">
-
-            <div class="counter-title">
-                🌸 Oficial
-            </div>
+            <div class="counter-title">🌸 Oficial</div>
 
             <div class="grid">
-
                 <div class="box">
                     <span class="number" id="oficial-anos">0</span>
                     <span class="label">anos</span>
@@ -975,19 +1104,13 @@ body::after{
                     <span class="number" id="oficial-segundos">0</span>
                     <span class="label">segundos</span>
                 </div>
-
             </div>
-
         </div>
 
         <div class="counter-card glass">
-
-            <div class="counter-title">
-                🌟 Não Oficial
-            </div>
+            <div class="counter-title">🌟 Não Oficial</div>
 
             <div class="grid">
-
                 <div class="box">
                     <span class="number" id="naooficial-anos">0</span>
                     <span class="label">anos</span>
@@ -1017,37 +1140,25 @@ body::after{
                     <span class="number" id="naooficial-segundos">0</span>
                     <span class="label">segundos</span>
                 </div>
-
             </div>
-
         </div>
 
     </div>
 
     <div class="message-card glass">
-
         <h2>💌 Mensagem do mês</h2>
-
-        <div id="monthly-message" class="message">
-            Carregando...
-        </div>
-
+        <div id="monthly-message" class="message">Carregando...</div>
         <div id="monthly-date" class="date"></div>
-
     </div>
 
     <div class="love-card glass">
-
         <h2>🤍 Sobre você</h2>
-
         <div class="love-text">
             Eu gosto do seu jeito. Tipo, vc é engraçada (eu realmente te acho muito engraçada), carinhosa, eu gosto do jeito q vc se preocupa comigo e da forma q vc demonstra as coisas. Tipo quando vc começa a sorrir enquanto eu tô falando, eu acho isso muito fofo kkkkkk
         </div>
-
     </div>
 
     <div class="shared-image-card glass">
-
         <div class="shared-image-header">
             <h2 class="shared-image-title">Nosso Rank</h2>
             <span class="live-badge">github</span>
@@ -1059,37 +1170,32 @@ body::after{
             </div>
 
             <img id="sharedImage" alt="Nosso Rank">
-
             <div id="sparkleLayer" class="sparkle-layer"></div>
-       </div>
+        </div>
 
-<div id="imageMeta" class="image-meta"></div>
+        <div id="imageMeta" class="image-meta"></div>
+    </div>
 
-</div>
-
-<div class="flower-card glass">
-
+    <div class="flower-card glass">
         <h2>clique aqui</h2>
 
         <div class="flower-stage">
-         <button id="giftButton" class="gift-button" type="button" aria-label="Abrir presente">
-    <img src="presente.png" class="gift-image" alt="Presente">
-</button>
+            <button id="giftButton" class="gift-button" type="button" aria-label="Abrir presente">
+                <img src="presente.png" class="gift-image" alt="Presente">
+            </button>
 
             <div id="flowerWrap" class="flower-wrap" aria-hidden="true">
                 <div>
                     <div>
-    <img src="flor.png" class="flower-image" alt="Flor">
-
-    <div class="flower-caption">Não-me-esqueças</div>
-</div>
+                        <img src="flor.png" class="flower-image" alt="Flor">
+                        <div class="flower-caption">Não-me-esqueças</div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 
     <div id="rabbit-container"></div>
-
 </div>
 
 <canvas id="particle-canvas"></canvas>
@@ -1103,7 +1209,12 @@ body::after{
    CONFIGURAÇÕES
 ========================= */
 
-const PASSWORD = "210425";
+const LOGIN_USERS = {
+    "210425": "Gabi",
+    "2026": "Pietro"
+};
+
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYPK6cEIRNoMqFhPZSF9t7u5_f3oER8PeSmcytbr0aTr4uIiUJc_VMwqdZfnJBgmg_/exec";
 const RANK_IMAGE_NAME = "nosso-rank.png";
 
 const AUDIO_TRACKS = [
@@ -1166,6 +1277,15 @@ const passwordInput = document.getElementById("password");
 const enterBtn = document.getElementById("enterBtn");
 const error = document.getElementById("error");
 
+const valentinesCard = document.getElementById("valentinesCard");
+const valentinesSubtitle = document.getElementById("valentinesSubtitle");
+const valentinesCountdown = document.getElementById("valentinesCountdown");
+const valentinesMessage = document.getElementById("valentinesMessage");
+const valentinesDays = document.getElementById("valentines-days");
+const valentinesHours = document.getElementById("valentines-hours");
+const valentinesMinutes = document.getElementById("valentines-minutes");
+const valentinesSeconds = document.getElementById("valentines-seconds");
+
 const sharedImage = document.getElementById("sharedImage");
 const sharedImageFrame = document.getElementById("sharedImageFrame");
 const sharedImagePlaceholder = document.getElementById("sharedImagePlaceholder");
@@ -1186,12 +1306,15 @@ let siteInitialized = false;
 let particlesInitialized = false;
 let rabbitInitialized = false;
 let countersInterval = null;
+let valentinesInterval = null;
 
 let audioPlayers = [];
 let currentTrackIndex = 0;
 let currentPlayer = null;
 let backgroundAudioInitialized = false;
 let audioEnabled = false;
+
+let currentUser = null;
 
 /* =========================
    SPLASH
@@ -1222,16 +1345,76 @@ function showToast(message){
 }
 
 /* =========================
+   UTILITÁRIOS DE DATA/HORA
+========================= */
+
+function pad(value){
+    return String(value).padStart(2,"0");
+}
+
+function getBrazilDateTimeParts(date = new Date()){
+    const formatter = new Intl.DateTimeFormat("en-CA",{
+        timeZone:"America/Sao_Paulo",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hour12:false
+    });
+
+    const parts = formatter.formatToParts(date);
+    const map = {};
+
+    for(const part of parts){
+        if(part.type !== "literal"){
+            map[part.type] = part.value;
+        }
+    }
+
+    return {
+        year:Number(map.year),
+        month:Number(map.month),
+        day:Number(map.day),
+        hour:Number(map.hour),
+        minute:Number(map.minute),
+        second:Number(map.second)
+    };
+}
+
+function formatDateBR(date = new Date()){
+    const p = getBrazilDateTimeParts(date);
+    return `${pad(p.day)}/${pad(p.month)}/${p.year}`;
+}
+
+function formatTimeBR(date = new Date()){
+    const p = getBrazilDateTimeParts(date);
+    return `${pad(p.hour)}:${pad(p.minute)}:${pad(p.second)}`;
+}
+
+/* =========================
    LOGIN / ENTRADA
 ========================= */
 
+function getUserByPassword(password){
+    return LOGIN_USERS[password] || null;
+}
+
 function enterSite(){
-    if(passwordInput.value.trim() !== PASSWORD){
+    const typedPassword = passwordInput.value.trim();
+    const identifiedUser = getUserByPassword(typedPassword);
+
+    if(!identifiedUser){
         error.textContent = "Senha incorreta";
         return;
     }
 
+    currentUser = identifiedUser;
     error.textContent = "";
+
+    registerAccess(currentUser);
+
     document.body.classList.add("inside");
     loginScreen.classList.add("hidden");
 
@@ -1252,6 +1435,7 @@ function enterSite(){
 
         setupMessage();
         loadRankImage();
+        initValentinesComponent();
 
         if(!particlesInitialized){
             initParticles();
@@ -1269,6 +1453,146 @@ passwordInput.addEventListener("keydown",(e)=>{
         enterSite();
     }
 });
+
+/* =========================
+   REGISTRO DE ACESSO
+========================= */
+
+function getDeviceType(){
+    const ua = navigator.userAgent.toLowerCase();
+    const width = Math.min(window.innerWidth || screen.width || 0, screen.width || 0);
+
+    if(/ipad|tablet|playbook|silk|(android(?!.*mobile))/i.test(ua)){
+        return "Tablet";
+    }
+
+    if(/mobi|android|iphone|ipod/i.test(ua) || width <= 768){
+        return "Celular";
+    }
+
+    return "Computador";
+}
+
+function getBrowser(){
+    const ua = navigator.userAgent;
+
+    if(/Edg/i.test(ua)) return "Edge";
+    if(/OPR|Opera/i.test(ua)) return "Opera";
+    if(/Chrome/i.test(ua) && !/Edg|OPR|Opera/i.test(ua)) return "Chrome";
+    if(/Firefox/i.test(ua)) return "Firefox";
+    if(/Safari/i.test(ua) && !/Chrome|Edg|OPR|Opera/i.test(ua)) return "Safari";
+
+    return "Desconhecido";
+}
+
+function getSystem(){
+    const ua = navigator.userAgent;
+
+    if(/Windows NT/i.test(ua)) return "Windows";
+    if(/Android/i.test(ua)) return "Android";
+    if(/iPhone|iPad|iPod/i.test(ua)) return "iOS";
+    if(/Mac OS X/i.test(ua)) return "macOS";
+    if(/CrOS/i.test(ua)) return "Chrome OS";
+    if(/Linux/i.test(ua)) return "Linux";
+
+    return "Desconhecido";
+}
+
+async function registerAccess(usuario){
+    const now = new Date();
+
+    const payload = {
+        usuario: usuario,
+        data: formatDateBR(now),
+        hora: formatTimeBR(now),
+        dataHoraISO: now.toISOString(),
+        dispositivo: getDeviceType(),
+        navegador: getBrowser(),
+        sistema: getSystem(),
+        idioma: (navigator.languages && navigator.languages.length)
+            ? navigator.languages.join(", ")
+            : (navigator.language || "Desconhecido"),
+        tela: `${window.screen.width}x${window.screen.height}`,
+        pagina: window.location.href
+    };
+
+    try{
+        await fetch(APPS_SCRIPT_URL,{
+            method:"POST",
+            mode:"no-cors",
+            body:new URLSearchParams(payload)
+        });
+    }catch(err){
+        console.warn("Não foi possível registrar o acesso na planilha.", err);
+    }
+}
+
+/* =========================
+   DIA DOS NAMORADOS
+========================= */
+
+function initValentinesComponent(){
+    if(valentinesInterval) return;
+
+    updateValentinesComponent();
+    valentinesInterval = setInterval(updateValentinesComponent,1000);
+}
+
+function setValentinesNumbers(days,hours,minutes,seconds){
+    valentinesDays.textContent = days;
+    valentinesHours.textContent = hours;
+    valentinesMinutes.textContent = minutes;
+    valentinesSeconds.textContent = seconds;
+}
+
+function updateValentinesComponent(){
+    const nowParts = getBrazilDateTimeParts(new Date());
+    const year = nowParts.year;
+
+    const nowSynthetic = Date.UTC(
+        nowParts.year,
+        nowParts.month - 1,
+        nowParts.day,
+        nowParts.hour,
+        nowParts.minute,
+        nowParts.second
+    );
+
+    const startCountdown = Date.UTC(year,4,12,0,0,0);   // 12 de maio
+    const celebrationStart = Date.UTC(year,5,12,0,0,0); // 12 de junho
+    const celebrationEnd = Date.UTC(year,5,13,0,0,0);   // 13 de junho
+
+    if(nowSynthetic >= startCountdown && nowSynthetic < celebrationStart){
+        const diffSeconds = Math.max(0, Math.floor((celebrationStart - nowSynthetic) / 1000));
+
+        const days = Math.floor(diffSeconds / 86400);
+        const hours = Math.floor((diffSeconds % 86400) / 3600);
+        const minutes = Math.floor((diffSeconds % 3600) / 60);
+        const seconds = diffSeconds % 60;
+
+        valentinesCard.classList.add("show");
+        valentinesSubtitle.textContent = "Contagem regressiva para o Dia dos Namorados ❤️";
+        valentinesCountdown.classList.remove("hidden");
+        valentinesMessage.classList.add("hidden");
+
+        setValentinesNumbers(days,hours,minutes,seconds);
+        return;
+    }
+
+    if(nowSynthetic >= celebrationStart && nowSynthetic < celebrationEnd){
+        valentinesCard.classList.add("show");
+        valentinesSubtitle.textContent = "Hoje é 12 de junho 💖";
+        valentinesCountdown.classList.add("hidden");
+        valentinesMessage.classList.remove("hidden");
+        return;
+    }
+
+    valentinesCard.classList.remove("show");
+    valentinesCountdown.classList.remove("hidden");
+    valentinesMessage.classList.add("hidden");
+    valentinesSubtitle.textContent = "";
+    setValentinesNumbers(0,0,0,0);
+}
 
 /* =========================
    CONTADORES
@@ -1619,7 +1943,7 @@ updateSoundButton();
 /* =========================
    PRESENTE / FLOR
 ========================= */
- 
+
 giftButton.addEventListener("click", ()=>{
     giftButton.classList.add("hide");
     flowerWrap.classList.add("show");
@@ -1635,7 +1959,7 @@ function loadRankImage(){
     const imageUrl = `${RANK_IMAGE_NAME}?v=${Date.now()}`;
 
     sharedImageFrame.classList.add("switching");
-  
+
     const preload = new Image();
 
     preload.onload = ()=>{
@@ -1653,6 +1977,7 @@ sharedImage.onload = ()=>{
     sharedImage.classList.add("visible");
     sharedImagePlaceholder.style.display = "none";
     sharedImageFrame.classList.remove("switching");
+    imageMeta.textContent = "Toque na imagem para recarregar.";
     createSparkles();
 };
 
@@ -1665,6 +1990,7 @@ function clearSharedImage(){
     sharedImage.classList.remove("visible");
     sharedImagePlaceholder.style.display = "flex";
     sharedImageFrame.classList.remove("switching");
+    imageMeta.textContent = "";
 }
 
 sharedImageFrame.addEventListener("click", ()=>{
