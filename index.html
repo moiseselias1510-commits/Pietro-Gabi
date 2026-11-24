@@ -1,0 +1,2068 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nosso Tempo</title>
+
+<style>
+
+/* =========================
+   RESET
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --glass: rgba(255,255,255,.08);
+    --border: rgba(255,255,255,.18);
+    --shadow: 0 18px 45px rgba(0,0,0,.18);
+    --text: rgba(255,255,255,.9);
+    --soft-white: rgba(255,255,255,.92);
+    --soft-blue: #dff5ff;
+    --soft-yellow: #fff5b7;
+    --accent-blue: #9fe5ff;
+    --accent-yellow: #ffe88a;
+}
+
+body{
+    min-height:100vh;
+    overflow-x:hidden;
+    font-family:"Segoe UI",sans-serif;
+    background:#8fd4f8;
+    color:white;
+}
+
+/* =========================
+   FUNDO
+========================= */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:url("fundo-login.png") center/contain no-repeat;
+    background-color:#8fd4f8;
+    z-index:-3;
+    transition:.8s;
+}
+
+body.inside::before{
+    background:url("fundo-site.png") center/contain no-repeat;
+    background-color:#8fd4f8;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at top, rgba(255,255,255,.1), transparent 40%),
+    linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.15));
+    z-index:-2;
+}
+
+/* =========================
+   SPLASH
+========================= */
+
+#splash{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,.35);
+    backdrop-filter:blur(5px);
+    z-index:999;
+    transition:1s;
+}
+
+#splash.hidden{
+    opacity:0;
+    visibility:hidden;
+}
+
+#splash img{
+    width:min(320px,70vw);
+    animation:introSpin 4s ease forwards;
+}
+
+@keyframes introSpin{
+    0%{
+        transform:perspective(800px) rotateY(0deg) scale(.7);
+        opacity:0;
+    }
+
+    20%{
+        opacity:1;
+    }
+
+    100%{
+        transform:perspective(800px) rotateY(720deg) scale(1);
+        opacity:1;
+    }
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.screen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.login-card{
+    width:min(400px,92vw);
+    padding:32px 24px;
+    border-radius:30px;
+    text-align:center;
+    opacity:0;
+    transform:translateY(20px);
+    transition:1s;
+}
+
+.login-card.visible{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.glass{
+    background:var(--glass);
+    backdrop-filter:blur(20px);
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+}
+
+.login-card input{
+    width:100%;
+    padding:15px 18px;
+    border:none;
+    outline:none;
+    border-radius:999px;
+    margin-bottom:14px;
+    font-size:16px;
+    background:rgba(255,255,255,.8);
+}
+
+.login-card button{
+    width:100%;
+    border:none;
+    cursor:pointer;
+    padding:14px;
+    border-radius:999px;
+    font-size:16px;
+    font-weight:700;
+    color:white;
+    background:linear-gradient(135deg,#ff5f95,#ff3d7c);
+}
+
+.error{
+    margin-top:14px;
+    color:#fff3b7;
+    min-height:20px;
+}
+
+/* =========================
+   SITE
+========================= */
+
+.hidden{
+    display:none !important;
+}
+
+#site{
+    width:min(1000px,92vw);
+    margin:35px auto 60px;
+    opacity:0;
+    transform:translateY(20px);
+    transition:1s;
+    position:relative;
+    padding-bottom:140px;
+}
+
+#site.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.header h1{
+    font-size:clamp(2.3rem,5vw,3.8rem);
+    margin-bottom:10px;
+}
+
+.header p{
+    color:rgba(255,255,255,.85);
+}
+
+/* =========================
+   DIA DOS NAMORADOS
+========================= */
+
+.valentines-card{
+    border-radius:30px;
+    padding:28px;
+    text-align:center;
+    margin-bottom:24px;
+    display:none;
+    overflow:hidden;
+    position:relative;
+}
+
+.valentines-card.show{
+    display:block;
+}
+
+.valentines-card::before{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    border-radius:inherit;
+    pointer-events:none;
+    background:linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+}
+
+.valentines-top{
+    position:relative;
+    z-index:1;
+}
+
+.valentines-top h2{
+    margin-bottom:10px;
+}
+
+.valentines-subtitle{
+    color:rgba(255,255,255,.82);
+    line-height:1.6;
+}
+
+.valentines-grid{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-top:20px;
+}
+
+.valentines-box{
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:20px;
+    padding:18px 10px;
+    text-align:center;
+}
+
+.valentines-number{
+    display:block;
+    font-size:1.45rem;
+    font-weight:800;
+    margin-bottom:5px;
+}
+
+.valentines-label{
+    font-size:.9rem;
+    color:rgba(255,255,255,.82);
+}
+
+.valentines-message{
+    position:relative;
+    z-index:1;
+    margin-top:20px;
+    font-size:clamp(1.1rem,2vw,1.5rem);
+    line-height:1.8;
+    font-weight:800;
+    color:rgba(255,255,255,.98);
+    text-shadow:
+        0 0 12px rgba(255,255,255,.18),
+        0 0 22px rgba(255,105,180,.18);
+}
+
+/* =========================
+   COUNTERS
+========================= */
+
+.counters{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+    margin-bottom:24px;
+}
+
+.counter-card{
+    border-radius:30px;
+    padding:26px;
+    overflow:hidden;
+}
+
+.counter-card:nth-child(1){
+    box-shadow:
+    0 0 20px rgba(255,255,255,.6),
+    0 0 40px rgba(255,255,255,.3);
+}
+
+.counter-card:nth-child(2){
+    box-shadow:
+    0 0 20px rgba(255,255,0,.5),
+    0 0 40px rgba(255,255,0,.25);
+}
+
+.counter-title{
+    text-align:center;
+    margin-bottom:20px;
+    font-weight:700;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.box{
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:20px;
+    padding:18px 10px;
+    text-align:center;
+}
+
+.number{
+    display:block;
+    font-size:1.5rem;
+    font-weight:800;
+    margin-bottom:5px;
+}
+
+.label{
+    font-size:.9rem;
+    color:rgba(255,255,255,.8);
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.message-card,
+.love-card,
+.shared-image-card,
+.flower-card{
+    border-radius:30px;
+    padding:28px;
+    text-align:center;
+    margin-top:24px;
+    position:relative;
+    overflow:hidden;
+}
+
+.message-card h2,
+.love-card h2,
+.shared-image-card h2,
+.flower-card h2{
+    margin-bottom:18px;
+}
+
+.message,
+.love-text{
+    font-size:clamp(1rem,2vw,1.3rem);
+    line-height:1.9;
+    font-weight:700;
+}
+
+.date{
+    margin-top:18px;
+    color:rgba(255,255,255,.75);
+}
+
+/* =========================
+   NOSSO RANK
+========================= */
+
+.shared-image-card{
+    box-shadow:
+    0 0 22px rgba(255,255,255,.20),
+    0 0 55px rgba(173,234,255,.16),
+    0 0 85px rgba(255,232,138,.12);
+}
+
+.shared-image-card::before{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    background:linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+    pointer-events:none;
+    border-radius:inherit;
+}
+
+.shared-image-header{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+}
+
+.shared-image-title{
+    margin:0;
+    user-select:none;
+    transition:transform .22s ease, text-shadow .22s ease, opacity .22s ease;
+    text-shadow:0 0 12px rgba(255,255,255,.18);
+}
+
+.shared-image-title:hover{
+    transform:translateY(-2px) scale(1.015);
+    text-shadow:
+    0 0 12px rgba(255,255,255,.35),
+    0 0 24px rgba(255,238,170,.20),
+    0 0 28px rgba(164,235,255,.25);
+}
+
+.live-badge{
+    padding:7px 12px;
+    border-radius:999px;
+    font-size:.78rem;
+    color:rgba(255,255,255,.95);
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.22);
+    box-shadow:0 0 18px rgba(255,255,255,.14);
+}
+
+.shared-image-frame{
+    position:relative;
+    width:min(100%, 760px);
+    aspect-ratio:16 / 9;
+    margin:0 auto;
+    border-radius:28px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.22);
+    background:
+        linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.05)),
+        radial-gradient(circle at top left, rgba(255,255,255,.20), transparent 35%),
+        linear-gradient(135deg, rgba(201,240,255,.18), rgba(255,244,182,.10));
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.05),
+        0 0 24px rgba(255,255,255,.18),
+        0 0 48px rgba(148,226,255,.16),
+        0 0 68px rgba(255,235,145,.08);
+    isolation:isolate;
+    cursor:pointer;
+}
+
+.shared-image-frame::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(120deg, transparent 0%, rgba(255,255,255,.10) 48%, transparent 100%);
+    transform:translateX(-120%);
+    animation:frameShine 6s linear infinite;
+    pointer-events:none;
+    z-index:3;
+}
+
+@keyframes frameShine{
+    100%{
+        transform:translateX(120%);
+    }
+}
+
+.shared-image-placeholder{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+    color:rgba(255,255,255,.92);
+    font-size:clamp(1rem,2vw,1.15rem);
+    line-height:1.7;
+    z-index:1;
+    background:
+        radial-gradient(circle at center, rgba(255,255,255,.12), rgba(255,255,255,.03) 55%, rgba(255,255,255,.01));
+}
+
+#sharedImage{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0;
+    transform:scale(1.035);
+    transition:
+        opacity .65s ease,
+        transform 1s ease,
+        filter .5s ease;
+    z-index:2;
+    filter:saturate(1.04) contrast(1.02);
+}
+
+#sharedImage.visible{
+    opacity:1;
+    transform:scale(1);
+}
+
+.shared-image-frame.switching #sharedImage{
+    opacity:.18;
+    transform:scale(1.02);
+    filter:blur(2px);
+}
+
+.image-meta{
+    margin-top:15px;
+    color:rgba(255,255,255,.80);
+    font-size:.94rem;
+    min-height:22px;
+}
+
+.upload-hint{
+    color:rgba(255,255,255,.68);
+    font-size:.86rem;
+    margin-top:10px;
+}
+
+/* =========================
+   BRILHINHOS
+========================= */
+
+.sparkle-layer{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:4;
+    overflow:hidden;
+}
+
+.sparkle{
+    position:absolute;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,.65) 35%, rgba(255,255,255,0) 72%);
+    box-shadow:
+        0 0 10px rgba(255,255,255,.8),
+        0 0 20px rgba(173,234,255,.45),
+        0 0 26px rgba(255,232,138,.25);
+    animation:sparklePop 1.1s ease forwards;
+}
+
+@keyframes sparklePop{
+    0%{
+        opacity:0;
+        transform:scale(.2) translateY(12px);
+    }
+    30%{
+        opacity:1;
+    }
+    100%{
+        opacity:0;
+        transform:scale(1.8) translateY(-20px);
+    }
+}
+
+/* =========================
+   PRESENTE / FLOR
+========================= */
+
+.flower-card{
+    box-shadow:
+    0 0 22px rgba(255,255,255,.16),
+    0 0 48px rgba(175,228,255,.12);
+}
+
+.flower-stage{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:280px;
+    position:relative;
+    overflow:visible;
+}
+
+.gift-button{
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    transition:transform .25s ease, opacity .35s ease;
+}
+
+.gift-button:hover{
+    transform:translateY(-4px) scale(1.02);
+}
+
+.gift-image{
+    width:140px;
+    height:auto;
+    display:block;
+    filter:
+    drop-shadow(0 0 12px rgba(255,255,255,.35))
+    drop-shadow(0 0 28px rgba(173,235,255,.25));
+    transition:transform .25s ease;
+}
+
+.gift-button:hover .gift-image{
+    transform:scale(1.04);
+}
+
+.gift-button.hide{
+    opacity:0;
+    transform:scale(.75);
+    pointer-events:none;
+    display:none;
+}
+
+.gift-text{
+    font-size:1rem;
+    font-weight:700;
+    color:rgba(255,255,255,.95);
+    text-shadow:0 0 12px rgba(255,255,255,.18);
+}
+
+.flower-wrap{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    margin-top:8px;
+    opacity:0;
+    transform:scale(.72);
+}
+
+.flower-wrap.show{
+    display:flex;
+    opacity:1;
+    transform:scale(1);
+    animation:flowerAppear .8s cubic-bezier(.2,.9,.2,1.1) forwards;
+}
+
+@keyframes flowerAppear{
+    0%{
+        opacity:0;
+        transform:scale(.4) translateY(20px);
+    }
+    60%{
+        opacity:1;
+        transform:scale(1.08) translateY(-4px);
+    }
+    100%{
+        opacity:1;
+        transform:scale(1) translateY(0);
+    }
+}
+
+.forget-flower{
+    position:relative;
+    width:180px;
+    height:210px;
+    filter:
+        drop-shadow(0 0 12px rgba(255,255,255,.40))
+        drop-shadow(0 0 24px rgba(126,203,255,.30));
+}
+
+.petal{
+    position:absolute;
+    width:54px;
+    height:54px;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, #ffffff, #9dd8ff 38%, #60aef2 72%, #4b90e8 100%);
+    left:50%;
+    top:50%;
+    margin-left:-27px;
+    margin-top:-27px;
+    box-shadow:
+        inset 0 0 8px rgba(255,255,255,.65),
+        0 0 12px rgba(255,255,255,.22);
+}
+
+.petal.p1{ transform:translate(-42px,-42px); }
+.petal.p2{ transform:translate(0,-56px); }
+.petal.p3{ transform:translate(42px,-42px); }
+.petal.p4{ transform:translate(-18px,0); }
+.petal.p5{ transform:translate(18px,0); }
+
+.flower-center{
+    position:absolute;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, #fffce2, #ffe874 55%, #ffc93d 100%);
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    z-index:2;
+    box-shadow:
+        0 0 12px rgba(255,235,145,.75),
+        0 0 24px rgba(255,235,145,.45);
+}
+
+.stem{
+    position:absolute;
+    width:7px;
+    height:92px;
+    border-radius:999px;
+    background:linear-gradient(180deg, #99f3bc, #49bf74);
+    left:50%;
+    top:60%;
+    transform:translateX(-50%);
+    box-shadow:0 0 12px rgba(126,255,170,.18);
+}
+
+.leaf{
+    position:absolute;
+    width:34px;
+    height:18px;
+    background:linear-gradient(135deg, #88e8a4, #43bc72);
+    border-radius:100% 0 100% 0;
+    top:112px;
+    box-shadow:0 0 10px rgba(140,255,180,.15);
+}
+
+.leaf.left{
+    left:54px;
+    transform:rotate(-28deg);
+}
+
+.leaf.right{
+    right:54px;
+    transform:scaleX(-1) rotate(-28deg);
+}
+
+.flower-caption{
+    margin-top:16px;
+    color:rgba(255,255,255,.92);
+    font-size:1.05rem;
+    font-weight:700;
+    text-shadow:0 0 12px rgba(255,255,255,.12);
+}
+
+.flower-image{
+    width:180px;
+    height:auto;
+    display:block;
+    filter:
+    drop-shadow(0 0 14px rgba(255,255,255,.40))
+    drop-shadow(0 0 30px rgba(126,203,255,.30));
+    animation:flowerFloat 3s ease-in-out infinite;
+}
+
+@keyframes flowerFloat{
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-10px) scale(1.02);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+/* =========================
+   COELHO
+========================= */
+
+#rabbit-container{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    overflow:visible;
+    z-index:20;
+}
+
+.rabbit{
+    position:absolute;
+    width:95px;
+    height:95px;
+    z-index:20;
+    transition:transform .08s linear;
+    will-change:transform;
+}
+
+.rabbit svg{
+    overflow:visible;
+    filter:
+    drop-shadow(0 0 10px rgba(255,255,255,.45))
+    drop-shadow(0 0 25px rgba(255,255,255,.25));
+}
+
+.rabbit .inner{
+    animation:rabbitFloat 2s ease-in-out infinite;
+}
+
+@keyframes rabbitFloat{
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-3px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+.ear-left{
+    animation:ear1 3s ease-in-out infinite;
+    transform-origin:center bottom;
+}
+
+.ear-right{
+    animation:ear2 3s ease-in-out infinite;
+    transform-origin:center bottom;
+}
+
+@keyframes ear1{
+    0%{
+        transform:rotate(0deg);
+    }
+
+    50%{
+        transform:rotate(-6deg);
+    }
+
+    100%{
+        transform:rotate(0deg);
+    }
+}
+
+@keyframes ear2{
+    0%{
+        transform:rotate(0deg);
+    }
+
+    50%{
+        transform:rotate(6deg);
+    }
+
+    100%{
+        transform:rotate(0deg);
+    }
+}
+
+/* =========================
+   PARTICULAS
+========================= */
+
+#particle-canvas{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+}
+
+/* =========================
+   BOTÃO DE SOM
+========================= */
+
+.sound-toggle{
+    position:fixed;
+    right:18px;
+    bottom:18px;
+    z-index:120;
+    border:none;
+    cursor:pointer;
+    color:white;
+    font-weight:700;
+    padding:12px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.20);
+    box-shadow:
+        0 0 16px rgba(255,255,255,.16),
+        0 0 30px rgba(155,222,255,.12);
+    backdrop-filter:blur(16px);
+    transition:transform .25s ease, background .25s ease, box-shadow .25s ease, opacity .25s ease;
+}
+
+.sound-toggle:hover{
+    transform:translateY(-2px);
+}
+
+.sound-toggle.off{
+    background:rgba(255,255,255,.08);
+    opacity:.85;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:90px;
+    transform:translateX(-50%) translateY(20px);
+    min-width:min(90vw, 320px);
+    max-width:min(92vw, 420px);
+    padding:14px 18px;
+    text-align:center;
+    border-radius:18px;
+    color:white;
+    background:rgba(21,40,68,.38);
+    border:1px solid rgba(255,255,255,.18);
+    box-shadow:
+        0 0 22px rgba(255,255,255,.16),
+        0 0 36px rgba(155,222,255,.12);
+    backdrop-filter:blur(16px);
+    z-index:160;
+    opacity:0;
+    pointer-events:none;
+    transition:.35s ease;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media(max-width:850px){
+    .counters{
+        grid-template-columns:1fr;
+    }
+
+    .valentines-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:520px){
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .rabbit{
+        width:75px;
+        height:75px;
+    }
+
+    body::before{
+        background-size:contain;
+    }
+
+    .shared-image-frame{
+        aspect-ratio:4 / 5;
+    }
+
+    .forget-flower{
+        width:150px;
+        height:180px;
+    }
+
+    .petal{
+        width:46px;
+        height:46px;
+        margin-left:-23px;
+        margin-top:-23px;
+    }
+
+    .petal.p1{ transform:translate(-35px,-35px); }
+    .petal.p2{ transform:translate(0,-47px); }
+    .petal.p3{ transform:translate(35px,-35px); }
+    .petal.p4{ transform:translate(-15px,0); }
+    .petal.p5{ transform:translate(15px,0); }
+
+    .stem{
+        height:78px;
+        top:61%;
+    }
+
+    .leaf.left{
+        left:48px;
+    }
+
+    .leaf.right{
+        right:48px;
+    }
+
+    .valentines-card{
+        padding:22px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="splash">
+    <img src="intro-image.png" alt="Intro">
+</div>
+
+<div id="loginScreen" class="screen">
+    <div id="loginCard" class="login-card glass">
+        <h1 style="font-size:2.2rem;margin-bottom:8px;">
+            Nosso Tempo
+        </h1>
+
+        <p style="margin-bottom:28px;color:var(--text);">
+            Um cantinho simples para guardar o tempo.
+        </p>
+
+        <input id="password" type="password" placeholder="Digite a senha">
+        <button id="enterBtn">Entrar</button>
+        <div id="error" class="error"></div>
+    </div>
+</div>
+
+<div id="site">
+
+    <div class="header">
+        <h1>Nosso Tempo</h1>
+        <p>Cada segundo continua sendo especial.</p>
+    </div>
+
+    <div id="valentinesCard" class="valentines-card glass" aria-live="polite">
+        <div class="valentines-top">
+            <h2>💘 Dia dos Namorados</h2>
+            <p id="valentinesSubtitle" class="valentines-subtitle"></p>
+        </div>
+
+        <div id="valentinesCountdown" class="valentines-grid">
+            <div class="valentines-box">
+                <span id="valentines-days" class="valentines-number">0</span>
+                <span class="valentines-label">dias</span>
+            </div>
+
+            <div class="valentines-box">
+                <span id="valentines-hours" class="valentines-number">0</span>
+                <span class="valentines-label">horas</span>
+            </div>
+
+            <div class="valentines-box">
+                <span id="valentines-minutes" class="valentines-number">0</span>
+                <span class="valentines-label">minutos</span>
+            </div>
+
+            <div class="valentines-box">
+                <span id="valentines-seconds" class="valentines-number">0</span>
+                <span class="valentines-label">segundos</span>
+            </div>
+        </div>
+
+        <div id="valentinesMessage" class="valentines-message hidden">
+            Feliz Dia dos Namorados, meu amor
+        </div>
+    </div>
+
+    <div class="counters">
+
+        <div class="counter-card glass">
+            <div class="counter-title">🌸 Oficial</div>
+
+            <div class="grid">
+                <div class="box">
+                    <span class="number" id="oficial-anos">0</span>
+                    <span class="label">anos</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="oficial-meses">0</span>
+                    <span class="label">meses</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="oficial-dias">0</span>
+                    <span class="label">dias</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="oficial-horas">0</span>
+                    <span class="label">horas</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="oficial-minutos">0</span>
+                    <span class="label">minutos</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="oficial-segundos">0</span>
+                    <span class="label">segundos</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="counter-card glass">
+            <div class="counter-title">🌟 Não Oficial</div>
+
+            <div class="grid">
+                <div class="box">
+                    <span class="number" id="naooficial-anos">0</span>
+                    <span class="label">anos</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="naooficial-meses">0</span>
+                    <span class="label">meses</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="naooficial-dias">0</span>
+                    <span class="label">dias</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="naooficial-horas">0</span>
+                    <span class="label">horas</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="naooficial-minutos">0</span>
+                    <span class="label">minutos</span>
+                </div>
+
+                <div class="box">
+                    <span class="number" id="naooficial-segundos">0</span>
+                    <span class="label">segundos</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="message-card glass">
+        <h2>💌 Mensagem do mês</h2>
+        <div id="monthly-message" class="message">Carregando...</div>
+        <div id="monthly-date" class="date"></div>
+    </div>
+
+    <div class="love-card glass">
+        <h2>🤍 Sobre você</h2>
+        <div class="love-text">
+            Eu gosto do seu jeito. Tipo, vc é engraçada (eu realmente te acho muito engraçada), carinhosa, eu gosto do jeito q vc se preocupa comigo e da forma q vc demonstra as coisas. Tipo quando vc começa a sorrir enquanto eu tô falando, eu acho isso muito fofo kkkkkk
+        </div>
+    </div>
+
+    <div class="shared-image-card glass">
+        <div class="shared-image-header">
+            <h2 class="shared-image-title">Nosso Rank</h2>
+            <span class="live-badge">github</span>
+        </div>
+
+        <div id="sharedImageFrame" class="shared-image-frame">
+            <div id="sharedImagePlaceholder" class="shared-image-placeholder">
+                Coloque a imagem <strong style="margin-left:6px;">nosso-rank.png</strong> na mesma pasta do HTML ✨
+            </div>
+
+            <img id="sharedImage" alt="Nosso Rank">
+            <div id="sparkleLayer" class="sparkle-layer"></div>
+        </div>
+
+        <div id="imageMeta" class="image-meta"></div>
+    </div>
+
+    <div class="flower-card glass">
+        <h2>clique aqui</h2>
+
+        <div class="flower-stage">
+            <button id="giftButton" class="gift-button" type="button" aria-label="Abrir presente">
+                <img src="presente.png" class="gift-image" alt="Presente">
+            </button>
+
+            <div id="flowerWrap" class="flower-wrap" aria-hidden="true">
+                <div>
+                    <div>
+                        <img src="flor.png" class="flower-image" alt="Flor">
+                        <div class="flower-caption">Não-me-esqueças</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="rabbit-container"></div>
+</div>
+
+<canvas id="particle-canvas"></canvas>
+
+<button id="soundToggle" class="sound-toggle off" type="button">🔈 Som</button>
+
+<div id="toast" class="toast"></div>
+
+<script>
+/* =========================
+   CONFIGURAÇÕES
+========================= */
+
+const LOGIN_USERS = {
+    "210425": "Gabi",
+    "2026": "Pietro"
+};
+
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYPK6cEIRNoMqFhPZSF9t7u5_f3oER8PeSmcytbr0aTr4uIiUJc_VMwqdZfnJBgmg_/exec";
+const RANK_IMAGE_NAME = "nosso-rank.png";
+
+const AUDIO_TRACKS = [
+    "musica-fundo-01.mp3",
+    "musica-fundo-02.mp3"
+];
+
+/* =========================
+   DADOS FIXOS
+========================= */
+
+const officialDate = new Date(2025,3,21);
+const unofficialDate = new Date(2024,9,9);
+
+const monthlyMessages = [
+{
+date:"2026-05-21",
+text:"O tempo passa, mas continuar ao seu lado ainda é uma das melhores partes dos meus dias."
+},
+{
+date:"2026-06-21",
+text:"Você supera a perfeição de Shadow Of The Colossus"
+},
+{
+date:"2026-07-21",
+text:"Eu te amo muito mais do que amo Resident Evil"
+},
+{
+date:"2026-08-21",
+text:"Em meio à tantas galáxias e universos, meu amor por vc supera toda essa vastidão"
+},
+{
+date:"2026-09-21",
+text:"Eu iria até o fim por você, assim como Alan Wake, Dante, Wander, Leon e Deacon foram"
+},
+{
+date:"2026-10-21",
+text:"Mesmo que a gente se veja por horas, eu vou sentir sua falta assim que for embora"
+},
+{
+date:"2026-11-21",
+text:"I would rather share one lifetime with you than face all the ages of this world"
+},
+{
+date:"2026-12-21",
+text:"Pra acabar o ano, quero que você saiba: eu te amo e vou te amar em todos os próximos anos"
+}
+];
+
+/* =========================
+   ELEMENTOS
+========================= */
+
+const splash = document.getElementById("splash");
+const loginCard = document.getElementById("loginCard");
+const loginScreen = document.getElementById("loginScreen");
+const site = document.getElementById("site");
+
+const passwordInput = document.getElementById("password");
+const enterBtn = document.getElementById("enterBtn");
+const error = document.getElementById("error");
+
+const valentinesCard = document.getElementById("valentinesCard");
+const valentinesSubtitle = document.getElementById("valentinesSubtitle");
+const valentinesCountdown = document.getElementById("valentinesCountdown");
+const valentinesMessage = document.getElementById("valentinesMessage");
+const valentinesDays = document.getElementById("valentines-days");
+const valentinesHours = document.getElementById("valentines-hours");
+const valentinesMinutes = document.getElementById("valentines-minutes");
+const valentinesSeconds = document.getElementById("valentines-seconds");
+
+const sharedImage = document.getElementById("sharedImage");
+const sharedImageFrame = document.getElementById("sharedImageFrame");
+const sharedImagePlaceholder = document.getElementById("sharedImagePlaceholder");
+const imageMeta = document.getElementById("imageMeta");
+const sparkleLayer = document.getElementById("sparkleLayer");
+
+const giftButton = document.getElementById("giftButton");
+const flowerWrap = document.getElementById("flowerWrap");
+
+const soundToggle = document.getElementById("soundToggle");
+const toast = document.getElementById("toast");
+
+/* =========================
+   ESTADO
+========================= */
+
+let siteInitialized = false;
+let particlesInitialized = false;
+let rabbitInitialized = false;
+let countersInterval = null;
+let valentinesInterval = null;
+
+let audioPlayers = [];
+let currentTrackIndex = 0;
+let currentPlayer = null;
+let backgroundAudioInitialized = false;
+let audioEnabled = false;
+
+let currentUser = null;
+
+/* =========================
+   SPLASH
+========================= */
+
+setTimeout(()=>{
+    splash.classList.add("hidden");
+
+    setTimeout(()=>{
+        loginCard.classList.add("visible");
+    },500);
+},4500);
+
+/* =========================
+   TOAST
+========================= */
+
+let toastTimer = null;
+
+function showToast(message){
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>{
+        toast.classList.remove("show");
+    },2600);
+}
+
+/* =========================
+   UTILITÁRIOS DE DATA/HORA
+========================= */
+
+function pad(value){
+    return String(value).padStart(2,"0");
+}
+
+function getBrazilDateTimeParts(date = new Date()){
+    const formatter = new Intl.DateTimeFormat("en-CA",{
+        timeZone:"America/Sao_Paulo",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hour12:false
+    });
+
+    const parts = formatter.formatToParts(date);
+    const map = {};
+
+    for(const part of parts){
+        if(part.type !== "literal"){
+            map[part.type] = part.value;
+        }
+    }
+
+    return {
+        year:Number(map.year),
+        month:Number(map.month),
+        day:Number(map.day),
+        hour:Number(map.hour),
+        minute:Number(map.minute),
+        second:Number(map.second)
+    };
+}
+
+function formatDateBR(date = new Date()){
+    const p = getBrazilDateTimeParts(date);
+    return `${pad(p.day)}/${pad(p.month)}/${p.year}`;
+}
+
+function formatTimeBR(date = new Date()){
+    const p = getBrazilDateTimeParts(date);
+    return `${pad(p.hour)}:${pad(p.minute)}:${pad(p.second)}`;
+}
+
+/* =========================
+   LOGIN / ENTRADA
+========================= */
+
+function getUserByPassword(password){
+    return LOGIN_USERS[password] || null;
+}
+
+function enterSite(){
+    const typedPassword = passwordInput.value.trim();
+    const identifiedUser = getUserByPassword(typedPassword);
+
+    if(!identifiedUser){
+        error.textContent = "Senha incorreta";
+        return;
+    }
+
+    currentUser = identifiedUser;
+    error.textContent = "";
+
+    registerAccess(currentUser);
+
+    document.body.classList.add("inside");
+    loginScreen.classList.add("hidden");
+
+    if(!siteInitialized){
+        siteInitialized = true;
+
+        setTimeout(()=>{
+            site.classList.add("show");
+
+            if(!rabbitInitialized){
+                initRabbit();
+                rabbitInitialized = true;
+            }
+        },100);
+
+        updateCounters();
+        countersInterval = setInterval(updateCounters,1000);
+
+        setupMessage();
+        loadRankImage();
+        initValentinesComponent();
+
+        if(!particlesInitialized){
+            initParticles();
+            particlesInitialized = true;
+        }
+
+        setupBackgroundMusic();
+    }
+}
+
+enterBtn.addEventListener("click", enterSite);
+
+passwordInput.addEventListener("keydown",(e)=>{
+    if(e.key === "Enter"){
+        enterSite();
+    }
+});
+
+/* =========================
+   REGISTRO DE ACESSO
+========================= */
+
+function getDeviceType(){
+    const ua = navigator.userAgent.toLowerCase();
+    const width = Math.min(window.innerWidth || screen.width || 0, screen.width || 0);
+
+    if(/ipad|tablet|playbook|silk|(android(?!.*mobile))/i.test(ua)){
+        return "Tablet";
+    }
+
+    if(/mobi|android|iphone|ipod/i.test(ua) || width <= 768){
+        return "Celular";
+    }
+
+    return "Computador";
+}
+
+function getBrowser(){
+    const ua = navigator.userAgent;
+
+    if(/Edg/i.test(ua)) return "Edge";
+    if(/OPR|Opera/i.test(ua)) return "Opera";
+    if(/Chrome/i.test(ua) && !/Edg|OPR|Opera/i.test(ua)) return "Chrome";
+    if(/Firefox/i.test(ua)) return "Firefox";
+    if(/Safari/i.test(ua) && !/Chrome|Edg|OPR|Opera/i.test(ua)) return "Safari";
+
+    return "Desconhecido";
+}
+
+function getSystem(){
+    const ua = navigator.userAgent;
+
+    if(/Windows NT/i.test(ua)) return "Windows";
+    if(/Android/i.test(ua)) return "Android";
+    if(/iPhone|iPad|iPod/i.test(ua)) return "iOS";
+    if(/Mac OS X/i.test(ua)) return "macOS";
+    if(/CrOS/i.test(ua)) return "Chrome OS";
+    if(/Linux/i.test(ua)) return "Linux";
+
+    return "Desconhecido";
+}
+
+async function getDeviceModel(){
+    const ua = navigator.userAgent || "";
+
+    // Alguns navegadores Chromium disponibilizam o modelo real do aparelho.
+    try{
+        if(navigator.userAgentData &&
+           typeof navigator.userAgentData.getHighEntropyValues === "function"){
+            const info = await navigator.userAgentData.getHighEntropyValues(["model"]);
+            if(info && info.model && info.model.trim()){
+                return info.model.trim();
+            }
+        }
+    }catch(err){
+        // Continua para as alternativas abaixo.
+    }
+
+    // Alguns Androids ainda incluem marca/modelo no User-Agent.
+    const androidMatch = ua.match(/Android[^;]*;\s*([^;)]+?)(?:\s+Build\/[^;)]+)?\s*[;) ]/i);
+    if(androidMatch && androidMatch[1]){
+        const candidate = androidMatch[1].trim();
+        if(candidate && !/^(wv|mobile|tablet|k|en-us)$/i.test(candidate)){
+            return candidate;
+        }
+    }
+
+    // iOS normalmente oculta o modelo exato para páginas web.
+    if(/iPhone/i.test(ua)) return "iPhone (modelo não informado pelo navegador)";
+    if(/iPad/i.test(ua)) return "iPad (modelo não informado pelo navegador)";
+    if(/Android/i.test(ua)) return "Android (modelo não informado pelo navegador)";
+    if(/Windows/i.test(ua)) return "Computador Windows (modelo não disponível)";
+    if(/Macintosh|Mac OS X/i.test(ua)) return "Mac (modelo não disponível)";
+
+    return "Não identificado";
+}
+
+async function registerAccess(usuario){
+    const now = new Date();
+
+    const modelo = await getDeviceModel();
+
+    const payload = {
+        usuario: usuario,
+        data: formatDateBR(now),
+        hora: formatTimeBR(now),
+        dataHoraISO: now.toISOString(),
+        dispositivo: getDeviceType(),
+        modelo: modelo,
+        navegador: getBrowser(),
+        sistema: getSystem(),
+        tela: `${window.screen.width}x${window.screen.height}`,
+        pagina: window.location.href
+    };
+
+    try{
+        await fetch(APPS_SCRIPT_URL,{
+            method:"POST",
+            mode:"no-cors",
+            body:new URLSearchParams(payload)
+        });
+    }catch(err){
+        console.warn("Não foi possível registrar o acesso na planilha.", err);
+    }
+}
+
+/* =========================
+   DIA DOS NAMORADOS
+========================= */
+
+function initValentinesComponent(){
+    if(valentinesInterval) return;
+
+    updateValentinesComponent();
+    valentinesInterval = setInterval(updateValentinesComponent,1000);
+}
+
+function setValentinesNumbers(days,hours,minutes,seconds){
+    valentinesDays.textContent = days;
+    valentinesHours.textContent = hours;
+    valentinesMinutes.textContent = minutes;
+    valentinesSeconds.textContent = seconds;
+}
+
+function updateValentinesComponent(){
+    const nowParts = getBrazilDateTimeParts(new Date());
+    const year = nowParts.year;
+
+    const nowSynthetic = Date.UTC(
+        nowParts.year,
+        nowParts.month - 1,
+        nowParts.day,
+        nowParts.hour,
+        nowParts.minute,
+        nowParts.second
+    );
+
+    const startCountdown = Date.UTC(year,4,12,0,0,0);   // 12 de maio
+    const celebrationStart = Date.UTC(year,5,12,0,0,0); // 12 de junho
+    const celebrationEnd = Date.UTC(year,5,13,0,0,0);   // 13 de junho
+
+    if(nowSynthetic >= startCountdown && nowSynthetic < celebrationStart){
+        const diffSeconds = Math.max(0, Math.floor((celebrationStart - nowSynthetic) / 1000));
+
+        const days = Math.floor(diffSeconds / 86400);
+        const hours = Math.floor((diffSeconds % 86400) / 3600);
+        const minutes = Math.floor((diffSeconds % 3600) / 60);
+        const seconds = diffSeconds % 60;
+
+        valentinesCard.classList.add("show");
+        valentinesSubtitle.textContent = "Contagem regressiva para o Dia dos Namorados ❤️";
+        valentinesCountdown.classList.remove("hidden");
+        valentinesMessage.classList.add("hidden");
+
+        setValentinesNumbers(days,hours,minutes,seconds);
+        return;
+    }
+
+    if(nowSynthetic >= celebrationStart && nowSynthetic < celebrationEnd){
+        valentinesCard.classList.add("show");
+        valentinesSubtitle.textContent = "Hoje é 12 de junho 💖";
+        valentinesCountdown.classList.add("hidden");
+        valentinesMessage.classList.remove("hidden");
+        return;
+    }
+
+    valentinesCard.classList.remove("show");
+    valentinesCountdown.classList.remove("hidden");
+    valentinesMessage.classList.add("hidden");
+    valentinesSubtitle.textContent = "";
+    setValentinesNumbers(0,0,0,0);
+}
+
+/* =========================
+   CONTADORES
+========================= */
+
+function preciseDiff(start,end){
+    let years = end.getFullYear() - start.getFullYear();
+    let months = end.getMonth() - start.getMonth();
+    let days = end.getDate() - start.getDate();
+    let hours = end.getHours() - start.getHours();
+    let minutes = end.getMinutes() - start.getMinutes();
+    let seconds = end.getSeconds() - start.getSeconds();
+
+    if(seconds < 0){
+        seconds += 60;
+        minutes--;
+    }
+
+    if(minutes < 0){
+        minutes += 60;
+        hours--;
+    }
+
+    if(hours < 0){
+        hours += 24;
+        days--;
+    }
+
+    if(days < 0){
+        const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+        days += prevMonth.getDate();
+        months--;
+    }
+
+    if(months < 0){
+        months += 12;
+        years--;
+    }
+
+    return {
+        years,
+        months,
+        days,
+        hours,
+        minutes,
+        seconds
+    };
+}
+
+function updateCounters(){
+    const now = new Date();
+
+    const o = preciseDiff(officialDate, now);
+    const n = preciseDiff(unofficialDate, now);
+
+    document.getElementById("oficial-anos").textContent = o.years;
+    document.getElementById("oficial-meses").textContent = o.months;
+    document.getElementById("oficial-dias").textContent = o.days;
+    document.getElementById("oficial-horas").textContent = o.hours;
+    document.getElementById("oficial-minutos").textContent = o.minutes;
+    document.getElementById("oficial-segundos").textContent = o.seconds;
+
+    document.getElementById("naooficial-anos").textContent = n.years;
+    document.getElementById("naooficial-meses").textContent = n.months;
+    document.getElementById("naooficial-dias").textContent = n.days;
+    document.getElementById("naooficial-horas").textContent = n.hours;
+    document.getElementById("naooficial-minutos").textContent = n.minutes;
+    document.getElementById("naooficial-segundos").textContent = n.seconds;
+}
+
+/* =========================
+   MENSAGEM
+========================= */
+
+function setupMessage(){
+    const now = new Date();
+    let found = monthlyMessages[0];
+
+    for(const msg of monthlyMessages){
+        const d = new Date(msg.date + "T00:00:00");
+        if(now >= d){
+            found = msg;
+        }
+    }
+
+    document.getElementById("monthly-message").textContent = found.text;
+
+    const d = new Date(found.date + "T00:00:00");
+
+    document.getElementById("monthly-date").textContent =
+    "— " +
+    d.toLocaleDateString("pt-BR",{
+        day:"numeric",
+        month:"long",
+        year:"numeric"
+    });
+}
+
+/* =========================
+   COELHO
+========================= */
+
+const rabbitContainer = document.getElementById("rabbit-container");
+
+let rabbit = null;
+
+const rabbitState = {
+    x:200,
+    y:380,
+    targetX:200,
+    direction:1
+};
+
+function rabbitSVG(){
+return `
+<div class="inner">
+<svg viewBox="0 0 120 120">
+<ellipse cx="60" cy="105" rx="28" ry="10" fill="rgba(0,0,0,0.12)"/>
+
+<g class="ear-left">
+<ellipse cx="38" cy="28" rx="12" ry="34" fill="#ffffff"/>
+<ellipse cx="38" cy="32" rx="5" ry="22" fill="#ffd1dc"/>
+</g>
+
+<g class="ear-right">
+<ellipse cx="82" cy="28" rx="12" ry="34" fill="#ffffff"/>
+<ellipse cx="82" cy="32" rx="5" ry="22" fill="#ffd1dc"/>
+</g>
+
+<ellipse cx="60" cy="74" rx="30" ry="28" fill="#ffffff"/>
+<circle cx="60" cy="50" r="26" fill="#ffffff"/>
+
+<ellipse cx="42" cy="58" rx="6" ry="4" fill="rgba(255,180,190,.5)"/>
+<ellipse cx="78" cy="58" rx="6" ry="4" fill="rgba(255,180,190,.5)"/>
+
+<ellipse cx="50" cy="50" rx="4" ry="6" fill="#1f1f1f"/>
+<ellipse cx="70" cy="50" rx="4" ry="6" fill="#1f1f1f"/>
+
+<circle cx="51" cy="48" r="1.3" fill="white"/>
+<circle cx="71" cy="48" r="1.3" fill="white"/>
+
+<ellipse cx="60" cy="60" rx="3" ry="2" fill="#ffb6c1"/>
+
+<path d="M55 64 Q60 69 65 64"
+stroke="#666"
+stroke-width="1.8"
+fill="none"
+stroke-linecap="round"/>
+
+<ellipse cx="45" cy="92" rx="9" ry="6" fill="#ffffff"/>
+<ellipse cx="75" cy="92" rx="9" ry="6" fill="#ffffff"/>
+
+<circle cx="88" cy="76" r="8" fill="#ffffff"/>
+</svg>
+</div>
+`;
+}
+
+function initRabbit(){
+    rabbit = document.createElement("div");
+    rabbit.className = "rabbit";
+    rabbit.innerHTML = rabbitSVG();
+    rabbitContainer.appendChild(rabbit);
+    rabbit.style.transform = `translate(${rabbitState.x}px, ${rabbitState.y}px)`;
+
+    moveRabbit();
+    animateRabbit();
+}
+
+function moveRabbit(){
+    setInterval(()=>{
+        const max = Math.max(40, site.clientWidth - 100);
+        rabbitState.targetX = Math.random() * max;
+        rabbitState.direction = rabbitState.targetX > rabbitState.x ? 1 : -1;
+    },3000);
+}
+
+function animateRabbit(){
+    function loop(){
+        rabbitState.x += (rabbitState.targetX - rabbitState.x) * 0.03;
+
+        if(rabbit){
+            rabbit.style.transform =
+            `translate(${rabbitState.x}px, ${rabbitState.y}px) scaleX(${rabbitState.direction})`;
+        }
+
+        requestAnimationFrame(loop);
+    }
+
+    loop();
+}
+
+/* =========================
+   PARTICULAS
+========================= */
+
+const canvas = document.getElementById("particle-canvas");
+const ctx = canvas.getContext("2d");
+let particles = [];
+
+function initParticles(){
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    for(let i=0;i<35;i++){
+        particles.push({
+            x:Math.random()*canvas.width,
+            y:Math.random()*canvas.height,
+            r:Math.random()*3+1,
+            speed:Math.random()*0.5+0.2
+        });
+    }
+
+    drawParticles();
+}
+
+function resizeCanvas(){
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
+
+function drawParticles(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    particles.forEach(p=>{
+        p.y -= p.speed;
+
+        if(p.y < -10){
+            p.y = canvas.height + 10;
+            p.x = Math.random()*canvas.width;
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle = "rgba(255,255,255,.4)";
+        ctx.fill();
+    });
+
+    requestAnimationFrame(drawParticles);
+}
+
+/* =========================
+   SOM DE FUNDO
+========================= */
+
+function setupBackgroundMusic(){
+    if(backgroundAudioInitialized) return;
+
+    backgroundAudioInitialized = true;
+
+    audioPlayers = AUDIO_TRACKS.map(src=>{
+        const audio = new Audio(src);
+        audio.preload = "auto";
+        audio.loop = false;
+        audio.volume = 0.35;
+        return audio;
+    });
+
+    playTrack(0);
+}
+
+function playTrack(index){
+    if(!audioPlayers.length) return;
+
+    if(currentPlayer){
+        currentPlayer.onended = null;
+        currentPlayer.pause();
+        currentPlayer.currentTime = 0;
+    }
+
+    currentTrackIndex = index;
+    currentPlayer = audioPlayers[index];
+    currentPlayer.onended = ()=>{
+        const nextIndex = (currentTrackIndex + 1) % audioPlayers.length;
+        playTrack(nextIndex);
+    };
+
+    currentPlayer.play()
+    .then(()=>{
+        audioEnabled = true;
+        updateSoundButton();
+    })
+    .catch(()=>{
+        audioEnabled = false;
+        updateSoundButton();
+        showToast("Toque no botão de som para ativar a música.");
+    });
+}
+
+function pauseAllTracks(){
+    audioPlayers.forEach(audio=>{
+        audio.pause();
+    });
+}
+
+function resumeCurrentTrack(){
+    if(!audioPlayers.length){
+        setupBackgroundMusic();
+        return;
+    }
+
+    if(!currentPlayer){
+        playTrack(currentTrackIndex);
+        return;
+    }
+
+    currentPlayer.play()
+    .then(()=>{
+        audioEnabled = true;
+        updateSoundButton();
+    })
+    .catch(()=>{
+        audioEnabled = false;
+        updateSoundButton();
+        showToast("O navegador pediu outro toque para liberar o som.");
+    });
+}
+
+function updateSoundButton(){
+    if(audioEnabled){
+        soundToggle.classList.remove("off");
+        soundToggle.textContent = "🔊 Som";
+    }else{
+        soundToggle.classList.add("off");
+        soundToggle.textContent = "🔈 Som";
+    }
+}
+
+soundToggle.addEventListener("click", ()=>{
+    if(!backgroundAudioInitialized){
+        setupBackgroundMusic();
+        return;
+    }
+
+    if(audioEnabled){
+        audioEnabled = false;
+        pauseAllTracks();
+        updateSoundButton();
+        return;
+    }
+
+    audioEnabled = true;
+    resumeCurrentTrack();
+});
+
+updateSoundButton();
+
+/* =========================
+   PRESENTE / FLOR
+========================= */
+
+giftButton.addEventListener("click", ()=>{
+    giftButton.classList.add("hide");
+    flowerWrap.classList.add("show");
+    flowerWrap.setAttribute("aria-hidden","false");
+    createSparkles();
+});
+
+/* =========================
+   NOSSO RANK - IMAGEM FIXA
+========================= */
+
+function loadRankImage(){
+    const imageUrl = `${RANK_IMAGE_NAME}?v=${Date.now()}`;
+
+    sharedImageFrame.classList.add("switching");
+
+    const preload = new Image();
+
+    preload.onload = ()=>{
+        sharedImage.src = imageUrl;
+    };
+
+    preload.onerror = ()=>{
+        clearSharedImage();
+    };
+
+    preload.src = imageUrl;
+}
+
+sharedImage.onload = ()=>{
+    sharedImage.classList.add("visible");
+    sharedImagePlaceholder.style.display = "none";
+    sharedImageFrame.classList.remove("switching");
+    imageMeta.textContent = "Toque na imagem para recarregar.";
+    createSparkles();
+};
+
+sharedImage.onerror = ()=>{
+    clearSharedImage();
+};
+
+function clearSharedImage(){
+    sharedImage.removeAttribute("src");
+    sharedImage.classList.remove("visible");
+    sharedImagePlaceholder.style.display = "flex";
+    sharedImageFrame.classList.remove("switching");
+    imageMeta.textContent = "";
+}
+
+sharedImageFrame.addEventListener("click", ()=>{
+    loadRankImage();
+    showToast("Recarregando imagem...");
+});
+
+/* =========================
+   BRILHINHOS
+========================= */
+
+function createSparkles(){
+    sparkleLayer.innerHTML = "";
+
+    for(let i=0;i<14;i++){
+        const particle = document.createElement("span");
+        particle.className = "sparkle";
+
+        const x = Math.random() * 100;
+        const y = 55 + Math.random() * 35;
+        const size = 5 + Math.random() * 7;
+        const delay = Math.random() * 0.25;
+
+        particle.style.left = `${x}%`;
+        particle.style.top = `${y}%`;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.animationDelay = `${delay}s`;
+
+        sparkleLayer.appendChild(particle);
+    }
+
+    setTimeout(()=>{
+        sparkleLayer.innerHTML = "";
+    },1400);
+}
+</script>
+
+</body>
+</html>
